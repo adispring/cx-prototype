@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HiMakers · 积分</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/member.css">
+  <style>
+    .points-page{overflow:visible}
+    .points-page .module-title{margin-bottom:0}
+
+    .points-hero{
+      margin-top:22px;
+      position:relative;
+      overflow:hidden;
+      border:1px solid #DFF2EA;
+      border-radius:18px;
+      background:linear-gradient(135deg,#F8FFFC 0%,#F1FFF9 52%,#ECFFF7 100%);
+      box-shadow:0 10px 24px rgba(12,201,146,.06);
+      padding:26px 28px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 250px;
+      gap:22px;
+    }
+    
+    .points-hero::after{
+      content:"";
+      position:absolute;
+      right:18px;
+      top:10px;
+      width:205px;
+      height:135px;
+      background:url('assets/member/points-crown.png') no-repeat center/contain;
+      opacity:.72;
+      pointer-events:none;
+      z-index:0;
+    }
+    .points-balance-row{display:flex;align-items:flex-start;gap:24px;min-width:0;position:relative;z-index:1}
+    .points-balance{min-width:148px}
+    .points-balance-label{display:flex;align-items:center;gap:6px;font-size:14px;color:#334054;font-weight:600}
+    .points-balance-value{margin-top:10px;font-size:62px;line-height:.95;font-weight:700;letter-spacing:-1.6px;color:#091B33}
+    .points-balance-meta{margin-top:10px;font-size:15px;line-height:1.4;color:#76859A}
+    .points-divider{width:1px;align-self:stretch;background:#DCE6E5}
+    .points-hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;flex:1;min-width:0}
+    .hero-stat{padding:0 22px;display:flex;flex-direction:column;justify-content:center;min-height:94px;position:relative}
+    .hero-stat + .hero-stat::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:1px;background:#DCE6E5}
+    .hero-stat span{font-size:14px;line-height:20px;color:#6E7C92;font-weight:500}
+    .hero-stat strong{margin-top:8px;font-size:22px;line-height:1.15;color:#091B33;font-weight:700}
+    .hero-stat strong.positive{color:var(--brand)}
+    .hero-expire{
+      margin-top:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      background:#FFF6EA;
+      color:#F28B28;
+      font-size:14px;
+      font-weight:600;
+    }
+    .hero-expire svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9}
+    .points-hero-side{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:10px;min-width:0;padding-top:6px;position:relative;z-index:2}
+    .hero-exchange-btn{
+      width:100%;height:48px;border-radius:14px;background:var(--brand);color:#fff;
+      display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;font-weight:650;
+      box-shadow:0 10px 20px rgba(12,201,146,.16);margin-top:10px
+    }
+    .hero-exchange-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .hero-checkin-card{
+      width:100%;height:50px;border:1px solid #E5EEE9;border-radius:14px;background:rgba(255,255,255,.94);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;color:#2B3648;font-weight:600;cursor:pointer
+    }
+    .hero-checkin-left{display:flex;align-items:center;gap:10px;min-width:0}
+    .hero-checkin-icon{width:24px;height:24px;border-radius:8px;background:#F1FBF7;color:var(--brand);display:grid;place-items:center;flex:0 0 auto}
+    .hero-checkin-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .hero-checkin-card b{color:var(--brand);font-size:16px;font-weight:700}
+    .hero-checkin-card .go{color:var(--brand);font-weight:700}
+    .hero-checkin-card.done .go{color:#9AA7B6}
+
+    .points-dual-grid{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
+    .points-panel{border:1px solid var(--border);border-radius:16px;background:#fff;padding:18px 18px 16px;min-width:0}
+    .points-panel h2{margin:0 0 16px;font-size:18px;line-height:1.35;font-weight:700;color:#101828}
+    .points-method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+    .points-method-item{
+      border:1px solid #EDF1F3;border-radius:14px;background:#fff;padding:11px 14px;
+      display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;
+      min-height:70px;min-width:0;
+    }
+    .points-method-item.use{background:#FBFCFC}
+    .points-method-icon{width:44px;height:44px;border-radius:12px;background:#F3FBF7;color:var(--brand);display:grid;place-items:center}
+    .points-method-icon svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .points-method-item.use .points-method-icon{background:#F5F8F7}
+    .points-method-text{min-width:0}.points-method-text strong{display:block;font-size:15px;line-height:1.35;font-weight:650;color:#182230;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .points-method-side{justify-self:end;font-size:15px;line-height:1.2;font-weight:700;color:var(--brand);white-space:nowrap;padding-left:8px}
+    .points-method-item.use .points-method-side{color:var(--brand)}
+
+    .points-detail-card{margin-top:18px;border:1px solid var(--border);border-radius:16px;background:#fff;padding:18px 18px 14px}
+    .points-detail-head h2{margin:0;font-size:18px;line-height:1.35;font-weight:700;color:#101828}
+    .points-detail-card .module-tabs{margin-top:16px}
+    .points-detail-table{margin-top:12px}
+    .points-table-head,.point-record{
+      display:grid;
+      grid-template-columns:170px 92px minmax(220px,1fr) 120px 90px;
+      gap:12px;align-items:center
+    }
+    .points-table-head{
+      min-height:42px;padding:0 14px;border-radius:10px;background:#F6F8FA;color:#8491A3;font-size:13px;font-weight:600
+    }
+    .points-detail-list{margin-top:6px}
+    .point-record{padding:16px 14px;border-bottom:1px solid #EEF1F3}
+    .point-record:last-child{border-bottom:0}
+    .point-record-time{font-size:14px;color:#708094;font-weight:500}
+    .point-record-type span{display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700}
+    .point-record-type .gain{background:#EBFBF4;color:var(--brand)}
+    .point-record-type .spend{background:#F2F4F7;color:#667085}
+    .point-record-desc strong{display:block;font-size:15px;line-height:1.4;font-weight:650;color:#17212F}
+    .point-record-desc em{display:block;margin-top:4px;font-style:normal;font-size:13px;line-height:1.4;color:#8693A5}
+    .point-record-amount,.point-record-balance{font-size:18px;line-height:1;font-weight:700;text-align:right}
+    .point-record-amount.plus{color:var(--brand)}
+    .point-record-amount.minus{color:#334155}
+    .point-record-balance{color:#17212F;font-size:16px}
+    .points-loadmore{display:flex;justify-content:center;padding-top:16px}
+    .points-loadmore .ghost-btn{min-width:120px;height:40px}
+
+    @media (max-width:1280px){
+      .points-method-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .points-hero{grid-template-columns:minmax(0,1fr) 240px}
+      .points-balance-value{font-size:54px}
+      .points-table-head,.point-record{grid-template-columns:150px 82px minmax(180px,1fr) 100px 80px}
+    }
+    @media (max-width:1024px){
+      .points-hero{grid-template-columns:1fr}
+      .points-hero-side{align-items:flex-start;max-width:360px}
+      .points-dual-grid{grid-template-columns:1fr}
+      .points-table-head,.point-record{grid-template-columns:140px 78px minmax(0,1fr) 90px 72px}
+    }
+    @media (max-width:767px){
+      .points-hero{margin-top:18px;padding:18px 16px;gap:18px}
+      .points-hero::after{right:6px;top:8px;width:150px;height:100px;opacity:.5}
+      .points-balance-row{flex-direction:column;gap:16px}
+      .points-divider{display:none}
+      .points-balance-value{font-size:44px}
+      .points-hero-stats{grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #DDE9E5;padding-top:12px}
+      .hero-stat{padding:0 10px;min-height:auto}
+      .hero-stat + .hero-stat::before{top:4px;bottom:4px}
+      .hero-stat span{font-size:12px;line-height:18px}
+      .hero-stat strong{font-size:18px}
+      .hero-exchange-btn{height:46px;font-size:17px}
+      .hero-checkin-card{height:46px;padding:0 14px}
+      .hero-checkin-card b{font-size:15px}
+      .points-dual-grid{gap:14px}
+      .points-panel,.points-detail-card{padding:16px}
+      .points-method-grid{grid-template-columns:1fr;gap:10px}
+      .points-method-item{grid-template-columns:44px minmax(0,1fr);padding:12px 14px;gap:12px;min-height:68px}
+      .points-method-side{justify-self:start;grid-column:2;font-size:15px;margin-top:2px}
+      .points-table-head{display:none}
+      .point-record{
+        grid-template-columns:minmax(0,1fr) auto;
+        grid-template-areas:
+          'desc amount'
+          'time balance'
+          'type balance';
+        gap:8px 12px;padding:14px 0
+      }
+      .point-record-time{grid-area:time;font-size:13px}
+      .point-record-type{grid-area:type}
+      .point-record-desc{grid-area:desc}
+      .point-record-amount{grid-area:amount;font-size:16px}
+      .point-record-balance{grid-area:balance;font-size:14px;align-self:end}
+    }
+  </style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="shop.html">商城</a>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="text" placeholder="搜索机器、模型、灵感…"></label>
+
+      <button class="icon-btn" title="购物车"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg><span class="badge-dot cart-count">0</span></button>
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm">注册</a>
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a>
+  <a href="member.html">个人中心</a>
+</div>
+<div class="mc-root">
+<main class="shell">
+  <aside class="sidebar">
+    <section class="profile-card">
+      <div class="profile-avatar-wrap">
+        <a class="avatar-link" href="member-profile-edit.html" aria-label="编辑个人资料"><img class="avatar-lg" src="assets/member/avatar.png" alt="创客小宇" /></a>
+        <a class="edit-badge" href="member-profile-edit.html" aria-label="编辑个人资料" title="编辑个人资料"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></a>
+      </div>
+      <a class="user-name" href="member-profile-edit.html">创客小宇 <span class="level">L2</span></a>
+      <div class="user-id">ID: H9–26242917–0081</div>
+      <div class="side-stats">
+        <a class="side-stat side-stat-link" href="member-points.html"><strong>3,580</strong><span>积分</span></a>
+        <a class="side-stat side-stat-link" href="member-coupons.html"><strong>5</strong><span>优惠券</span></a>
+        <a class="side-stat side-stat-link" href="member-devices.html"><strong>3</strong><span>设备</span></a>
+      </div>
+    </section>
+    <nav class="side-menu">
+      <a class="side-item" href="member-creation.html"><svg viewBox="0 0 24 24"><path d="M14.7 4.3a3 3 0 0 1 4.2 4.2L9 18.4 4 20l1.6-5 9.1-10.7Z"/><path d="m13 6 5 5"/></svg>创作空间</a>
+      <a class="side-item" href="member-community.html"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>社区互动</a>
+      <a class="side-item" href="member-orders.html"><svg viewBox="0 0 24 24"><path d="M6 2v4M18 2v4M4 5h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="M8 11h8M8 15h6"/></svg>我的订单</a>
+    </nav>
+  </aside>
+
+  <section class="content-panel points-page">
+    <h1 class="module-title">积分</h1>
+
+    <section class="points-hero">
+      <div>
+        <div class="points-balance-row">
+          <div class="points-balance">
+            <div class="points-balance-label">当前积分</div>
+            <div class="points-balance-value" id="pointBalance">3,580</div>
+            <div class="points-balance-meta">≈ 可抵扣 35.8 元</div>
+          </div>
+          <div class="points-divider"></div>
+          <div style="flex:1;min-width:0">
+            <div class="points-hero-stats">
+              <div class="hero-stat"><span>本月获得</span><strong class="positive" id="monthGain">+183</strong></div>
+              <div class="hero-stat"><span>本月消耗</span><strong id="monthSpend">-25</strong></div>
+              <div class="hero-stat"><span>累计签到</span><strong id="checkinCount">18 天</strong></div>
+            </div>
+            <div class="hero-expire"><svg viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>120 积分将在 30 天后过期</div>
+          </div>
+        </div>
+      </div>
+      <div class="points-hero-side">
+        <button class="hero-checkin-card" id="dailyCheckinBtn" type="button">
+          <span class="hero-checkin-left">
+            <span class="hero-checkin-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+            <span>连续签到 <b id="checkinCountInline">18 天</b></span>
+          </span>
+          <span class="go" id="checkinBtnText">去签到</span>
+        </button>
+        <a class="hero-exchange-btn" href="member-redeem.html"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M7 8.5h11a2.5 2.5 0 0 1 0 5H6a2.5 2.5 0 0 0 0 5h12"/></svg>去兑换</a>
+      </div>
+    </section>
+
+    <section class="points-dual-grid">
+      <article class="points-panel">
+        <h2>获取积分</h2>
+        <div class="points-method-grid">
+          <div class="points-method-item">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="M6 7h15l-1.5 8h-11z"/><path d="M6 7 5 4H2"/><circle cx="9" cy="19" r="1.2"/><circle cx="18" cy="19" r="1.2"/></svg></div>
+            <div class="points-method-text"><strong>商城消费</strong></div>
+            <div class="points-method-side">+300</div>
+          </div>
+          <div class="points-method-item">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></div>
+            <div class="points-method-text"><strong>上传模型</strong></div>
+            <div class="points-method-side">+50</div>
+          </div>
+          <div class="points-method-item">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            <div class="points-method-text"><strong>每日签到</strong></div>
+            <div class="points-method-side">+5</div>
+          </div>
+          <div class="points-method-item">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+            <div class="points-method-text"><strong>AI 创作保存</strong></div>
+            <div class="points-method-side">+5</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="points-panel">
+        <h2>使用积分</h2>
+        <div class="points-method-grid">
+          <div class="points-method-item use">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="M4 7h16v10H4z"/><path d="M4 11h16"/></svg></div>
+            <div class="points-method-text"><strong>商城抵扣</strong></div>
+            <div class="points-method-side">抵扣</div>
+          </div>
+          <div class="points-method-item use">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="m12 17-5.878 3.09 1.123-6.545L2.49 8.91l6.573-.955L12 2l2.937 5.955 6.573.955-4.755 4.636 1.123 6.545z"/></svg></div>
+            <div class="points-method-text"><strong>AI 高级功能</strong></div>
+            <div class="points-method-side">10 / 次</div>
+          </div>
+          <div class="points-method-item use">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M9 6v12"/></svg></div>
+            <div class="points-method-text"><strong>兑换优惠券</strong></div>
+            <div class="points-method-side">兑换</div>
+          </div>
+          <div class="points-method-item use">
+            <div class="points-method-icon"><svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m12 12 8-4.5"/><path d="m12 12-8-4.5"/><path d="M12 21v-9"/></svg></div>
+            <div class="points-method-text"><strong>付费模型抵扣</strong></div>
+            <div class="points-method-side">抵扣</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="points-detail-card">
+      <div class="points-detail-head"><h2>积分明细</h2></div>
+      <div class="module-tabs" id="pointTabs" role="tablist" aria-label="积分筛选">
+        <button type="button" class="active" data-filter="all">全部</button>
+        <button type="button" data-filter="gain">获取</button>
+        <button type="button" data-filter="spend">消耗</button>
+      </div>
+      <div class="points-detail-table">
+        <div class="points-table-head">
+          <div>时间</div>
+          <div>类型</div>
+          <div>说明</div>
+          <div style="text-align:right">积分变化</div>
+          <div style="text-align:right">余额</div>
+        </div>
+        <div class="points-detail-list" id="pointRecordList"></div>
+      </div>
+      <div class="points-loadmore"><button class="ghost-btn" id="loadMoreBtn" type="button">加载更多</button></div>
+    </section>
+  </section>
+</main>
+</div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i>Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+        <div class="footer-social">
+          <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="3.5"></rect><path d="m10.5 9.5 4.5 2.5-4.5 2.5v-5Z"></path></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"></circle></svg></a>
+          <a href="#" aria-label="X"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l16 16M20 4 4 20"></path></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="shop.html">激光雕刻机</a><a href="shop.html">3D 打印机</a><a href="shop.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="member-orders.html">我的订单</a><a href="member-points.html">积分</a><a href="member-coupons.html">优惠券</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  const records = [
+    {type:'gain', title:'每日签到', detail:'连续签到奖励', time:'2026-09-22 10:24', amount:5, balance:3580},
+    {type:'spend', title:'商城订单抵扣', detail:'商城订单 HM-20260921-1032', time:'2026-09-21 18:06', amount:-200, balance:3575},
+    {type:'gain', title:'上传模型奖励', detail:'作品《桌面收纳盒》审核通过', time:'2026-09-20 14:33', amount:50, balance:3775},
+    {type:'gain', title:'AI 创作保存', detail:'保存《灯光万圣节鬼屋》', time:'2026-09-19 11:08', amount:5, balance:3725},
+    {type:'gain', title:'商城消费获得', detail:'模型订单返积分', time:'2026-09-18 20:16', amount:128, balance:3720},
+    {type:'spend', title:'兑换 20 元无门槛券', detail:'优惠券中心自动发放', time:'2026-09-15 19:10', amount:-100, balance:3592},
+    {type:'gain', title:'社区精选奖励', detail:'作品被社区精选收录', time:'2026-09-14 14:18', amount:30, balance:3692}
+  ];
+
+  const list = document.getElementById('pointRecordList');
+  const tabs = Array.from(document.querySelectorAll('#pointTabs button'));
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  const balanceEl = document.getElementById('pointBalance');
+  const monthGainEl = document.getElementById('monthGain');
+  const monthSpendEl = document.getElementById('monthSpend');
+  const checkinCountEl = document.getElementById('checkinCount');
+  const checkinCountInlineEl = document.getElementById('checkinCountInline');
+  const checkinBtn = document.getElementById('dailyCheckinBtn');
+  const checkinBtnText = document.getElementById('checkinBtnText');
+
+  let filter = 'all';
+  let expanded = false;
+  let signedToday = false;
+  let pointBalance = 3580;
+  let monthGain = 183;
+  let monthSpend = 25;
+  let checkinCount = 18;
+
+  const formatNumber = v => v.toLocaleString('zh-CN');
+  const formatAmount = v => `${v > 0 ? '+' : ''}${v}`;
+
+  function filteredRecords(){
+    const all = filter === 'all' ? records : records.filter(item => item.type === filter);
+    return expanded ? all : all.slice(0,5);
+  }
+
+  function renderRecords(){
+    const data = filteredRecords();
+    list.innerHTML = data.map(item => `
+      <article class="point-record">
+        <div class="point-record-time">${item.time}</div>
+        <div class="point-record-type"><span class="${item.type === 'gain' ? 'gain' : 'spend'}">${item.type === 'gain' ? '获取' : '消耗'}</span></div>
+        <div class="point-record-desc"><strong>${item.title}</strong><em>${item.detail}</em></div>
+        <div class="point-record-amount ${item.amount > 0 ? 'plus' : 'minus'}">${formatAmount(item.amount)}</div>
+        <div class="point-record-balance">${formatNumber(item.balance)}</div>
+      </article>`).join('');
+    const total = filter === 'all' ? records.length : records.filter(item => item.type === filter).length;
+    loadMoreBtn.style.display = total > 5 ? 'inline-flex' : 'none';
+    loadMoreBtn.textContent = expanded ? '收起' : '加载更多';
+  }
+
+  tabs.forEach(btn => btn.addEventListener('click', ()=>{
+    tabs.forEach(node => node.classList.remove('active'));
+    btn.classList.add('active');
+    filter = btn.dataset.filter;
+    expanded = false;
+    renderRecords();
+  }));
+
+  loadMoreBtn.addEventListener('click', ()=>{ expanded = !expanded; renderRecords(); });
+
+  checkinBtn.addEventListener('click', ()=>{
+    if(signedToday) return;
+    signedToday = true;
+    pointBalance += 5;
+    monthGain += 5;
+    checkinCount += 1;
+    records.unshift({type:'gain', title:'每日签到', detail:'连续签到奖励', time:'刚刚', amount:5, balance:pointBalance});
+    balanceEl.textContent = formatNumber(pointBalance);
+    monthGainEl.textContent = `+${monthGain}`;
+    checkinCountEl.textContent = `${checkinCount} 天`;
+    checkinCountInlineEl.textContent = `${checkinCount} 天`;
+    checkinBtn.classList.add('done');
+    checkinBtnText.textContent = '今日已签到';
+    renderRecords();
+  });
+
+  monthSpendEl.textContent = `-${monthSpend}`;
+  renderRecords();
+})();
+</script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/member-app.js"></script>
+</body>
+</html>

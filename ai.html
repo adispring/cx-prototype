@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="zzKKzNZB89OLUqtcWEgJFu">
+<head data-page-node-id="UwcGTVcDdGkmyQmPDcs337">
+<meta charset="UTF-8" data-page-node-id="N32Xi7vrClVYaxamj5x7WQ">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="Zks2twJp9BGqAOtKrZPrnE">
+<title>AI 创作 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="zAVCl8l8L6AyUvA6blikaR">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" data-page-node-id="ILneXNABpvIkQ6peyLNu8f">
+<link rel="stylesheet" href="assets/css/site.css" data-page-node-id="3aYTk3GopA0KVtRs3FUvtO">
+<style>
+/* ============ AI 创作 ============ */
+.ai-page { background: var(--bg-ink); min-height: 100vh; color: #AEBBB2; }
+.ai-page .nav { background: rgba(13,19,16,.8); border-bottom: 1px solid rgba(255,255,255,.08); }
+.ai-page .brand-name { color: #fff; }
+.ai-page .nav-links a { color: #9DB0A5; }
+.ai-page .nav-links a:hover { color: #fff; background: rgba(255,255,255,.06); }
+.ai-page .nav-links a.active { color: #fff; background: none; }
+.ai-page .nav-links a.active::after { background: #4ADE97; }
+.ai-page .icon-btn { background: transparent; border-color: rgba(255,255,255,.18); color: #DCE6DF; }
+.ai-page .icon-btn:hover { border-color: #4ADE97; }
+.ai-page .nav-search { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.14); color: #6E7B73; }
+.ai-page .nav-search:focus-within { border-color: #4ADE97; box-shadow: 0 0 0 3px rgba(74,222,151,.12); }
+.ai-page .nav-search input { color: #fff; }
+.ai-page .nav-search input::placeholder { color: #6E7B73; }
+.ai-page .btn-ghost { border-color: rgba(255,255,255,.25); color: #fff; }
+.ai-page h1, .ai-page h2, .ai-page h3, .ai-page h4 { color: #fff; }
+
+.workbench { padding: 40px 0 80px; }
+.wb-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 32px; flex-wrap: wrap; }
+.wb-head h1 { font-size: clamp(28px, 3.4vw, 40px); }
+.wb-head p { color: #8FA096; margin-top: 8px; }
+.credits { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: 10px 20px; font-size: 13.5px; }
+.credits b { color: #4ADE97; }
+.credits .c-bar { width: 120px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
+.credits .c-bar i { display: block; height: 100%; width: 72%; background: linear-gradient(90deg, #0FA36B, #4ADE97); border-radius: 3px; }
+
+.wb-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
+
+/* 左侧控制面板 */
+.panel { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 22px; position: sticky; top: 92px; }
+.field label.f-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #DCE6DF; margin-bottom: 10px; letter-spacing: .04em; }
+.field .f-count { color: #6E7B73; font-weight: 400; }
+.prompt-box {
+  width: 100%; min-height: 96px; resize: vertical;
+  background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.14); border-radius: 14px;
+  padding: 14px 16px; color: #fff; font-size: 14.5px; line-height: 1.7; outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.prompt-box:focus { border-color: #4ADE97; box-shadow: 0 0 0 3px rgba(74,222,151,.12); }
+.prompt-box::placeholder { color: #6E7B73; }
+.sample-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.sample-row .pc { font-size: 12px; color: #9DB0A5; border: 1px solid rgba(255,255,255,.14); padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s ease; }
+.sample-row .pc:hover { border-color: #4ADE97; color: #4ADE97; }
+.mode-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.mode-btn {
+  border: 1.5px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); border-radius: 12px;
+  padding: 12px; text-align: left; color: #DCE6DF; font-size: 13.5px; transition: all .15s ease;
+}
+.mode-btn small { display: block; color: #6E7B73; font-size: 11.5px; margin-top: 2px; }
+.mode-btn.on { border-color: #4ADE97; background: rgba(74,222,151,.08); }
+.style-chips, .mat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.s-chip { font-size: 13px; color: #9DB0A5; border: 1.5px solid rgba(255,255,255,.14); padding: 6px 14px; border-radius: 999px; background: none; transition: all .15s ease; }
+.s-chip:hover { color: #fff; border-color: rgba(255,255,255,.4); }
+.s-chip.on { background: #4ADE97; border-color: #4ADE97; color: #0D1310; font-weight: 600; }
+.range-wrap { display: flex; align-items: center; gap: 14px; }
+.range-wrap input[type="range"] { flex: 1; accent-color: #4ADE97; }
+.range-wrap .r-val { font-family: var(--font-num); font-size: 13px; color: #4ADE97; min-width: 40px; text-align: right; }
+.gen-btn {
+  width: 100%; height: 54px; border: none; border-radius: 999px;
+  background: linear-gradient(135deg, #0FA36B, #17C984); color: #04150C;
+  font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform .18s ease, box-shadow .18s ease, opacity .2s ease;
+}
+.gen-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -10px rgba(23,201,132,.5); }
+.gen-btn:disabled { opacity: .5; pointer-events: none; }
+.gen-note { text-align: center; font-size: 12.5px; color: #6E7B73; }
+
+/* 右侧画布 */
+.canvas {
+  background: rgba(255,255,255,.03); border: 1px dashed rgba(255,255,255,.16); border-radius: 22px;
+  min-height: 620px; padding: 24px; position: relative; display: flex; flex-direction: column;
+}
+.canvas-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.canvas-head .c-title { font-size: 14px; font-weight: 600; color: #DCE6DF; letter-spacing: .04em; }
+.canvas-head .c-tip { font-size: 12.5px; color: #6E7B73; }
+.result-grid { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-content: stretch; }
+.result-cell {
+  border-radius: 16px; overflow: hidden; position: relative; cursor: pointer;
+  border: 2px solid transparent; background: rgba(255,255,255,.05); min-height: 220px;
+  transition: border-color .15s ease, transform .2s ease;
+}
+.result-cell:hover { transform: translateY(-3px); }
+.result-cell.on { border-color: #4ADE97; }
+.result-cell img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.result-cell .r-tag { position: absolute; top: 10px; left: 10px; background: rgba(13,19,16,.75); backdrop-filter: blur(6px); color: #DCE6DF; font-size: 11.5px; padding: 3px 10px; border-radius: 999px; }
+.result-cell .r-time { position: absolute; bottom: 10px; right: 12px; color: rgba(255,255,255,.75); font-size: 11.5px; font-family: var(--font-num); }
+/* 空状态 */
+.canvas-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; color: #6E7B73; }
+.canvas-empty .ce-ico { width: 84px; height: 84px; border-radius: 26px; background: rgba(74,222,151,.1); display: flex; align-items: center; justify-content: center; color: #4ADE97; }
+.canvas-empty b { color: #DCE6DF; font-size: 17px; }
+/* 生成中 */
+.skeleton { position: relative; overflow: hidden; background: rgba(255,255,255,.05); }
+.skeleton::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(74,222,151,.12) 50%, transparent 70%);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.gen-status { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-size: 13.5px; color: #9DB0A5; }
+.gen-status .pulse { width: 9px; height: 9px; border-radius: 50%; background: #4ADE97; animation: pulse 1.1s ease infinite; }
+@keyframes pulse { 50% { opacity: .3; transform: scale(.8); } }
+
+/* 结果操作条 */
+.action-bar { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
+.action-bar .spacer { flex: 1; }
+.ab-btn {
+  display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px;
+  border-radius: 999px; border: 1.5px solid rgba(255,255,255,.18); background: none;
+  color: #DCE6DF; font-size: 14px; font-weight: 500; transition: all .15s ease;
+}
+.ab-btn:hover { border-color: #fff; }
+.ab-btn.primary { background: #4ADE97; border-color: #4ADE97; color: #04150C; font-weight: 700; }
+.ab-btn.primary:hover { box-shadow: 0 10px 26px -8px rgba(74,222,151,.45); }
+.ab-btn:disabled { opacity: .4; pointer-events: none; }
+
+/* 能力矩阵 */
+.cap-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 24px; }
+.cap-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 22px 20px; transition: all .2s ease; }
+.cap-card:hover { border-color: rgba(74,222,151,.5); transform: translateY(-4px); }
+.cap-card .cap-ico { width: 42px; height: 42px; border-radius: 12px; background: rgba(74,222,151,.12); color: #4ADE97; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.cap-card h4 { font-size: 15px; margin-bottom: 6px; }
+.cap-card p { font-size: 12.5px; color: #8FA096; line-height: 1.65; }
+
+/* 深色页脚复用 */
+.ai-page .footer { background: transparent; border-top: 1px solid rgba(255,255,255,.08); margin-top: 0; }
+.ai-page .footer::before { display: none; }
+
+@media (max-width: 1080px) {
+  .wb-grid { grid-template-columns: 1fr; }
+  .panel { position: static; }
+  .cap-grid { grid-template-columns: repeat(2, 1fr); }
+  .result-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .cap-grid { grid-template-columns: 1fr; }
+  .result-grid { grid-template-columns: 1fr; }
+  .canvas { min-height: 0; }
+}
+</style>
+</head>
+<body class="ai-page" data-page-node-id="9oiZrwOKeD5xsD66xIhL2a">
+
+<!-- ================= 导航 ================= -->
+<header class="nav" data-page-node-id="kFhZGXmRnj2dvDE7EW2Cj3">
+  <div class="nav-inner" data-page-node-id="JBwyg3ZNOI1CcyqyklCmBU">
+    <a class="brand" href="index.html" data-page-node-id="sC1oiXpIFA3PZg1zYeZr2x">
+      <span class="brand-mark" data-page-node-id="SyYs02J0TWqkDD35E75DeY"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="lLJ1zy5XBx8Tm2PeQKGBT3"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="gQzA0IMnIiYhLiZHeeQTaT"/><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"/></svg></span>
+      <span class="brand-name" data-page-node-id="P4CSD2Hq7viXLniz6JtYQl">Hi<i style="color:#4ADE97" data-page-node-id="bKRRGk3RzQV8QcIQWWYkvh">Makers</i></span>
+    </a>
+    <nav class="nav-links" data-page-node-id="hwFE0g1j6JnFtmvUyJmTJG">
+      <a href="index.html" data-page-node-id="SP4SOqsQNWlRmMropuVjQE">首页</a>
+      <a href="shop.html" data-page-node-id="L5NYiPFQqDt37LZQ5aq24f">商城</a>
+      <a href="ai.html" class="active" data-page-node-id="4OPpl9reHO2zwuL343jaqz">AI 创作</a>
+      <a href="models.html" data-page-node-id="nu8nCpSXYOkYCv4PQM6jOI">模型库</a>
+      <a href="community.html" data-page-node-id="DhPlxLpAMR2XnSFfLmgvAC">社区</a>
+    </nav>
+    <div class="nav-actions" data-page-node-id="KVwyoHqHG0n1J7BQu9HUdj">
+      <label class="nav-search" data-page-node-id="OXn6BO2cFK8Q3ULQn7cGXW">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="6aiNp6TWC3n1WchCJfgM40"><circle cx="11" cy="11" r="7" data-page-node-id="dWhZJKFgMuDHu5VUA9OlvQ"/><path d="m20 20-3.5-3.5" data-page-node-id="DQuHIFAaePvLszwyHxyokF"/></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…" data-page-node-id="BXM7nh6z0Pqa5NdWgHBqKC">
+      </label>
+
+      <a href="#" class="btn btn-ghost sm" data-page-node-id="PP2ySUs6z4Xno6V571pWMa">登录</a>
+      <button class="icon-btn nav-burger" data-page-node-id="RUIc9PhdbDr70VZqCtIHBk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="xeGz6jQEEX79pF5poROhJt"><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="24HyQ906xQ1ZlKvDipyvun"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" style="background:rgba(13,19,16,.98)" data-page-node-id="qqSsXoyUM4NPQAqcRBQHrj">
+  <a href="index.html" style="color:#fff" data-page-node-id="lHCumW7RhlX5nTGvZKCYJf">首页</a><a href="shop.html" style="color:#fff" data-page-node-id="qwPTYBrD89Q69DYIKRzWCp">商城</a><a href="ai.html" style="color:#4ADE97" data-page-node-id="Cvxiu9O9cq3gm0wn4drPqi">AI 创作</a><a href="models.html" style="color:#fff" data-page-node-id="VL7PYJOVK7f39Co2BdrOLy">模型库</a><a href="community.html" style="color:#fff" data-page-node-id="EkWvIDZdW8kjldAzvhQpHD">社区</a>
+<a href="member.html">个人中心</a></div>
+
+<!-- ================= 工作台 ================= -->
+<section class="workbench" data-page-node-id="0J8BE4LkDpI8WQT2rH2DFd">
+  <div class="wrap" data-page-node-id="15vpHgE7Gh8DOa8JRX3Z3O">
+    <div class="wb-head" data-page-node-id="TpYIfxmrjaXcD3bvF0MdT0">
+      <div data-page-node-id="GvCJ8mjo1iMhczYvYJetst">
+        <h1 data-page-node-id="z5eSzp36pZAixgZVVAFZm3">AI 创作 <span class="serif-it" style="color:#4ADE97;font-size:.85em" data-page-node-id="dCEDdpGDdrJzEQDonlx6wg">workbench</span></h1>
+        <p data-page-node-id="TRvJn1nG346CRJIbz8qGX1">Describe it, make it —— 一句话到可上机文件，全程不超过 60 秒。</p>
+      </div>
+      <div class="credits" data-page-node-id="LHtnI1ordMmrxCv15R6ksn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4ADE97" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="U08QL81aNpl7wUZ2EUgCk2"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z" data-page-node-id="XP4ZhrsNo8P3cigH0d5igD"/></svg>
+        灵感点 <b data-page-node-id="cA2L7FwzPHxwMjs8NPmw8J">487 / 500</b>
+        <span class="c-bar" data-page-node-id="291fFjPQewyrtYvOHirlK5"><i data-page-node-id="7I1oCDIYnJqO92NJ640ZEY"></i></span>
+        <a href="#" style="color:#4ADE97;font-weight:600" onclick="toast('演示原型：升级 Maker Pass 可获得每月 500 点')" data-page-node-id="heWJ0FS0b8lL2W4TeNvgwg">补充</a>
+      </div>
+    </div>
+
+    <div class="wb-grid" data-page-node-id="bMOsHCFpOF9811ZumE60lC">
+      <!-- 左：控制面板 -->
+      <aside class="panel reveal" data-page-node-id="QcrUUvGaVOuK3wKwQlfV3b">
+        <div class="field" data-page-node-id="1Mafz9uwkN35Xa9CpSeH06">
+          <label class="f-label" data-page-node-id="x70WPWuI4iYm4aSCf4TtGx">创作类型</label>
+          <div class="mode-row" data-page-node-id="fKXx8ajeoVMeZyN1603iFu">
+            <button class="mode-btn on" data-mode data-page-node-id="8s9BvGyhhPutAcljsvG00m">图案雕刻<small data-page-node-id="4l2P29H3oYoOpHIGUGqnbU">Line / 线稿上机</small></button>
+            <button class="mode-btn" data-mode data-page-node-id="HGOF9qeIQIYLaSbQSoUgEe">照片浮雕<small data-page-node-id="8hPUOuTgktizsszPULqeYT">Photo → Relief</small></button>
+            <button class="mode-btn" data-mode data-page-node-id="QaARuSD61hXsfZs1nG2gO2">3D 模型<small data-page-node-id="uXIcdu14S2qJoEluiII4Lf">生成可打印模型</small></button>
+            <button class="mode-btn" data-mode data-page-node-id="2yE4VNDUpdmnzPYljAYj5H">字体排版<small data-page-node-id="LWLBpHFfiQY7yO8jlv1T8w">招牌 / 铭牌一键排版</small></button>
+          </div>
+        </div>
+        <div class="field" data-page-node-id="fSkxlHb0TZaTAeOiLx5UEH">
+          <label class="f-label" data-page-node-id="MbX6SMdQZdF7zQ14CGIjBJ">描述你想做的作品 <span class="f-count" data-page-node-id="QsOe6ZuawePAzuAlFmEXMu"><span id="charCount" data-page-node-id="s4sTumo1CSHDI9EMAI5Z2B">0</span>/300</span></label>
+          <textarea class="prompt-box" id="promptBox" maxlength="300" placeholder="例：一只在星空下奔跑的机械鹿，等高线风格，适合 20cm 木盘雕刻…"></textarea>
+          <div class="sample-row" data-page-node-id="XZwdJ3JslaqErbVH1QFP8l">
+            <span class="pc" data-sample="一座等高线风格的雪山木刻，边缘留白 5mm" data-page-node-id="ppWcHbRNxNZRh9DMHIkxXg">🏔️ 等高线雪山</span>
+            <span class="pc" data-sample="极简线条的猫剪影，圆形边框，适合皮革烫印" data-page-node-id="t7QJg9xFAuT2ScPJqz2PEI">🐱 线条猫剪影</span>
+            <span class="pc" data-sample="机械风格的蜂巢六边形收纳盒，带卡扣结构" data-page-node-id="BmEt4WY462ZFmTS47m6ecz">🐝 蜂巢收纳盒</span>
+            <span class="pc" data-sample="花体英文 HOME 招牌，适合亚克力切割" data-page-node-id="vVqmGCFJpLdP3Fh0hjBKV9">✨ HOME 招牌</span>
+          </div>
+        </div>
+        <div class="field" data-page-node-id="9g4GLbSOa2p7Qs5F7d1EGr">
+          <label class="f-label" data-page-node-id="y9QDLCTPbDSEMqNi6N4UXY">艺术风格</label>
+          <div class="style-chips" id="styleChips" data-page-node-id="9jfhEIf9jzuFmClRRZ8mtR">
+            <button class="s-chip on" data-page-node-id="i5UTOhzxXUDSA27C40HmTG">等高线</button><button class="s-chip" data-page-node-id="mHRov1dIOIODe2V9M5Sq32">线稿</button><button class="s-chip" data-page-node-id="1Vp5MwxiMZk8vrVLyvJ9gR">剪影</button><button class="s-chip" data-page-node-id="SbMSxF67JmZZCJe3ecAkAo">浮雕</button><button class="s-chip" data-page-node-id="WslpGZg005jqCl3z5yqhpR">几何</button><button class="s-chip" data-page-node-id="QXwrQfzZHlIkHIOAq1DAxr">像素</button>
+          </div>
+        </div>
+        <div class="field" data-page-node-id="FoVwZ88QqYsOmPaR43mV5B">
+          <label class="f-label" data-page-node-id="5DXpK3Fx2nU2dPZaDgiPfg">目标材质 / 工艺</label>
+          <div class="mat-chips" id="matChips" data-page-node-id="ONbnDmtPMibWSwVBjUREeJ">
+            <button class="s-chip on" data-page-node-id="1dgOGeRkeQ9Jul3JnpbjJx">椴木板</button><button class="s-chip" data-page-node-id="wFsuQ6fkyt7ERwZSFoaiv5">胡桃木</button><button class="s-chip" data-page-node-id="aaOZAiA4ETZDX1wQ2co7I9">亚克力</button><button class="s-chip" data-page-node-id="yFnL6Nw4YaFWcMkisHdyZM">皮革</button><button class="s-chip" data-page-node-id="KXNbritn1ylA73WZsQsS9N">铝合金</button>
+          </div>
+        </div>
+        <div class="field" data-page-node-id="KA2eTRk40HmIY5JgyThVeF">
+          <label class="f-label" data-page-node-id="FG3ZA1ILmWE6vBUU09BVtm">细节程度 <span class="f-count" id="detailVal" data-page-node-id="oZufaCXL9en3yhr68XrJck">中 · 60%</span></label>
+          <div class="range-wrap" data-page-node-id="LKOYrejo2fWQUj3ZGNVeun">
+            <input type="range" id="detailRange" min="10" max="100" step="10" value="60" data-page-node-id="ZaVUst1NCCsYCL3re59L1A">
+          </div>
+        </div>
+        <div class="field" data-page-node-id="t44loUJg3V9du4pTGU4x4h">
+          <label class="f-label" data-page-node-id="OCRtS8j7r3mVRNKDv6kmJL">生成数量</label>
+          <div class="style-chips" id="countChips" data-page-node-id="bGRMnZ8YpzP3r8LKhUL6Ve">
+            <button class="s-chip" data-page-node-id="G1wHNQVjUQaExoxYVmChNA">2 张</button><button class="s-chip on" data-page-node-id="Yv6sQn6bNbqsIl1UtCMluJ">4 张</button><button class="s-chip" data-page-node-id="SpaGbqJi3YIuHEp6pl3J91">6 张</button>
+          </div>
+        </div>
+        <button class="gen-btn" id="genBtn" data-page-node-id="VjFcoGyLfMJmvK8igG4cdK">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="fClOriY5rIAL4bQS2lhrnH"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z" data-page-node-id="YE2aexmBzq1pqKHs4hDCtZ"/></svg>
+          开始生成 · 消耗 2 点
+        </button>
+        <div class="gen-note" data-page-node-id="U4aq3SCECho95PBvwoqYUy">生成结果默认私密，发布到社区前不会被公开</div>
+      </aside>
+
+      <!-- 右：结果画布 -->
+      <div class="canvas reveal d1" data-page-node-id="X97nwrTDB8GnIAFIXqmVNC">
+        <div class="canvas-head" data-page-node-id="w6pM0vQH3DpccHaYcL0MsD">
+          <span class="c-title" data-page-node-id="oJdo0zOVHkT9SmVtAbEcKY">生成结果</span>
+          <span class="c-tip" id="canvasTip" data-page-node-id="AUXADlbnzFMYO89I4Ne4Hl">选择一张继续下一步</span>
+        </div>
+
+        <!-- 空状态 -->
+        <div class="canvas-empty" id="canvasEmpty" data-page-node-id="xLx7GeFBRGY8PObJF6rDX6">
+          <div class="ce-ico" data-page-node-id="vMMlinUHZyO5kAB7dR89jo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="kCwTfMDhrgDaIY3c9lMfWn"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z" data-page-node-id="tlz9kbDVcO8UBsCDSt54TT"/><path d="M19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15Z" data-page-node-id="XdDWfEruIXbwCb6JbY26Mb"/></svg></div>
+          <b data-page-node-id="GjjzVoCCnrkzVRxLv4FjiB">你的作品将出现在这里</b>
+          <span data-page-node-id="Wh5G7JBDTL0qikqKIZzxnX">输入描述并点击「开始生成」，通常 30–60 秒完成</span>
+        </div>
+
+        <!-- 生成结果 / 骨架由 JS 渲染 -->
+        <div class="result-grid" id="resultGrid" style="display:none" data-page-node-id="dzl7JSTBLFClDrgIPBilC9"></div>
+        <div class="gen-status" id="genStatus" style="display:none" data-page-node-id="DwA9merAjVWawykYvqvpb1"><span class="pulse" data-page-node-id="PEHyFJb0hF4zlczC7rfT6p"></span><span id="genStatusText" data-page-node-id="cofyccvvhImdnhDEwi3tup">正在解析描述…</span></div>
+
+        <div class="action-bar" id="actionBar" style="display:none" data-page-node-id="YXIAWNxiIiIZ8tbLaHfmrU">
+          <button class="ab-btn primary" id="sendMachine" disabled data-page-node-id="GQ8EaIXWuNAYoOnlJHkniJ">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="R90XyGzyfeXriQW7F1TwUT"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z" data-page-node-id="KEDrP1l60ZvZ4LsAwpcIDd"/></svg>
+            发送到机器
+          </button>
+          <button class="ab-btn" id="saveLib" disabled data-page-node-id="hYQqJq7pPnu4hwKNyhDkMo">存入模型库</button>
+          <button class="ab-btn" id="shareCom" disabled data-page-node-id="hRVdVpxHOVx8ste8toz2mF">分享到社区</button>
+          <span class="spacer" data-page-node-id="uMMzRiMtKdGOED5yKMB8vB"></span>
+          <button class="ab-btn" id="reGen" onclick="doGenerate()" data-page-node-id="4e3n0u4g1FtemzAX7FHM1o">↺ 再来一组</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 能力矩阵 ================= -->
+<section style="padding-bottom:88px" data-page-node-id="OZNMkAYRWV3A4CHABzprAv">
+  <div class="wrap" data-page-node-id="SLl2hj5TaVInjajiARw12D">
+    <div class="section-head" style="margin-bottom:20px" data-page-node-id="bcCnlDiANrjvmLgiUGH4yL">
+      <div data-page-node-id="V2YBgbNek74gONEjk6smFN">
+        <span class="eyebrow on-dark" data-page-node-id="YqLlYTtT1ErAC16Jpx8OGp">Capabilities</span>
+        <h2 class="h2" style="margin-top:12px;font-size:30px" data-page-node-id="VCP9hfkMWmvEyjJsGWahwP">不只是生成图片，<span class="serif-it" style="color:#4ADE97" data-page-node-id="7NfuG3RnI1pqFWNHnyyzAB">而是可制造文件</span></h2>
+      </div>
+    </div>
+    <div class="cap-grid" data-page-node-id="VVE1AW54fVCeQ1u34TLGdB">
+      <div class="cap-card reveal" data-page-node-id="A42x90iECCf3THzBcclJol">
+        <div class="cap-ico" data-page-node-id="72K8yM0qhdP0eqBTRzAG23"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="fs9IomQMpEAG1WPM6GoIZF"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z" data-page-node-id="ue31zrCPGH1vlkrDbikVff"/></svg></div>
+        <h4 data-page-node-id="YKX7gPNapetsDEcm6fhE6P">文生图案</h4><p data-page-node-id="Rgbg7LL0PqeLnTX0rgJ2aq">自然语言到矢量雕刻路径，自动处理闭环与桥接。</p>
+      </div>
+      <div class="cap-card reveal d1" data-page-node-id="ZqXN0R64AGyuo2S82OdiXU">
+        <div class="cap-ico" data-page-node-id="tYmNo3wtFBuvY45cBi7uMH"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="hJNB0TdQupBBf4CEs6zucD"><rect x="3" y="5" width="18" height="14" rx="2.5" data-page-node-id="28koPEilZEGyKaI2qUVyLr"/><path d="m3 15 5-4 4 3 3.5-2.5L21 15" data-page-node-id="PIwSNeynjQTdR0dU8XRC6j"/><circle cx="9" cy="9.5" r="1.4" data-page-node-id="O7meFGXc5Z94ddy5FIxVeZ"/></svg></div>
+        <h4 data-page-node-id="fvHdZzrZkdYFW9xX1xMjuq">照片转浮雕</h4><p data-page-node-id="hDsRstiCFbabEQ1ZBGv9G4">人像 / 宠物照片一键生成灰度浮雕与高度图。</p>
+      </div>
+      <div class="cap-card reveal d2" data-page-node-id="d8EpZC4eQe9gL2uqDlDO3n">
+        <div class="cap-ico" data-page-node-id="rHWtc8kQVnsRE8Efiuw7dD"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Pey1HsDOQFbqvhwM1cTDkx"><path d="M4 20V8l8-5 8 5v12" data-page-node-id="4We4CvbMPPACZKBcFHbRXf"/><path d="M4 20h16M9 20v-6h6v6" data-page-node-id="LUBXcXHRKKqcVU7HBthbFW"/></svg></div>
+        <h4 data-page-node-id="sNMqV5CkD0xGGJBLMB05Dx">智能排版</h4><p data-page-node-id="ivVvmBxCS56C9E1IQEGPsD">招牌、铭牌自动字体匹配与排版，导出即用。</p>
+      </div>
+      <div class="cap-card reveal d3" data-page-node-id="P6zzAGSqbYvrjorb4UbnSa">
+        <div class="cap-ico" data-page-node-id="YoeT0uI3sOzZbNSfIeQfbh"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Z3SN8hKRf3kViPqOCqp3Ic"><path d="M5 4h14M5 4v4c0 2 1.5 3.5 3.5 3.5S12 10 12 8V4M12 4v4c0 2 1.5 3.5 3.5 3.5S19 10 19 8V4M8.5 11.5V20m7-8.5V20" data-page-node-id="iyYkIFGBkTPdevxI4wQw4W"/></svg></div>
+        <h4 data-page-node-id="VzLUr4ua6GcJDBPqY3dIHH">参数推荐</h4><p data-page-node-id="L8MCmzvyMg8zxbpg0Qaiyq">按材质与机器型号推荐功率、速度与遍数。</p>
+      </div>
+      <div class="cap-card reveal d4" data-page-node-id="FHbnHptrchYfBhAJ6GGc7F">
+        <div class="cap-ico" data-page-node-id="enw4rhwlGN6LjRNJhqFYtJ"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="FEyJG1cSJlJnVrSb9aqCqB"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5" data-page-node-id="qoI8LJL4aiVcctLOfvXVge"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5" data-page-node-id="JoGJMNQCjSCu3bMtb2lkqP"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5" data-page-node-id="EzJtO1PfbqnGA6AffcPPxG"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5" data-page-node-id="3QE8ETf7HrIOcNVt9zhnnV"/></svg></div>
+        <h4 data-page-node-id="GaG0BlKaFpCpDp4saa84q0">批量生成</h4><p data-page-node-id="zXSRAoNTivLgaaprlro3Ba">活动物料、系列徽章批量套版，一次出整套。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 页脚 ================= -->
+<footer class="footer" data-page-node-id="AAV3jSuR3B10zu7Vs6GhZO">
+  <div class="footer-inner" data-page-node-id="3Yl6jIuPwFVyd9OnTIxiBe">
+    <div class="footer-bottom" style="border-top:none;padding-top:0" data-page-node-id="A2zvnzaQF8TNmzy9Bg2jWt">
+      <span data-page-node-id="YvDyG0WSpvaINHZo7ELgE9">© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links" data-page-node-id="Wz1FY0eNYxzW545P6OMCIt"><a href="#" data-page-node-id="fZFLoLgqwGGJjIbAkMTrmf">隐私政策</a><a href="#" data-page-node-id="ZlP8DmOC9lkioEBIGjW8w0">服务条款</a><a href="#" data-page-node-id="rXaPW9UB6xcbHk1p5ZXaKr">AI 生成内容规范</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-wrap" data-page-node-id="DNBaLnC5KCemtMQYlzHDQv"></div>
+
+<script src="assets/js/site.js"></script>
+<script>
+/* ---------- 字数统计 ---------- */
+var promptBox = document.getElementById("promptBox");
+promptBox.addEventListener("input", function(){
+  document.getElementById("charCount").textContent = this.value.length;
+});
+
+/* ---------- 示例填充 ---------- */
+document.querySelectorAll("[data-sample]").forEach(function(el){
+  el.addEventListener("click", function(){
+    promptBox.value = el.getAttribute("data-sample");
+    promptBox.dispatchEvent(new Event("input"));
+    promptBox.focus();
+  });
+});
+
+/* ---------- 单选 chip 组 ---------- */
+function bindSingle(groupId){
+  var group = document.getElementById(groupId);
+  if (!group) return;
+  group.addEventListener("click", function(e){
+    var chip = e.target.closest(".s-chip"); if (!chip) return;
+    group.querySelectorAll(".s-chip").forEach(function(c){ c.classList.remove("on"); });
+    chip.classList.add("on");
+  });
+}
+bindSingle("styleChips"); bindSingle("matChips"); bindSingle("countChips");
+
+/* ---------- 模式选择 ---------- */
+document.querySelectorAll("[data-mode]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll("[data-mode]").forEach(function(b){ b.classList.remove("on"); });
+    btn.classList.add("on");
+  });
+});
+
+/* ---------- 细节滑杆 ---------- */
+var detailRange = document.getElementById("detailRange");
+var detailWords = ["极简","简约","适中","细腻","丰富","极繁","奢华","绚烂","超精细","极致"];
+detailRange.addEventListener("input", function(){
+  var v = parseInt(this.value,10);
+  document.getElementById("detailVal").textContent = detailWords[Math.round(v/10)-1] + " · " + v + "%";
+});
+
+/* ---------- 生成流程（模拟） ---------- */
+var RESULTS = [
+  { img:"assets/img/works/wood-relief.png",   tag:"方案 A · 等高线" },
+  { img:"assets/img/works/acrylic-sign.png",  tag:"方案 B · 剪影" },
+  { img:"assets/img/works/wood-puzzle.png",   tag:"方案 C · 几何" },
+  { img:"assets/img/models/lattice-vase.png", tag:"方案 D · 浮雕" }
+];
+var STATUS = ["正在解析描述…","正在生成构图…","正在适配材质与工艺…","正在优化雕刻路径…","即将完成…"];
+var selectedIdx = -1, generating = false;
+
+function doGenerate(){
+  if (generating) return;
+  if (!promptBox.value.trim()) {
+    toast("先描述一下你想做的作品吧");
+    promptBox.focus();
+    return;
+  }
+  generating = true;
+  selectedIdx = -1;
+  var grid = document.getElementById("resultGrid");
+  var count = parseInt(document.querySelector("#countChips .s-chip.on").textContent,10);
+  document.getElementById("canvasEmpty").style.display = "none";
+  document.getElementById("actionBar").style.display = "none";
+  document.getElementById("genStatus").style.display = "flex";
+  document.getElementById("genBtn").disabled = true;
+
+  var cells = "";
+  for (var i = 0; i < count; i++) cells += '<div class="result-cell skeleton"></div>';
+  grid.style.display = "grid";
+  grid.innerHTML = cells;
+
+  var si = 0;
+  var statusTimer = setInterval(function(){
+    si = Math.min(si + 1, STATUS.length - 1);
+    document.getElementById("genStatusText").textContent = STATUS[si];
+  }, 1100);
+
+  setTimeout(function(){
+    clearInterval(statusTimer);
+    generating = false;
+    document.getElementById("genStatus").style.display = "none";
+    document.getElementById("genBtn").disabled = false;
+    grid.innerHTML = RESULTS.slice(0, count).map(function(r,i){
+      return '<div class="result-cell" data-idx="' + i + '">' +
+        '<img src="' + r.img + '" alt="">' +
+        '<span class="r-tag">' + r.tag + '</span>' +
+        '<span class="r-time">32.' + (10 + i * 7) + 's</span></div>';
+    }).join("");
+    document.getElementById("actionBar").style.display = "flex";
+    updateActions();
+    grid.querySelectorAll(".result-cell").forEach(function(cell){
+      cell.addEventListener("click", function(){
+        grid.querySelectorAll(".result-cell").forEach(function(c){ c.classList.remove("on"); });
+        cell.classList.add("on");
+        selectedIdx = parseInt(cell.getAttribute("data-idx"),10);
+        updateActions();
+      });
+    });
+    toast("生成完成 · 消耗 2 灵感点");
+  }, 5200);
+}
+document.getElementById("genBtn").addEventListener("click", doGenerate);
+
+function updateActions(){
+  var has = selectedIdx > -1;
+  ["sendMachine","saveLib","shareCom"].forEach(function(id){ document.getElementById(id).disabled = !has; });
+  document.getElementById("canvasTip").textContent = has ? "已选择方案 · 可继续下一步" : "选择一张继续下一步";
+}
+document.getElementById("sendMachine").addEventListener("click", function(){
+  toast("已发送到 XCheng X1 · 预计雕刻 26 分钟");
+});
+document.getElementById("saveLib").addEventListener("click", function(){
+  toast("已存入「我的模型库」私有空间");
+});
+document.getElementById("shareCom").addEventListener("click", function(){
+  toast("已发布到社区 · 等待审核通过后公开");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="EAe7b3GT16sYJyJELRbeVE" data-dm-ref="6"><head data-page-node-id="I2EecLNPQCp2vOy8FaK2A8">
+<meta charset="UTF-8" data-page-node-id="XZqVcSDxorXyIShot7s9N4">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="NOvJRDgxTUAOIJWuJgrr0L">
+<title>自由组合 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="HVd3N1596MpfG9WRV6qL8L">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet" data-page-node-id="cMmlFGLuyVGnGKbyBei88r">
+<link rel="stylesheet" href="assets/css/site.css" data-page-node-id="QNCOnOVgQFYreMeCtIxu8O">
+<style>
+/* ============ 自由组合 DIY ============ */
+.diy-head { padding: 40px 0 4px; }
+.crumbs { font-size: 13.5px; color: var(--faint); display: flex; gap: 8px; }
+.crumbs a { color: var(--faint); text-decoration: none; }
+.crumbs a:hover { color: var(--ink); }
+.crumbs .sep { color: var(--line-2); }
+.diy-head h1 { font-size: clamp(28px, 3.2vw, 40px); margin: 12px 0 8px; letter-spacing: -.03em; }
+.diy-lead { color: var(--muted); font-size: 15.5px; max-width: 620px; }
+
+.diy-layout { display: grid; grid-template-columns: 1fr 372px; gap: 32px; align-items: start; padding: 26px 0 88px; }
+.step-card { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 24px; margin-bottom: 18px; }
+.step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.step-no { width: 28px; height: 28px; border-radius: 9px; background: var(--green); color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-head h3 { font-size: 17px; }
+.step-head .step-tip { margin-left: auto; font-size: 13px; color: var(--muted); }
+
+.main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.m-pick { position: relative; border: 1.5px solid var(--line); border-radius: 18px; padding: 16px 14px; background: #fff; text-align: center; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease; }
+.m-pick:hover { border-color: var(--ink); transform: translateY(-2px); }
+.m-pick.on { border-color: var(--green); background: var(--green-bg); box-shadow: 0 16px 34px -22px rgba(15,163,107,.55); }
+.m-pick img { width: 100%; height: 92px; object-fit: contain; }
+.mp-n { font-size: 15px; font-weight: 600; margin-top: 10px; }
+.mp-d { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+.mp-p { font-size: 17px; font-weight: 600; margin-top: 8px; }
+.mp-ck { position: absolute; right: 12px; top: 12px; width: 21px; height: 21px; border-radius: 50%; border: 1.5px solid var(--line-2); background: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; color: transparent; }
+.m-pick.on .mp-ck { background: var(--green); border-color: var(--green); color: #fff; }
+
+.acc-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); }
+.acc-item:first-child { border-top: 0; }
+.acc-item > img { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.acc-info { flex: 1; min-width: 0; }
+.acc-n { font-size: 14.5px; font-weight: 600; }
+.acc-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.acc-p { font-size: 15px; font-weight: 600; color: var(--ink); margin-left: auto; }
+
+.sum-card { position: sticky; top: 96px; background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.sum-card h3 { font-size: 17px; }
+.sum-items { display: flex; flex-direction: column; gap: 8px; }
+.sum-item { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--body); }
+.sum-item img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.sum-item .si-n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sum-item .si-q { color: var(--faint); font-size: 12.5px; }
+.sum-item.main .si-n { font-weight: 600; color: var(--ink); }
+.sum-line { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; color: var(--muted); }
+.sum-line b { color: var(--ink); font-weight: 600; }
+.save-pill { color: var(--green-t); background: var(--green-bg); font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+.sum-total { display: flex; align-items: baseline; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--line); }
+.sum-total > span:first-child { font-size: 14px; color: var(--muted); }
+.sum-total .price { font-size: 28px; }
+.sum-tip { font-size: 12.5px; color: var(--faint); line-height: 1.65; }
+.sum-empty { font-size: 13px; color: var(--faint); }
+
+@media (max-width: 1080px) {
+  .diy-layout { grid-template-columns: 1fr; }
+  .sum-card { position: static; }
+  .main-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .diy-layout { padding-bottom: 56px; }
+  .step-card { padding: 18px; }
+  .main-grid { grid-template-columns: 1fr; }
+  .m-pick { display: flex; align-items: center; gap: 14px; text-align: left; }
+  .m-pick img { width: 76px; height: 76px; }
+  .m-pick .mp-n { margin-top: 0; }
+  .acc-item { flex-wrap: wrap; }
+  .acc-p { margin-left: 66px; }
+}
+</style>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<body data-page-node-id="fD1NqT2LdQyajJwAiX0iSB" style="">
+
+<!-- ================= 导航 ================= -->
+<header class="nav" data-page-node-id="aCJDTcJ44pmuOdZexZFQta">
+  <div class="nav-inner" data-page-node-id="7VHNK3eAXKA3nGxaNypFo2">
+    <a class="brand" href="index.html" data-page-node-id="yhHavWNxTHAP0A6eWFr2VJ">
+      <span class="brand-mark" data-page-node-id="oc9tGuFFQjuf1tS0hJSWYU" style=""><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="Q8k7LfgzstCAVSPJqC2ZB9" style=""><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="NGgol5nGOqUUQkBHJTLQGk"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="GcdLrHQ2YawzMKK0qhBzsF"></path></svg></span>
+      <span class="brand-name" data-page-node-id="cMJl9msy30EFZdLg9qdlwT">Hi<i data-page-node-id="rJERlx2HeznttGnpvQ3XGt">Makers</i></span>
+    </a>
+    <nav class="nav-links" data-page-node-id="ADFJxH94pVEh30W5ThYBDG">
+      <a href="index.html" data-page-node-id="KaEwBFYoIdUKJPsJrg5Y2I">首页</a>
+      <div class="nav-item">
+        <a href="shop.html" class="active" data-page-node-id="jETB9ZISQ68UQ8H0wxegFn">商城</a>
+        <div class="nav-menu" aria-label="商城分类">
+          <div class="wrap nm-in">
+            <div class="nm-col">
+              <div class="nm-h">整机</div>
+              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
+              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
+              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
+              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
+            </div>
+            <div class="nm-prods">
+              <div class="nm-h">热销机型</div>
+              <div class="nm-grid">
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="ai.html" data-page-node-id="Gx3qTp2DMpSyo3uC6ni2yf">AI 创作</a>
+      <a href="models.html" data-page-node-id="YI6N4Q7y54MWxRZ3in8yh3">模型库</a>
+      <a href="community.html" data-page-node-id="7KlbXOGDJWUgxImxZ15psv">社区</a>
+    </nav>
+    <div class="nav-actions" data-page-node-id="vaDNs2vEQzwVJSoKustApO">
+      <label class="nav-search" data-page-node-id="K7ol3GQjg24wOrfgG0vC5o">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="jGKf6HzmZDkxHHCBLuizc9" style=""><circle cx="11" cy="11" r="7" data-page-node-id="lP4KhS0MbWUs6M3HE3jo8D"></circle><path d="m20 20-3.5-3.5" data-page-node-id="LKu6iweIVcsvDaozQ9ip3O"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…" data-page-node-id="AiSRAHpzRqF7We5cjhIHfl" style="">
+      </label>
+
+      <div class="notif-wrap" data-page-node-id="z7ovwt1Q2QytciHLsL957D"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知" data-page-node-id="JqjvqkP7FD08c7ssdRA0LH"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="5H1LbkU55FVoJyc8Zpj086" style=""><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8" data-page-node-id="7lp6fSgIONChKpKvXEddmy"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0" data-page-node-id="7TdrwdOR5szrHmBeTkvS2i"></path></svg><span class="badge-dot notif-count show" data-page-node-id="V4xuuBr4azjXFxhUQyUCDW">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知" data-page-node-id="tQOeKtKP0ZinxqPoSmGsWH" style=""><div class="np-head" data-page-node-id="NKrySjFnzaFC4akP6SrBeQ"><h4 data-page-node-id="Zrf1LkKTULsUcsJjiB6G4J">通知中心<span class="np-count" id="notifUnreadCount" data-page-node-id="ysawCQfnP6Yeq4YKFRmFGf">3 条未读</span></h4><button class="np-mark" id="notifMarkAll" data-page-node-id="jcKhnZobAtIbMA75oKfp7p">全部已读</button></div><div class="np-tabs" data-page-node-id="G4XHGqo26Dya1D9T4NiJWW"><button class="np-tab on" data-cat="全部" data-page-node-id="5eQ6f7B5iWA6qOUAFJFFg8">全部</button><button class="np-tab" data-cat="互动" data-page-node-id="FyHqbJixl2HIri43mO9GTT">互动</button><button class="np-tab" data-cat="订单" data-page-node-id="jfIQ4DfkxgmjPWWgAo6Pc7">订单</button><button class="np-tab" data-cat="系统" data-page-node-id="BsQ2k6lY04XU40ERccLR0r">系统</button></div><div class="np-list" id="notifList" data-page-node-id="f7O9uuAmw04jOPOn1dfxMV" style=""><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot" data-page-node-id="hIGkMQowcJBHw4292Y4HnP"><a href="community.html" data-page-node-id="6Z5sNGGWAH4oC7PUkEO4BG">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart="" data-page-node-id="t0CEMH9xfcxU2DFLyibhA4" aria-label="购物车">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="rJ5xu4rTGagy0WHd5ODm0Z" style=""><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z" data-page-node-id="BzCJEdoLBJNYevmx7rVm2I"></path><path d="M9 9V6a3 3 0 0 1 6 0v3" data-page-node-id="B7dT7dABLjLcTY1lgviCLX"></path></svg>
+        <span class="badge-dot cart-count" data-page-node-id="URr1t9fTsY60x9CatGdLAb">0</span>
+      </button>
+      
+      
+      <button class="icon-btn nav-burger" data-page-node-id="CuEYQ82Qy21fUlUmODkAgy"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="Auuwr0ltaE8vRhn7joBVFh" style=""><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="bFYJgsJKhtApmBG4TFIC0l"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" data-page-node-id="x2qc0ULdAqxhdwxpGu0hsm">
+  <a href="index.html" data-page-node-id="UClU0tOOIuPfAJFoHxYBbx">首页</a><a href="shop.html" class="active" data-page-node-id="Juyb2bPPJCOBDdwQ0ghUju">商城</a><a href="ai.html" data-page-node-id="4zgB6vBDvp3tVSvSCd3rQ2">AI 创作</a><a href="models.html" data-page-node-id="g2xR8MHfF2jm02qTzjjObI">模型库</a><a href="community.html" data-page-node-id="01Y1aCCiB9mFF5VqpekNwG">社区</a>
+<a href="member.html" data-page-node-id="9wH3Wp2wixUZgCwJvlbivz">个人中心</a></div>
+
+<!-- ================= 页头 ================= -->
+<section class="diy-head" data-page-node-id="dMTpXEVHo6TQ1a6GZqoUQp">
+  <div class="wrap" data-page-node-id="zm8eaYEaHr14SmcnC5OI4w">
+    
+    <h1 data-page-node-id="c2jcGa6RO43UlzSAG0EO3y" style="white-space: pre-wrap; cursor: text;">自由组合​</h1>
+    <p class="diy-lead" data-page-node-id="yDDtQQCyhnt0VUru2Ao277">先挑一台主机作主品，再自由加减配件与耗材。满 2 件自动 95 折，价格实时更新。</p>
+  </div>
+</section>
+
+<section class="diy-layout wrap" data-page-node-id="ldqRplQngS9bWSqU1A1NfP">
+  <div class="diy-main" data-page-node-id="r7ZaTZc7AY9Bpv5qhEwdXZ">
+
+    <div class="step-card" data-page-node-id="39Jxu34mwraAxl7z8adBrk">
+      <div class="step-head" data-page-node-id="05tAcjgCfCiq0AVohq0V33"><span class="step-no" data-page-node-id="CQCqM1iDgh3HSaC2LxqXhV">1</span><h3 data-page-node-id="sXCxvODxsNthxOEByX3R3s">选择主品</h3><span class="step-tip" data-page-node-id="7yUymuijfSureYcLEb28dw">必选 1 台 · 可随时切换</span></div>
+      <div class="main-grid" id="mainGrid" data-page-node-id="NvCVeYrP0kRrKrYbbYlpDA">
+        <div class="m-pick on" data-main="laser" data-name="XCheng X1 激光雕刻机" data-price="4999" data-img="assets/img/device-laser.png" data-page-node-id="ZEkfDEsuIO2fJaADDVW24g">
+          <span class="mp-ck" data-page-node-id="d7qf0WI4jSK7lJxKjdPnEu">✓</span>
+          <img src="assets/img/device-laser.png" alt="XCheng X1" data-page-node-id="DZEm5awakEiuwwqCYJHTx3">
+          <div class="mp-n" data-page-node-id="ChPrth0CLFHHEmXRigt7ru">XCheng X1</div>
+          <div class="mp-d" data-page-node-id="uh46G3AcDBRrayuYdSSXNK">20W 激光 · 木 / 皮革 / 亚克力</div>
+          <div class="mp-p" data-page-node-id="TBxjpH7gXtblq2ezAgw6NC">¥4,999</div>
+        </div>
+        <div class="m-pick" data-main="printer" data-name="Doyao Y2 3D 打印机" data-price="3299" data-img="assets/img/device-printer.png" data-page-node-id="nvrrrP41islXey5DNa2Mb2">
+          <span class="mp-ck" data-page-node-id="oLXA7XHzUH8fE9DqDYDTL9">✓</span>
+          <img src="assets/img/device-printer.png" alt="Doyao Y2" data-page-node-id="tfDTh8BTSYptwVJPPkStFw">
+          <div class="mp-n" data-page-node-id="PwReeqKR89XocslFZ6EQ0y">Doyao Y2</div>
+          <div class="mp-d" data-page-node-id="HFmyTypAKejGg6EU4vwqki">高速成型 · 手办 / 零件 / 工具</div>
+          <div class="mp-p" data-page-node-id="P8LcrsHNNu3L5WA80iub0V">¥3,299</div>
+        </div>
+        <div class="m-pick" data-main="cnc" data-name="CNC C1 雕刻机" data-price="5999" data-img="assets/img/device-cnc.png" data-page-node-id="ymW1kAgDiJdydAttRXi2Mz">
+          <span class="mp-ck" data-page-node-id="NxmLLAlBZodM7H5DjIyUd8">✓</span>
+          <img src="assets/img/device-cnc.png" alt="CNC C1" data-page-node-id="M8W9NdubdWVtpSsBI7gSyh">
+          <div class="mp-n" data-page-node-id="XXqsDvCLBmNagDx6vfEKHE">CNC C1</div>
+          <div class="mp-d" data-page-node-id="WGTzMW5n1w0COi00DoNmYw">木铝通吃 · 浮雕与结构件</div>
+          <div class="mp-p" data-page-node-id="kgDetRPWWhZqXkuk0b9fIa">¥5,999</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card" data-page-node-id="LzcomjHru0CEy6TijHnGeO">
+      <div class="step-head" data-page-node-id="OWHJMFNnQCSszyAOD8BCdp"><span class="step-no" data-page-node-id="rDUrQgyvSIE46CcDwIFo2A">2</span><h3 data-page-node-id="6HjI7fqAvZ9ozaBFU9C4w1">添加配件与耗材</h3><span class="step-tip" data-page-node-id="982DrOxSJmwELxqQxv3qfX">与主品合计满 2 件享 95 折</span></div>
+      <div class="acc-list" id="accList" data-page-node-id="Dl37NooSwYmxnrGIUUm3Lp">
+        <div class="acc-item" data-page-node-id="AjdqL0tXVfdx9C61gnAUSK">
+          <img src="assets/img/shop/pla-filament.png" alt="" data-page-node-id="uejEcDce9lUhj8wcnCFBoe">
+          <div class="acc-info" data-page-node-id="QXuq3wJ6Nlv6IJR3FfHhBs"><div class="acc-n" data-page-node-id="yMyl9wY5EWjFYtULjmvarc">PLA 环保耗材 1kg</div><div class="acc-s" data-page-node-id="P7Nz6GcpI3a3JndAnIv428">适配 Doyao Y2 · 12 色可选</div></div>
+          <div class="acc-p" data-page-node-id="QvL9A70skgEZxALC01ZHAG">¥129</div>
+          <div class="stepper" data-price="129" data-name="PLA 环保耗材 1kg" data-img="assets/img/shop/pla-filament.png" data-page-node-id="ESE0kGBHqhozTGCrrqws2l"><button data-d="-1" data-page-node-id="C9xK0QI5cCrw4zbC1uHZdX">−</button><span class="d-qty" data-page-node-id="GZoswSjtBKoNhpn3BIHCIu">0</span><button data-d="1" data-page-node-id="Na69ycQrwKRE09RzC0gisX">＋</button></div>
+        </div>
+        <div class="acc-item" data-page-node-id="wSrwVTBSgZY0TVm2NiPOEe">
+          <img src="assets/img/shop/uv-resin.png" alt="" data-page-node-id="1N0tWvay4fLgOt2Ul0Vp58">
+          <div class="acc-info" data-page-node-id="ROlPHMsjFrpDMDR2lsPLTs"><div class="acc-n" data-page-node-id="8sNBEj5Cyn0bK3cALC98HC">UV 光固化树脂 1kg</div><div class="acc-s" data-page-node-id="zMU4qmCqKRGshtQyvpkGCw">高精度 · 8 色</div></div>
+          <div class="acc-p" data-page-node-id="jqomeYlJe7EFa6d7eAromF">¥199</div>
+          <div class="stepper" data-price="199" data-name="UV 光固化树脂 1kg" data-img="assets/img/shop/uv-resin.png" data-page-node-id="Ar0B3ltwXOFkfll4MuG5Ow"><button data-d="-1" data-page-node-id="zzqkbBwZqFcQkWzr904lH6">−</button><span class="d-qty" data-page-node-id="9ko51oEOTyYZVD19SxhMsC">0</span><button data-d="1" data-page-node-id="Ty5GB0GWqej84q28xzNXCk">＋</button></div>
+        </div>
+        <div class="acc-item" data-page-node-id="u9EKEOzM48K64xQGyHXI1U">
+          <img src="assets/img/materials-flatlay.png" alt="" data-page-node-id="sWqak9H5Nzfdg0SbXPg4Y9">
+          <div class="acc-info" data-page-node-id="D1PuyjuwqZGsHFrvYleBA5"><div class="acc-n" data-page-node-id="vg86Cn6okZAekQSHShymNF">认证材质探索包</div><div class="acc-s" data-page-node-id="NEzncShZ2ss5AAhrknQllr">24 片 · 木 / 亚克力 / 皮革 · 含参数表</div></div>
+          <div class="acc-p" data-page-node-id="YA8P6Z6YaybJqB641Xzl3J">¥299</div>
+          <div class="stepper" data-price="299" data-name="认证材质探索包" data-img="assets/img/materials-flatlay.png" data-page-node-id="xUtZOAQ0lRc26U6zc1X9Zx"><button data-d="-1" data-page-node-id="5cSJvdroAUEdB707PUQnUM">−</button><span class="d-qty" data-page-node-id="o3vKZeuRrJmm3BdF0B9Oq2">0</span><button data-d="1" data-page-node-id="7aHSST1prYtaF4KF1WOCeT">＋</button></div>
+        </div>
+        <div class="acc-item" data-page-node-id="qG48sbaMiWnsXchFDoQFsW">
+          <img src="assets/img/models/hex-box.png" alt="" data-page-node-id="9ZqCTvwhgP7gpXMEkZO2sz">
+          <div class="acc-info" data-page-node-id="RwpGAGbu0PFUnYbtSDTci7"><div class="acc-n" data-page-node-id="xOJYobHEJy0gD7rSmCCDC4">PEI 纹理打印板</div><div class="acc-s" data-page-node-id="1y2e0vj1lMcI4K11jxrDDn">适配 Doyao Y2 · 免胶易取件</div></div>
+          <div class="acc-p" data-page-node-id="0zZqZybIjbknTKaQlBvCzr">¥199</div>
+          <div class="stepper" data-price="199" data-name="PEI 纹理打印板" data-img="assets/img/models/hex-box.png" data-page-node-id="vPIJYFrGChOFltQm6P3wOc"><button data-d="-1" data-page-node-id="cJ4gXpRfM0gIUmmUVUWsQb">−</button><span class="d-qty" data-page-node-id="wC7akD6OTGQKdVqVed275N">0</span><button data-d="1" data-page-node-id="3Xnpth5GBFptkFgnUUU9Fh">＋</button></div>
+        </div>
+        <div class="acc-item" data-page-node-id="3tfWCgUZQGC7HRriKtV0yI">
+          <img src="assets/img/models/robot-arm-joint.png" alt="" data-page-node-id="8t3sgnPn7cQKRxnrSEEZ2Z">
+          <div class="acc-info" data-page-node-id="JpKEGSPkVxfqyQFOxPIxYf"><div class="acc-n" data-page-node-id="QXkFlnhkb0A1NN6SRcZ3b5">硬质合金喷头组 ×3</div><div class="acc-s" data-page-node-id="DSE8D7pmasyi9E8M5r6s6N">耐磨 · 0.2 / 0.4 / 0.6mm</div></div>
+          <div class="acc-p" data-page-node-id="Mn6du0Az0XwgLExMP5OH14">¥249</div>
+          <div class="stepper" data-price="249" data-name="硬质合金喷头组 ×3" data-img="assets/img/models/robot-arm-joint.png" data-page-node-id="zF3l5OriTcjeiGaqcWN40R"><button data-d="-1" data-page-node-id="VLj8e1uThsUR7To9DVMbRD">−</button><span class="d-qty" data-page-node-id="C6lTte4zaD0Etr2fFOIeXM">0</span><button data-d="1" data-page-node-id="eKRb2rHOiGNXY6LKWPJZKG">＋</button></div>
+        </div>
+        <div class="acc-item" data-page-node-id="1FLR9LZxGuLPyxsw7FSTJB">
+          <img src="assets/img/models/cable-clip.png" alt="" data-page-node-id="BPYWkouj3HlXksmzbMLT3G">
+          <div class="acc-info" data-page-node-id="unl5WeA5lsJNBJWEl2Orpb"><div class="acc-n" data-page-node-id="czjWZzEy6I1wdn1yQarLYH">旋转雕刻轴 R1</div><div class="acc-s" data-page-node-id="6sbNL8O9Hq0klciaXDIFOm">适配 XCheng X1 · 杯体与圆柱件雕刻</div></div>
+          <div class="acc-p" data-page-node-id="mWUTvMo45WxxUcPP7AM9vg">¥399</div>
+          <div class="stepper" data-price="399" data-name="旋转雕刻轴 R1" data-img="assets/img/models/cable-clip.png" data-page-node-id="Fa5rISbpNKdHAMqdUvCk5m"><button data-d="-1" data-page-node-id="3SbpfgQH4ZCA8npNDuMYZX">−</button><span class="d-qty" data-page-node-id="hvVHnKGcZWR7BGfk3p0Cao">0</span><button data-d="1" data-page-node-id="t5bH7VQgr6beoAKeR2BCBt">＋</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <aside class="sum-card" data-page-node-id="HlKu9XgCWoCqFt6m9sUyAz">
+    <h3 data-page-node-id="QFSxgxR6ILOCAnNVPFejwa">你的组合</h3>
+    <div class="sum-items" id="sumItems" data-page-node-id="03jkcc9DmxAlLcVohh813q"><div class="sum-item main"><img src="assets/img/device-laser.png" alt=""><span class="si-n">XCheng X1 激光雕刻机</span><span class="si-q">主品 ×1</span></div><div class="sum-empty">还没选配件，可直接购买主品</div></div>
+    <div class="sum-line" data-page-node-id="s1HJtO4zC1izSfmRIrqYQ7"><span data-page-node-id="8oDFjolwrzIFgL4ITAj116">商品件数</span><b id="sumQty" data-page-node-id="vZvHuCCURq3wwgbVMk50qV">1 件</b></div>
+    <div class="sum-line" data-page-node-id="tLADSK0Qpv3QNKtvoO6D3A"><span data-page-node-id="qJ8AunG46RPXiI7QrsYzih">组合原价</span><b id="sumRaw" data-page-node-id="RvRsoDBtNBGl5pdnqO5AtY">¥4,999</b></div>
+    <div class="sum-line" id="sumSaveLine" style="display:none" data-page-node-id="e0Gt9TRTIODorywioRQcAA"><span data-page-node-id="wsb9MP4cHjvZWh4VQa6Lc8">满 2 件 95 折</span><b class="save-pill" id="sumSave" data-page-node-id="MvH3tYrJ3uW3nUNW0OrGiv">−¥0</b></div>
+    <div class="sum-total" data-page-node-id="DNEK8t9mFXC60z13Da7kk6"><span data-page-node-id="brXGaupaBZURFwP9GFRlSw">合计</span><span class="price" data-page-node-id="MfBgB3f0lYrmPz5ZPcTbzv"><span class="cur" data-page-node-id="ItXQNxUF4L5an5a37oiYMl">¥</span><span id="sumTotal" data-page-node-id="F9K5vrX1CrQKfoADC26BMw">4,999</span></span></div>
+    <button class="btn btn-primary block" id="sumAdd" data-page-node-id="Gb36fr5xPIm2BarVF0bH26">加入购物车</button>
+    <p class="sum-tip" data-page-node-id="Ku3npeqziTJJsH6PO71ihW">满 ¥999 全球包邮 · 整机 2 年质保 · 30 天无理由退换。加入后可在购物车继续调整。</p>
+    <a class="btn btn-ghost block" href="shop.html" data-page-node-id="bY8Nzs9OPBNDbxcDqiPC1O">返回商城</a>
+  </aside>
+</section>
+
+<!-- ================= 页脚 ================= -->
+<footer class="footer" data-page-node-id="Ub60eD7nL2NS6kBWRUyz1M" style="">
+  <div class="footer-inner" data-page-node-id="lY2jUePKfGkHHD8eNlUUAe">
+    <div class="footer-top" data-page-node-id="GOfd64j2CqX65Eo54orySd">
+      <div class="footer-brand" data-page-node-id="Gry7u2Vrzp8DRWqmdBrFGy">
+        <a class="brand" href="index.html" data-page-node-id="ORF0awuN6TqGzpy2umwB36">
+          <span class="brand-mark" data-page-node-id="meZjCcIsNmjjbISWZrQrbI" style=""><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="zu6rFHlEy4Wt87vYM7NQjU" style=""><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="z5w8jEkzDhnj2TmTJSLyQ7"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="mX3deIqNmIqNKMw69CT4qD"></path></svg></span>
+          <span class="brand-name" data-page-node-id="d6jl3DDW46bLp6iZVb7D4N">Hi<i style="color:#4ADE97" data-page-node-id="zBg4k1bhydJZd6ZletM5h0">Makers</i></span>
+        </a>
+        <p class="footer-slogan" data-page-node-id="SVjGFPspAkmmaqqLjZspG5">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+        <div class="footer-social" data-page-node-id="uLnqlGDr23YX2sSffWZQXw">
+          <a href="#" data-page-node-id="OYmwabWLzMK1GCuMsXPcHU"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" data-page-node-id="FhupruLGhvuEEFBnnU3pHq" style=""><rect x="2.5" y="6" width="19" height="12" rx="3.5" data-page-node-id="fcsH9yHHWzdlBEjrRc5hMg"></rect><path d="m10.5 9.5 4.5 2.5-4.5 2.5v-5Z" data-page-node-id="eSzxdnZrbasxOSmn6jhDPr"></path></svg></a>
+          <a href="#" data-page-node-id="kPDVICDziQgTH07blfIipD"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" data-page-node-id="TGunw3J2bUvqNnJOC8gNyx" style=""><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" data-page-node-id="yoMmHNJOFhC9LSw4Fjb2TK"></rect><circle cx="12" cy="12" r="4" data-page-node-id="DVSc6snTaUXAqIGbZazfYV"></circle><circle cx="17.2" cy="6.8" r=".6" fill="currentColor" data-page-node-id="FqssrEnYVn1XuZWZNIrqrJ"></circle></svg></a>
+          <a href="#" data-page-node-id="Ygq8FIxLvSXXnEX8Zuxe6p"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="H6W6A2IPPNAmhBjybP36jf" style=""><path d="M4 4l16 16M20 4 4 20" data-page-node-id="DnLLVJCgU8ZAayIlBygQFS"></path></svg></a>
+        </div>
+      </div>
+      <div class="footer-col" data-page-node-id="7hwkZBCAaQkyD73oiZdRVC"><h4 data-page-node-id="3oR88pG7se1YoBmMZgk7VK">产品</h4><a href="shop.html" data-page-node-id="IX3tQRbqxs2WzgTPY61qKi">激光雕刻机</a><a href="shop.html" data-page-node-id="NHTLVrbHKnOY1OitWVmXjP">3D 打印机</a><a href="shop.html" data-page-node-id="8F2d5Gqm8IT8Nad33SI6bb">CNC 雕刻机</a><a href="shop.html" data-page-node-id="Xw90wPxHRTOtATY506aF2b">配件与耗材</a></div>
+      <div class="footer-col" data-page-node-id="EpJmrn0nQm8vJ0Y5788XFA"><h4 data-page-node-id="f095ZoP60s9npMj0URUUSf">创作</h4><a href="ai.html" data-page-node-id="5ACeni4AEOGmHmUrOObiAn">AI 创作</a><a href="models.html" data-page-node-id="NeyCjQjEElBwLi9s0SgiX6">模型库</a><a href="ai.html" data-page-node-id="m5DKVnoG5HNtjOBHR0NfBS">设计工具</a></div>
+      <div class="footer-col" data-page-node-id="VsoUewlnnJHUEfzr6gkk9W"><h4 data-page-node-id="qfz8xpR65SckbCagdDP0qu">社区</h4><a href="community.html" data-page-node-id="R6VaZYiaJBePWCorma6Rd0">作品广场</a><a href="community.html" data-page-node-id="s6npYuSb2AJdFRJaA9AYDa">挑战赛</a><a href="community.html" data-page-node-id="XSrFh7iNzw75Bkla4nKWuz">教程工坊</a></div>
+      <div class="footer-col" data-page-node-id="rBIKBTillSzpNNjOUno7lB"><h4 data-page-node-id="rHOxTM39YtMbCvBlTHwTDE">支持</h4><a href="#" data-page-node-id="CjSMDKe2tqwlgzAhCIhTiM">帮助中心</a><a href="#" data-page-node-id="G7kp4F6p3DEpGrP2dh9LyK">固件下载</a><a href="#" data-page-node-id="0FcBwdtZcG4Fn7EJhFEAu1">保修政策</a><a href="#" data-page-node-id="oH3lHyxpVXqBv1c5zZIIZI">联系我们</a></div>
+    </div>
+    
+    <div class="footer-bottom" data-page-node-id="NZL096PI5CHMS5a0G45TBo">
+      <span data-page-node-id="CRpzqOkuTBUvykycZXBrcX">© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links" data-page-node-id="Zvh9iqhOupdWcfoRREPz9c"><a href="#" data-page-node-id="PahIbaNOWgDHgH5b4Cgk08">隐私政策</a><a href="#" data-page-node-id="RIIOmrvD9sToYTDjkYOqwb">服务条款</a><a href="#" data-page-node-id="JyVdTr3imt60fnht3CsgAa">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= 购物车抽屉 ================= -->
+<div class="overlay" id="overlay" data-close="" data-page-node-id="8uX880BDItoQdH5ch81eLT"></div>
+
+<script src="assets/js/site.js"></script>
+<script>
+function money(n){ return n.toLocaleString("en-US"); }
+
+var picks = Array.prototype.slice.call(document.querySelectorAll(".m-pick"));
+var mainKey = "laser";
+var q = new URLSearchParams(location.search).get("main");
+if (q && picks.some(function(p){ return p.getAttribute("data-main") === q; })) mainKey = q;
+
+function currentMain(){
+  return picks.filter(function(p){ return p.getAttribute("data-main") === mainKey; })[0];
+}
+function setMain(key){
+  mainKey = key;
+  picks.forEach(function(p){ p.classList.toggle("on", p.getAttribute("data-main") === key); });
+  calc();
+}
+picks.forEach(function(p){
+  p.addEventListener("click", function(){ setMain(p.getAttribute("data-main")); });
+});
+
+function accState(){
+  return Array.prototype.slice.call(document.querySelectorAll("#accList .stepper")).map(function(st){
+    return {
+      name: st.getAttribute("data-name"),
+      img: st.getAttribute("data-img"),
+      price: parseInt(st.getAttribute("data-price"), 10),
+      qty: parseInt(st.querySelector(".d-qty").textContent, 10)
+    };
+  }).filter(function(x){ return x.qty > 0; });
+}
+
+function calc(){
+  var main = currentMain();
+  var mainPrice = parseInt(main.getAttribute("data-price"), 10);
+  var mainName = main.getAttribute("data-name");
+  var mainImg = main.getAttribute("data-img");
+  var accs = accState();
+  var accTotal = accs.reduce(function(s, a){ return s + a.price * a.qty; }, 0);
+  var accQty = accs.reduce(function(s, a){ return s + a.qty; }, 0);
+  var raw = mainPrice + accTotal;
+  var qty = 1 + accQty;
+  var save = qty >= 2 ? Math.round(raw * 0.05) : 0;
+
+  var box = document.getElementById("sumItems");
+  var html = '<div class="sum-item main"><img src="' + mainImg + '" alt=""><span class="si-n">' + mainName + '</span><span class="si-q">主品 ×1</span></div>';
+  html += accs.map(function(a){
+    return '<div class="sum-item"><img src="' + a.img + '" alt=""><span class="si-n">' + a.name + '</span><span class="si-q">×' + a.qty + '</span></div>';
+  }).join("");
+  if (!accs.length) html += '<div class="sum-empty">还没选配件，可直接购买主品</div>';
+  box.innerHTML = html;
+
+  document.getElementById("sumQty").textContent = qty + " 件";
+  document.getElementById("sumRaw").textContent = "¥" + money(raw);
+  var saveLine = document.getElementById("sumSaveLine");
+  saveLine.style.display = save ? "" : "none";
+  document.getElementById("sumSave").textContent = "−¥" + money(save);
+  document.getElementById("sumTotal").textContent = money(raw - save);
+
+  document.getElementById("sumAdd").onclick = function(){
+    addToCart({
+      name: "自由组合 DIY · " + mainName,
+      spec: accs.length ? ("主品 + " + accQty + " 件配件（95 折）") : "仅主品",
+      price: raw - save,
+      img: mainImg,
+      /* 配件与耗材随主品一起带进购物车，在购物车里以小图展示在主品下方 */
+      parts: accs.map(function(a){ return { name: a.name, img: a.img, price: a.price, qty: a.qty }; })
+    });
+  };
+}
+
+document.querySelectorAll("#accList .stepper button").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var st = btn.closest(".stepper");
+    var qtyEl = st.querySelector(".d-qty");
+    var v = Math.max(0, parseInt(qtyEl.textContent, 10) + parseInt(btn.getAttribute("data-d"), 10));
+    qtyEl.textContent = v;
+    calc();
+  });
+});
+
+setMain(mainKey);
+</script>
+
+
+
+
+</body></html>

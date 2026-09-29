@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CNC C1 雕刻机 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+.pdp { padding: 34px 0 70px; }
+.pdp-crumb { font-size: 13px; color: var(--faint); margin-bottom: 18px; }
+.pdp-crumb a { color: var(--muted); }
+.pdp-crumb a:hover { color: var(--green-t); }
+/* ---------- 顶部购买区 ---------- */
+.pdp-top {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start;
+  /* 主图放大到「图库列宽」，缩略图收成一条小方图带；两者合计仍受一屏封顶：
+     主图高 = 宽 / --pg-r，--pg-thumb = 缩略图带总高（含上间距）
+     → 允许宽度 = (一屏预算 - --pg-thumb) × --pg-r，再与列宽取小。
+     --pg-top = 导航 + 面包屑 + 吸底栏 + 余量。
+     短屏只是图变小，既不裁图也不出现 letterbox。 */
+  --pg-r: 1.3333;   /* 主图 宽/高（= 4 / 3，与下方 .pg-main 的 aspect-ratio 成对，改一个要改两个） */
+  --pg-ts: 48px;                          /* 缩略图边长（≤720 收一档） */
+  --pg-thumb: calc(var(--pg-ts) + 14px);  /* 缩略图带总高 = 边长 + 行间距 14（与左列的 row-gap 成对，改一个要改两个） */
+  --pg-nav: 32px;                         /* 左右翻页按钮直径（≤720 收一档） */
+  --pg-top-base: 244px;   /* 顶部占用基准（吸底栏单行为 ~64px 时） */
+  --pg-top: var(--pg-top-base);
+}
+/* 左列 = 三列网格：主图独占首行，第二行是「‹ 缩略图带 ›」—— 左右翻页按钮与缩略图
+   同处一行、紧贴带子两侧。两侧 1fr 等宽 + 带子居中 ⇒ 带子中点与主图中点重合。
+   另：左列图库吸顶 —— 右列（购买信息）比图长，页面下滚时图停在导航下方不动、由右侧继续滚
+   （视觉上「左图位置固定、右侧滑动」）。滚到 .pdp-top 底部自动解除。
+   top = 导航高 68 + 20 余量；单列布局（≤1080）下无位移空间，见媒体查询里的 static 复位。 */
+.pdp-top > div:first-child {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  column-gap: 12px; row-gap: 14px;
+  position: sticky; top: 88px;
+}
+.pg-main {
+  grid-area: 1 / 1 / 2 / -1; justify-self: center;
+  /* 被「一屏封顶」压窄时，主图在左列内居中（左右留白相等）—— 贴左缘会在主图与右侧
+     购买信息之间留出一条很远的空档。图能填满列宽时本条自动失效。 */
+  inline-size: min(100%, calc((100vh - var(--pg-top) - var(--pg-thumb)) * var(--pg-r)));
+  position: relative; border-radius: 22px; overflow: hidden; background: var(--bg-2); aspect-ratio: 4 / 3;
+}
+.pg-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 左右翻页：与缩略图同一行的圆形小按钮，分列带子两侧（不再压在主图上） */
+.pg-nav {
+  grid-row: 2; align-self: center; padding: 0; display: flex; align-items: center; justify-content: center;
+  inline-size: var(--pg-nav); block-size: var(--pg-nav);
+  border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink);
+  cursor: pointer; transition: border-color .18s ease, background .18s ease, color .18s ease, transform .12s ease;
+}
+.pg-nav.prev { grid-column: 1; justify-self: end; }
+.pg-nav.next { grid-column: 3; justify-self: start; }
+.pg-nav:hover { border-color: var(--green); background: var(--green-bg); color: var(--green-t); }
+.pg-nav:active { transform: scale(.9); }
+.pg-nav svg { inline-size: 14px; block-size: 14px; display: block; }
+/* 视频：主图上的播放遮罩（.pg-main.is-video 才显示）；播放中只切视觉态（原型无视频文件） */
+.pg-vplay { position: absolute; inset: 0; z-index: 1; display: none; align-items: center; justify-content: center; padding: 0; border: 0; background: rgba(12,18,16,.16); cursor: pointer; }
+.pg-main.is-video .pg-vplay { display: flex; }
+.pg-vplay .vp-btn { inline-size: 64px; block-size: 64px; border-radius: 999px; background: rgba(255,255,255,.95); color: var(--green-t); display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 34px -14px rgba(12,18,16,.8); transition: transform .18s ease; }
+.pg-vplay:hover .vp-btn { transform: scale(1.06); }
+.pg-vplay .vp-btn svg { inline-size: 24px; block-size: 24px; display: block; }
+.pg-vplay .vp-dur { position: absolute; right: 16px; bottom: 14px; font-size: 12px; font-weight: 600; color: #fff; background: rgba(12,18,16,.6); padding: 3px 9px; border-radius: 999px; }
+.pg-vplay .vp-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.3); display: none; }
+.pg-vplay .vp-bar i { display: block; height: 100%; width: 0; background: var(--green); }
+.pg-main.is-playing .pg-vplay { background: rgba(12,18,16,.06); }
+.pg-main.is-playing .pg-vplay .vp-btn { opacity: 0; }
+.pg-main.is-playing .pg-vplay .vp-bar { display: block; }
+.pg-main.is-playing .pg-vplay .vp-bar i { animation: pgPlay var(--pg-vdur, 48s) linear forwards; }
+@keyframes pgPlay { from { width: 0; } to { width: 100%; } }
+/* 缩略图：横向居中的小方图带（宽度 = 内容宽，由左列网格居中）；当前项 = 品牌绿描边 + 淡绿外环 */
+.pg-thumbs { grid-area: 2 / 2 / 3 / 3; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pg-thumbs button { inline-size: var(--pg-ts); block-size: var(--pg-ts); flex: 0 0 auto; padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-2); cursor: pointer; opacity: .72; transition: opacity .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.pg-thumbs button:hover { opacity: 1; border-color: var(--line-2); }
+.pg-thumbs button.on { opacity: 1; border-color: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
+.pg-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 视频缩略图（追加在缩略图带末尾）：海报 + 中央播放徽标 + 底部时长条 */
+.pg-thumbs .pg-vthumb { position: relative; }
+.pg-thumbs .pg-vbadge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(12,18,16,.3); color: #fff; }
+.pg-thumbs .pg-vbadge svg { inline-size: 15px; block-size: 15px; display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
+.pg-thumbs .pg-vdur { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px 0 3px; font-size: 8px; font-weight: 600; line-height: 1.2; text-align: center; color: #fff; background: linear-gradient(transparent, rgba(12,18,16,.72)); }
+.pdp-cat { display: inline-block; font-size: 12px; font-weight: 600; color: var(--green-t); background: var(--green-bg); padding: 4px 11px; border-radius: 999px; }
+.pdp-top h1 { font-size: 32px; letter-spacing: -.03em; margin: 12px 0 8px; }
+.pdp-lead { font-size: 14.5px; color: var(--muted); line-height: 1.7; }
+.pdp-price { display: flex; align-items: baseline; gap: 10px; margin: 16px 0 4px; }
+.pdp-price .price { font-size: 34px; font-weight: 700; letter-spacing: -.03em; }
+.pdp-price .cur { font-size: 18px; margin-right: 2px; }
+.pdp-price s { font-size: 14px; color: var(--faint); font-weight: 400; }
+.pdp-price .save { font-size: 12.5px; font-weight: 600; color: var(--green-t); background: var(--green-bg); padding: 3px 10px; border-radius: 999px; }
+.pdp-note { font-size: 12.5px; color: var(--faint); }
+.sku-block { margin-top: 18px; }
+.sku-label { font-size: 13px; font-weight: 600; margin-bottom: 9px; }
+.sku-label span { color: var(--faint); font-weight: 400; margin-left: 6px; }
+.sku-opts { display: flex; flex-wrap: wrap; gap: 9px; }
+.sku-opt { border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 15px; cursor: pointer; background: #fff; text-align: left; transition: all .18s ease; min-width: 128px; }
+.sku-opt:hover { border-color: var(--green); }
+.sku-opt.on { border-color: var(--green); background: var(--green-bg); }
+.sku-opt b { display: block; font-size: 14px; font-weight: 600; }
+.sku-opt i { display: block; font-style: normal; font-size: 12px; color: var(--muted); margin-top: 3px; }
+.sku-opt em { font-style: normal; font-size: 12.5px; color: var(--green-t); font-weight: 600; }
+.pdp-combo { margin-top: 22px; }
+.combo-head { display: flex; align-items: baseline; gap: 8px; font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.combo-head span { font-size: 12px; font-weight: 400; color: var(--muted); }
+/* 组合搭配：竖排 —— 一行一件（勾选框 / 缩略图 / 名称说明 / 单价），整列自上而下，不再横向滚动 */
+.combo-grid { display: grid; gap: 10px; }
+.combo-item {
+  display: flex; align-items: center; gap: 12px; padding: 9px 14px 9px 12px; background: #fff;
+  border: 1.5px solid var(--line); border-radius: 14px; cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.combo-item:hover { border-color: var(--green); box-shadow: 0 8px 16px -12px rgba(12,18,16,.5); }
+.combo-item.on { border-color: var(--green); background: var(--green-bg); }
+.combo-item img { flex: 0 0 auto; inline-size: 60px; block-size: 60px; object-fit: cover; border-radius: 11px; background: #fff; display: block; }
+.combo-item .ci-mid { flex: 1; min-width: 0; }
+.combo-item .ci-n { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+.combo-item .ci-s { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
+.combo-item .ci-p { margin-left: auto; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.combo-box {
+  flex: 0 0 auto; inline-size: 19px; block-size: 19px; border-radius: 6px;
+  border: 1.5px solid var(--line-2); background: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff;
+  transition: background .15s ease, border-color .15s ease;
+}
+.combo-item.on .combo-box { background: var(--green); border-color: var(--green); }
+/* ---------- 吸底购买栏 ---------- */
+.buybar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 180;
+  background: rgba(255,255,255,.94);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -10px 34px -14px rgba(12,18,16,.22);
+}
+.buybar-in { display: flex; align-items: center; gap: 18px; padding: 9px 0; }
+.bb-prod { display: flex; align-items: center; gap: 11px; flex: 1; min-width: 0; }
+.bb-prod img { width: 40px; height: 40px; border-radius: 11px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.bb-meta { min-width: 0; }
+.bb-meta b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bb-meta span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bb-price { display: flex; align-items: baseline; gap: 7px; flex-shrink: 0; }
+.bb-price .cur { font-size: 13px; }
+.bb-price b { font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.bb-price s { font-size: 12px; color: var(--faint); font-weight: 400; }
+.bb-act { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+.bb-act .btn { height: 42px; min-width: 126px; padding: 0 22px; font-size: 14px; }
+.bb-act .btn:hover { transform: none; box-shadow: none; }
+/* 加入购物车：幽灵按钮（无实底 + 描边），hover 才染品牌绿 */
+.bb-add { background: transparent; border-color: var(--line-2); color: var(--ink); }
+.bb-add:hover { background: var(--green-bg); border-color: var(--green); color: var(--green-t); transform: none; box-shadow: none; }
+/* 立即购买：主行动 —— 品牌绿实底 */
+.bb-buy { background: var(--green); border-color: var(--green); color: #fff; }
+.bb-buy:hover { background: var(--green-h); border-color: var(--green-h); color: #fff; transform: none; box-shadow: none; }
+.stepper { display: inline-flex; align-items: center; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; height: 42px; flex-shrink: 0; }
+.stepper button { width: 34px; height: 100%; border: none; background: #fff; font-size: 15px; cursor: pointer; color: var(--muted); transition: background .15s ease, color .15s ease; }
+.stepper button:hover { background: var(--bg-2); color: var(--ink); }
+.stepper span { min-width: 28px; text-align: center; font-weight: 600; font-size: 14px; }
+.footer { padding-bottom: 68px; }
+.toast-wrap { bottom: 86px; }
+.pdp-perks { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; font-size: 12.5px; color: var(--muted); }
+.pdp-perks span::before { content: "✓ "; color: var(--green); font-weight: 700; }
+.spec-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.spec-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); }
+.spec-table td:first-child { width: 200px; color: var(--muted); background: var(--bg-2); }
+.pdp-story { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.story-card { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.story-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+.story-card .sc-b { padding: 14px 16px 18px; }
+.story-card h4 { font-size: 15px; margin-bottom: 5px; }
+.story-card p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+/* ---------- 产品介绍：4 段锚点 tab（产品概述 / 规格参数 / 深入了解 / 常见问题） ---------- */
+.pd { margin-top: 54px; }
+.pd-nav {
+  position: sticky; top: 68px; z-index: 40;   /* top = 站点顶栏高；z-index 低于顶栏 200、低于吸底栏 180 */
+  background: rgba(255,255,255,.94);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid var(--line);
+}
+/* 居中：4 个 tab 整体在容器里居中；safe center 让窄屏真溢出时退回左对齐（否则左侧会被裁掉、滚不到） */
+.pd-nav-in { display: flex; justify-content: center; justify-content: safe center; gap: 26px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+.pd-nav-in::-webkit-scrollbar { display: none; }
+.pd-tab {
+  position: relative; flex: 0 0 auto; padding: 15px 2px 13px; text-decoration: none;
+  font-size: 15px; font-weight: 600; color: var(--muted); white-space: nowrap; transition: color .16s ease;
+}
+.pd-tab::after {
+  content: ""; position: absolute; left: 2px; right: 2px; bottom: -1px; height: 2px; border-radius: 2px;
+  background: var(--green); transform: scaleX(0); transform-origin: 50% 100%; transition: transform .22s ease;
+}
+.pd-tab:hover { color: var(--ink); }
+.pd-tab.on { color: var(--green-t); }
+.pd-tab.on::after { transform: scaleX(1); }
+/* 锚点段：吸顶导航 68 + tab 条 ~49 + 12 余量 = 129；四段共用一个值（点 tab 后标题不会被条压住） */
+.pd-block { padding-top: 34px; scroll-margin-top: 129px; }
+/* ---------- tab 条吸住顶后收起一级导航（页尾脚本加 html.nav-collapsed）：下滑收、上滑 / 点 tab 展 ---------- */
+.nav { transition: transform .26s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, box-shadow .2s ease; }
+html.nav-collapsed .nav { transform: translateY(-100%); }
+.pd-nav { transition: transform .26s cubic-bezier(.4, 0, .2, 1); }
+/* 顶栏让位后 tab 条顶上补位：68 = 一级导航高，两块一起位移、视觉上只少了顶栏 */
+html.nav-collapsed .pd-nav { transform: translateY(-68px); }
+html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落点 = tab 条 ~49 + 12 */
+.pd-block h2 { font-size: 21px; letter-spacing: -.02em; margin-bottom: 16px; }
+.pd-lead { max-inline-size: 860px; font-size: 14.5px; line-height: 1.9; color: var(--body); }
+.pd-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 22px 0 4px; }
+.pd-fact { border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px 16px; }
+.pd-fact b { display: block; font-size: 23px; font-weight: 700; letter-spacing: -.03em; }
+.pd-fact b i { font-size: 12.5px; font-weight: 600; font-style: normal; color: var(--muted); margin-left: 3px; }
+.pd-fact span { display: block; margin-top: 7px; font-size: 12.5px; color: var(--muted); }
+.pd-sub { font-size: 14px; font-weight: 600; margin: 28px 0 14px; }
+/* 深入了解：图文左右交替 */
+.pd-feat { display: grid; grid-template-columns: 1.02fr .98fr; gap: 36px; align-items: center; }
+.pd-feat + .pd-feat { margin-top: 42px; }
+.pd-feat.rev .pd-feat-media { order: 2; }
+.pd-feat-media img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 20px; background: var(--bg-2); }
+.pd-feat-body h3 { font-size: 17px; letter-spacing: -.01em; margin-bottom: 10px; }
+.pd-feat-body p { font-size: 13.5px; line-height: 1.9; color: var(--muted); }
+.pd-feat-body ul { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.pd-feat-body li { position: relative; padding-left: 21px; font-size: 13px; line-height: 1.7; color: var(--body); }
+.pd-feat-body li::before { content: ""; position: absolute; left: 6px; top: 8px; inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--green); }
+/* 常见问题：原生 <details> 手风琴（零 JS） */
+.pd-faq { max-inline-size: 940px; }
+.faq-item { border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.faq-item + .faq-item { margin-top: 10px; }
+.faq-item > summary { display: flex; align-items: center; gap: 12px; padding: 15px 18px; font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; }
+.faq-item > summary::-webkit-details-marker { display: none; }
+.faq-item > summary:hover { color: var(--green-t); }
+.faq-item > summary::after {
+  content: ""; flex: 0 0 auto; margin-left: auto; inline-size: 8px; block-size: 8px;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s ease, border-color .2s ease;
+}
+.faq-item[open] > summary { color: var(--green-t); }
+.faq-item[open] > summary::after { border-color: var(--green); transform: rotate(225deg) translate(-2px, -2px); }
+.faq-a { padding: 0 18px 16px; font-size: 13px; line-height: 1.9; color: var(--muted); }
+@media (max-width: 1024px) {
+  .pd-facts { grid-template-columns: repeat(2, 1fr); }
+  .pd-feat { grid-template-columns: 1fr; gap: 20px; }
+  .pd-feat.rev .pd-feat-media { order: 0; }
+}
+@media (max-width: 720px) {
+  .pd { margin-top: 40px; }
+  .pd-nav-in { gap: 20px; }
+  .pd-tab { padding: 13px 2px 11px; font-size: 14px; }
+  .pd-block { padding-top: 26px; scroll-margin-top: 122px; }
+  html.nav-collapsed .pd-block { scroll-margin-top: 54px; }   /* 窄屏 tab 条收一档：~42 + 12 */
+  .pd-block h2 { font-size: 19px; }
+  .pd-fact { padding: 13px 15px 14px; }
+  .pd-fact b { font-size: 20px; }
+  .faq-item > summary { padding: 13px 15px; font-size: 13.5px; }
+  .faq-a { padding: 0 15px 14px; }
+}
+@media (max-width: 1080px) {
+  .pdp-top { grid-template-columns: 1fr; gap: 26px; max-inline-size: 680px; margin-inline: auto; }
+  .pdp-top > div:first-child { position: static; }   /* 单列堆叠：图在购买信息上方，取消吸顶 */
+  .pdp-story { grid-template-columns: 1fr; }
+  .bb-meta span { display: none; }
+}
+@media (max-width: 900px) {
+  .buybar-in { gap: 14px; }
+  .bb-act .btn { min-width: 0; padding: 0 18px; }
+}
+@media (max-width: 720px) {
+  /* 吸底栏在窄屏折成两行（~102px），顶部占用要相应加 38px；缩略图/翻页按钮再各收一档。只改这一处，三页同构 */
+  .pdp-top { --pg-top: calc(var(--pg-top-base) + 38px); --pg-ts: 40px; --pg-nav: 28px; }
+  .pg-vplay .vp-btn { inline-size: 52px; block-size: 52px; }
+  .pg-vplay .vp-btn svg { inline-size: 20px; block-size: 20px; }
+  .buybar-in { flex-wrap: wrap; gap: 9px 12px; padding: 9px 0; }
+  .bb-prod { flex: 1 1 100%; }
+  .bb-prod img { width: 34px; height: 34px; border-radius: 9px; }
+  .bb-price b { font-size: 19px; }
+  .bb-act { flex: 1; justify-content: flex-end; gap: 8px; }
+  .bb-act .btn { flex: 1; height: 40px; padding: 0 14px; font-size: 13.5px; }
+  .stepper { height: 40px; }
+  .stepper button { width: 32px; }
+  .stepper span { min-width: 24px; }
+  .footer { padding-bottom: 108px; }
+}
+@media (max-width: 640px) {
+  .pdp-top h1 { font-size: 25px; }
+  .pdp-price .price { font-size: 28px; }
+  .spec-table td:first-child { width: 120px; }
+}
+@media (max-width: 480px) {
+  /* 竖排组合卡在小屏收一档（缩略图 60 → 52） */
+  .combo-item { gap: 10px; padding: 8px 12px 8px 10px; }
+  .combo-item img { inline-size: 52px; block-size: 52px; border-radius: 10px; }
+}
+@media (max-width: 420px) {
+  .bb-prod { display: none; }
+  .footer { padding-bottom: 100px; }
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <div class="nav-item">
+        <a href="shop.html">商城</a>
+        <div class="nav-menu" aria-label="商城分类">
+          <div class="wrap nm-in">
+            <div class="nm-col">
+              <div class="nm-h">整机</div>
+              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
+              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
+              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
+              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
+            </div>
+            <div class="nm-prods">
+              <div class="nm-h">热销机型</div>
+              <div class="nm-grid">
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…">
+      </label>
+
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm">注册</a>
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a><a href="member.html">个人中心</a><a href="orders.html">我的订单</a>
+</div>
+
+<main class="pdp">
+  <div class="wrap">
+    <div class="pdp-crumb"><a href="shop.html">商城</a> / CNC 雕刻机 / <b>CNC C1 雕刻机</b></div>
+    <div class="pdp-top">
+      <div>
+        <div class="pg-main"><img id="pgMain" src="assets/img/device-cnc.png" alt="CNC C1 雕刻机"><button class="pg-vplay" type="button" style="--pg-vdur: 56s" aria-label="播放产品视频"><span class="vp-btn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10.4-6.8a1 1 0 0 0 0-1.7L9.6 4.3A1 1 0 0 0 8 5.2z"/></svg></span><span class="vp-dur">00:56</span><span class="vp-bar"><i></i></span></button></div>
+        <button class="pg-nav prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button><div class="pg-thumbs" id="pgThumbs"></div><button class="pg-nav next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="pdp-info">
+        <span class="pdp-cat">CNC 雕刻机</span>
+        <h1 id="pdpName">CNC C1 雕刻机</h1>
+        <p class="pdp-lead">木铝通吃，浮雕与结构件一次成型。全金属龙门 + 精密导轨，长时间加工也稳。</p>
+        <div class="pdp-price">
+          <span class="price"><span class="cur">¥</span><span id="pdpPrice">0</span></span>
+          <s id="pdpOrig"></s>
+          <span class="save" id="pdpSave" style="display:none"></span>
+        </div>
+        <div class="pdp-note" id="pdpNote"></div>
+
+        <div class="sku-block">
+          <div class="sku-label">机型<span>选择适合你的规格</span></div>
+          <div class="sku-opts" id="skuModels"></div>
+        </div>
+        <div class="sku-block">
+          <div class="sku-label">套装<span>开箱即用的配置组合</span></div>
+          <div class="sku-opts" id="skuBundles"></div>
+        </div>
+
+        <div class="pdp-combo">
+          <div class="combo-head">组合搭配<span>勾选一起带走 · 满 2 件配件 95 折</span></div>
+          <div class="combo-grid" id="comboList"></div>
+        </div>
+
+        <div class="pdp-perks">
+          <span>30 天无理由退换</span><span>整机 2 年质保</span><span>满 ¥999 包邮</span><span>6 期免息</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="pd" id="pdIntro">
+      <nav class="pd-nav" id="pdNav" aria-label="产品介绍">
+        <div class="wrap pd-nav-in">
+          <a class="pd-tab on" href="#pdOverview">产品概述</a>
+          <a class="pd-tab" href="#pdSpecs">规格参数</a>
+          <a class="pd-tab" href="#pdDeep">深入了解</a>
+          <a class="pd-tab" href="#pdFaq">常见问题</a>
+        </div>
+      </nav>
+      <div class="wrap">
+        <div class="pd-block" id="pdOverview">
+          <h2>产品概述</h2>
+          <p class="pd-lead">CNC C1 把小批量「减法加工」搬到工作台：500W 无刷主轴、400×400×80mm 行程、全金属龙门结构，木料、亚克力、铝铜都能铣。自动对刀 + 断电续雕，一次跑完不用盯。</p>
+          <div class="pd-facts">
+            <div class="pd-fact"><b>500<i>W</i></b><span>无刷主轴功率</span></div>
+            <div class="pd-fact"><b>400×400×80<i>mm</i></b><span>加工行程</span></div>
+            <div class="pd-fact"><b>±0.02<i>mm</i></b><span>重复定位精度</span></div>
+            <div class="pd-fact"><b>3<i>轴</i></b><span>独立驱动 · 自动对刀</span></div>
+          </div>
+          <div class="pd-sub">适用场景</div>
+          <div class="pdp-story" id="storyList"></div>
+        </div>
+
+        <div class="pd-block" id="pdSpecs">
+          <h2>规格参数</h2>
+          <table class="spec-table" id="specTable"></table>
+        </div>
+
+        <div class="pd-block" id="pdDeep">
+          <h2>深入了解</h2>
+          <div class="pd-feat">
+            <div class="pd-feat-media"><img src="assets/img/device-cnc.png" alt="CNC C1 机身"></div>
+            <div class="pd-feat-body">
+              <h3>铣得动：铝、铜、木、亚克力</h3>
+              <p>500W 无刷主轴 + 硬化滚珠丝杠，10mm 铝板和 9mm 亚克力都能一刀一刀吃下来；Pro 版 800W，铜件与硬木更从容。</p>
+              <ul><li>铝 / 铜 / 木材 / MDF / 亚克力 / PCB</li><li>500W 无刷主轴（Pro 800W），转速 8000–24000 rpm</li><li>全金属龙门 + 精密直线导轨，重切不颤</li></ul>
+            </div>
+          </div>
+          <div class="pd-feat rev">
+            <div class="pd-feat-media"><img src="assets/img/works/wood-relief.png" alt="木雕浮雕成品"></div>
+            <div class="pd-feat-body">
+              <h3>对得准：自动对刀，断电也能续</h3>
+              <p>自动对刀块测量工件表面高度，不用手动对零；加工中掉电或暂停后可从断点继续，长件不必从头再来。</p>
+              <ul><li>自动对刀块 · 一键对零</li><li>断电续雕 / 暂停继续</li><li>±0.02mm 重复定位精度</li></ul>
+            </div>
+          </div>
+          <div class="pd-feat">
+            <div class="pd-feat-media"><img src="assets/img/works/gearbox.png" alt="结构件打样成品"></div>
+            <div class="pd-feat-body">
+              <h3>接得上：草图到刀路，一站完成</h3>
+              <p>在 HiMakers Studio 里导入 DXF / STL，自动生成粗加工 + 精加工刀路；也兼容 Fusion 360、Carveco 导出的 G-code。</p>
+              <ul><li>DXF / STL / SVG 导入，自动生成刀路</li><li>兼容 Fusion 360 / Carveco / GRBL G-code</li><li>模型库浮雕与结构件图纸一键取用</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="pd-block" id="pdFaq">
+          <h2>常见问题</h2>
+          <div class="pd-faq">
+            <details class="faq-item">
+              <summary>能铣铝吗？</summary>
+              <div class="faq-a">可以。500W 无刷主轴 + 全金属龙门，常规 6061 铝板（≤10mm）走小步距、低进给能稳定加工；批量或厚料建议 Pro 的 800W 主轴。铜件同理，进给再放慢。</div>
+            </details>
+            <details class="faq-item">
+              <summary>需要冷却和排屑吗？</summary>
+              <div class="faq-a">铝、铜建议加少量切削液（喷雾或油刷）并配吸尘；木材、MDF、亚克力用吸尘器接管排屑即可，不需要水冷系统。</div>
+            </details>
+            <details class="faq-item">
+              <summary>噪音和场地要求？</summary>
+              <div class="faq-a">空转约 60 dB，切削时 75–85 dB，建议配耳罩；整机 620×600×420mm，放在稳固的工作台或地台上即可，不需要专用车间。</div>
+            </details>
+            <details class="faq-item">
+              <summary>需要会写 G-code 吗？</summary>
+              <div class="faq-a">不需要。HiMakers Studio 导入 DXF / STL 后自动生成粗、精加工刀路，选材料档就能出程序；进阶用户可直接导入 Fusion 360 的 G-code。</div>
+            </details>
+            <details class="faq-item">
+              <summary>能雕曲面浮雕吗？</summary>
+              <div class="faq-a">可以，支持三轴联动做平面浮雕与简单曲面；圆柱体的四轴旋转加工需要选配旋转轴 R1。</div>
+            </details>
+            <details class="faq-item">
+              <summary>维护麻烦吗？</summary>
+              <div class="faq-a">每次加工后吹净导轨与丝杠、定期给丝杠上油即可。整机 2 年质保，主轴与导轨为主要保修件。</div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i style="color:#4ADE97">Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="pdp-laser.html">激光雕刻机</a><a href="pdp-printer.html">3D 打印机</a><a href="pdp-cnc.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="orders.html">我的订单</a><a href="cart.html">购物车</a><a href="addresses.html">收货地址</a><a href="aftersale.html">售后与退款</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- 吸底购买栏 -->
+<div class="buybar">
+  <div class="wrap buybar-in">
+    <div class="bb-prod">
+      <img id="bbImg" src="assets/img/device-cnc.png" alt="CNC C1 雕刻机">
+      <div class="bb-meta">
+        <b id="bbName">CNC C1</b>
+        <span id="bbNote">入门级 · 行程 400×400×80mm · 标准版</span>
+      </div>
+    </div>
+    <div class="bb-price">
+      <span class="cur">&yen;</span><b id="bbPrice">0</b>
+      <s id="bbOrig" style="display:none"></s>
+    </div>
+    <div class="bb-act">
+      <div class="stepper">
+        <button id="qtyMinus" title="减少数量">&minus;</button><span id="qtyVal">1</span><button id="qtyPlus" title="增加数量">+</button>
+      </div>
+      <button class="btn bb-add" id="btnAdd">加入购物车</button>
+      <button class="btn btn-primary bb-buy" id="btnBuy">立即购买</button>
+    </div>
+  </div>
+</div>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/orders.js"></script>
+
+<script>
+var CFG = {"file": "pdp-cnc.html", "title": "CNC C1 雕刻机", "cat": "CNC 雕刻机", "mainimg": "assets/img/device-cnc.png", "lead": "木铝通吃，浮雕与结构件一次成型。全金属龙门 + 精密导轨，长时间加工也稳。", "models": [{"id": "c1", "name": "CNC C1", "price": 5999, "note": "入门级 · 行程 400×400×80mm", "img": "assets/img/device-cnc.png"}, {"id": "c1pro", "name": "CNC C1 Pro", "price": 8999, "note": "工业级 · 行程 600×600×120mm", "img": "assets/img/device-cnc-pro.png"}], "bundles": [{"id": "std", "name": "标准版", "delta": 0, "note": "主机 + 入门刀组 6 支"}, {"id": "plus", "name": "进阶套装", "delta": 1000, "note": "加刀组 20 支 + 夹具套装"}, {"id": "max", "name": "旗舰套装", "delta": 2000, "note": "加第四轴 + 真空吸附台 + 铝料包"}], "combos": [{"name": "硬质合金刀组 ×20", "spec": "平底 / 球头 / 锥刀", "price": 399, "img": "assets/img/models/robot-arm-joint.png"}, {"name": "精密夹具套装", "spec": "快速装夹 · 含压板 12 件", "price": 299, "img": "assets/img/scene-home.png"}, {"name": "铝料练习包", "spec": "6061 铝板 ×6 · 含参数表", "price": 259, "img": "assets/img/materials-flatlay.png"}, {"name": "防尘隔音罩", "spec": "降噪 12dB · 含集尘口", "price": 199, "img": "assets/img/scene-order.png"}], "gallery": ["assets/img/device-cnc.png", "assets/img/device-cnc-pro.png", "assets/img/scene-home.png", "assets/img/scene-order.png"], "stories": [{"t": "金属标牌", "d": "门牌、铭牌、logo 浮雕，铝铜都能铣。", "img": "assets/img/scene-home.png"}, {"t": "木雕浮雕", "d": "立体浮雕、拼装结构件，一刀到底。", "img": "assets/img/scene-order.png"}, {"t": "结构件打样", "d": "治具、外壳、连接件，自己验证设计。", "img": "assets/img/models/hex-box.png"}], "specs": [["加工行程", "400×400×80mm（Pro 600×600×120mm）"], ["主轴功率", "500W 无刷主轴（Pro 800W）"], ["机架结构", "全金属龙门 · 精密直线导轨"], ["重复定位精度", "±0.02 mm"], ["适用材料", "木材 / MDF / 亚克力 / 铝 / 铜 / PCB"], ["对刀方式", "自动对刀块 · 断电续雕"], ["软件支持", "HiMakers CAM / Fusion 360 / 支持 G-code"], ["整机尺寸", "700 × 680 × 520 mm · 净重 32kg"]]};
+var state = { model: CFG.models[0].id, bundle: CFG.bundles[0].id, qty: 1, combo: {} };
+
+function m(n) { return (n || 0).toLocaleString("en-US"); }
+/* 元素容错：节点缺失时写入空对象，避免单个节点缺失打断整段渲染 */
+var nullSink = { textContent: "", innerHTML: "", src: "", style: {}, onclick: null };
+function getEl(id) { return window.document.getElementById(id) || nullSink; }
+function curModel() { return CFG.models.filter(function (x) { return x.id === state.model; })[0]; }
+function curBundle() { return CFG.bundles.filter(function (x) { return x.id === state.bundle; })[0]; }
+function comboItems() { return CFG.combos.filter(function (c) { return state.combo[c.name]; }); }
+
+function calc() {
+  var base = curModel().price + curBundle().delta;
+  var picks = comboItems();
+  var add = picks.reduce(function (s, c) { return s + c.price; }, 0);
+  var dis = picks.length >= 2 ? Math.round(add * 0.05) : 0;
+  return { base: base, add: add, dis: dis, unit: base + add - dis };
+}
+
+function render() {
+  var c = calc();
+  getEl("pdpName").textContent = curModel().name;
+  getEl("pdpPrice").textContent = m(c.unit);
+  getEl("comboTotal").textContent = m(c.unit * state.qty);
+  var picks = comboItems();
+  getEl("comboTip").textContent = picks.length >= 2 ? ("已选 " + picks.length + " 件配件 · 省 ¥" + m(c.dis)) : "";
+  var orig = c.base + c.add;
+  getEl("comboOrig").textContent = c.dis ? ("¥" + m(orig * state.qty)) : "";
+  getEl("comboOrig").style.display = c.dis ? "" : "none";
+  getEl("pdpNote").textContent = curModel().note + " · " + curBundle().note;
+    /* 吸底栏同步 */
+  getEl("qtyVal").textContent = state.qty;
+  getEl("bbImg").src = curModel().img;
+  getEl("bbName").textContent = curModel().name;
+  getEl("bbNote").textContent = curModel().note + " · " + configText();
+  getEl("bbPrice").textContent = m(c.unit * state.qty);
+  getEl("bbOrig").textContent = c.dis ? ("¥" + m(orig * state.qty)) : "";
+  getEl("bbOrig").style.display = c.dis ? "" : "none";
+
+  getEl("pgMain").src = curModel().img;
+
+  getEl("skuModels").innerHTML = CFG.models.map(function (x) {
+    return '<button class="sku-opt' + (x.id === state.model ? " on" : "") + '" data-model="' + x.id + '">' +
+      '<b>' + x.name + '</b><i>' + x.note + '</i><em>¥' + m(x.price) + '</em></button>';
+  }).join("");
+  getEl("skuBundles").innerHTML = CFG.bundles.map(function (x) {
+    return '<button class="sku-opt' + (x.id === state.bundle ? " on" : "") + '" data-bundle="' + x.id + '">' +
+      '<b>' + x.name + '</b><i>' + x.note + '</i><em>' + (x.delta ? "+¥" + m(x.delta) : "") + '</em></button>';
+  }).join("");
+  getEl("comboList").innerHTML = CFG.combos.map(function (c) {
+    var on = !!state.combo[c.name];
+    return '<div class="combo-item' + (on ? " on" : "") + '" data-combo="' + c.name + '">' +
+      '<span class="combo-box">' + (on ? "✓" : "") + '</span>' +
+      '<img src="' + c.img + '" alt="">' +
+      '<span class="ci-mid"><span class="ci-n">' + c.name + '</span><span class="ci-s">' + c.spec + '</span></span>' +
+      '<span class="ci-p">¥' + m(c.price) + '</span></div>';
+  }).join("");
+
+  getEl("pgThumbs").innerHTML = CFG.gallery.map(function (g, i) {
+    return '<button class="' + (i === 0 ? "on" : "") + '" data-img="' + g + '"><img src="' + g + '" alt=""></button>';
+  }).join("");
+  getEl("storyList").innerHTML = CFG.stories.map(function (s) {
+    return '<div class="story-card"><img src="' + s.img + '" alt=""><div class="sc-b"><h4>' + s.t + '</h4><p>' + s.d + '</p></div></div>';
+  }).join("");
+  getEl("specTable").innerHTML = CFG.specs.map(function (r) {
+    return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+  }).join("");
+}
+
+function configText() {
+  var picks = comboItems().map(function (c) { return c.name; });
+  return curBundle().name + (picks.length ? " · " + picks.join(" / ") : "");
+}
+
+document.addEventListener("click", function (e) {
+  var mb = e.target.closest("[data-model]");
+  if (mb) { state.model = mb.getAttribute("data-model"); render(); return; }
+  var bb = e.target.closest("[data-bundle]");
+  if (bb) { state.bundle = bb.getAttribute("data-bundle"); render(); return; }
+  var cb = e.target.closest("[data-combo]");
+  if (cb) {
+    var k = cb.getAttribute("data-combo");
+    if (state.combo[k]) delete state.combo[k]; else state.combo[k] = true;
+    render(); return;
+  }
+  var tb = e.target.closest("[data-img]");
+  if (tb) {
+    getEl("pgMain").src = tb.getAttribute("data-img");
+    document.querySelectorAll("#pgThumbs button").forEach(function (b) { b.classList.remove("on"); });
+    tb.classList.add("on"); return;
+  }
+});
+
+getEl("qtyMinus").onclick = function () { if (state.qty > 1) { state.qty--; getEl("qtyVal").textContent = state.qty; render(); } };
+getEl("qtyPlus").onclick = function () { if (state.qty < 9) { state.qty++; getEl("qtyVal").textContent = state.qty; render(); } };
+
+getEl("btnAdd").onclick = function () {
+  var c = calc();
+  window.addToCart({
+    name: curModel().name,
+    spec: configText(),
+    price: c.unit,
+    qty: state.qty,
+    img: curModel().img
+  });
+};
+getEl("btnBuy").onclick = function () {
+  var c = calc();
+  /* 立即购买：不计入购物车，单独存一份给结算页（走站点多通道存储，沙箱里直写 localStorage 会抛错） */
+  var lines = [{ name: curModel().name, spec: configText(), price: c.unit, qty: state.qty, img: curModel().img }];
+  if (window.hmSetBuyNow) window.hmSetBuyNow(lines);
+  try { localStorage.setItem("himakers_buynow", JSON.stringify(lines)); } catch (e) {}
+  location.href = window.hmHref ? window.hmHref("checkout.html?mode=buynow") : "checkout.html?mode=buynow";
+};
+
+render();
+</script>
+
+<script>
+/* ---------- 产品图库：左右翻页 + 视频缩略图（三页同构，不改各页原有切换逻辑） ---------- */
+(function () {
+  if (window.__pgGallery) return;
+  var main = document.querySelector(".pg-main");
+  var box = document.getElementById("pgThumbs");
+  if (!main || !box) return;
+  window.__pgGallery = true;
+  var IMG = main.querySelector("img");
+  var BOX = main.querySelector(".pg-vplay");
+  var DUR = BOX && BOX.querySelector(".vp-dur") ? BOX.querySelector(".vp-dur").textContent : "";
+  var POSTER = "assets/img/works/wood-relief.png", TITLE = "CNC C1 浮雕实拍";
+  var PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10.4-6.8a1 1 0 0 0 0-1.7L9.6 4.3A1 1 0 0 0 8 5.2z"/></svg>';
+  var PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.2"/></svg>';
+
+  function items() { return Array.prototype.slice.call(box.querySelectorAll("button")); }
+  function mark(on) {
+    items().forEach(function (b) { b.classList.toggle("on", b === on); });
+  }
+  function videoState(on) {
+    main.classList.toggle("is-video", on);
+    main.classList.remove("is-playing");
+    if (BOX) { var b = BOX.querySelector(".vp-btn"); if (b) b.innerHTML = PLAY; }
+  }
+  function goto(step) {
+    var list = items();
+    if (!list.length) return;
+    var cur = -1;
+    list.forEach(function (b, i) { if (b.classList.contains("on")) cur = i; });
+    var i = cur < 0 ? (step > 0 ? 0 : list.length - 1) : cur + step;
+    list[(i % list.length + list.length) % list.length].click();
+  }
+  /* 翻页按钮在缩略图带两侧（.pg-main 之外），故按文档查找 */
+  var prev = document.querySelector(".pg-nav.prev"), next = document.querySelector(".pg-nav.next");
+  if (prev) prev.addEventListener("click", function () { goto(-1); });
+  if (next) next.addEventListener("click", function () { goto(1); });
+  if (BOX) BOX.addEventListener("click", function () {
+    var on = main.classList.toggle("is-playing");
+    var b = BOX.querySelector(".vp-btn");
+    if (b) b.innerHTML = on ? PAUSE : PLAY;
+  });
+  /* 缩略图点击（含视频项）：冒泡到 box 早于各页的 document 级处理器 */
+  box.addEventListener("click", function (e) {
+    var t = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (!t || !box.contains(t)) return;
+    var isVideo = t.classList.contains("pg-vthumb");
+    mark(t);
+    videoState(isVideo);
+    if (isVideo && IMG) IMG.src = POSTER;
+  });
+  function ensure() {
+    if (box.querySelector(".pg-vthumb")) return;
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "pg-vthumb";
+    b.setAttribute("data-video", "1"); b.setAttribute("aria-label", "产品视频");
+    b.innerHTML = '<img src="' + POSTER + '" alt="' + TITLE + '"><span class="pg-vbadge">' + PLAY + '</span><span class="pg-vdur">' + DUR + '</span>';
+    box.appendChild(b);
+    videoState(false);
+  }
+  ensure();
+  if (window.MutationObserver) new MutationObserver(ensure).observe(box, { childList: true });
+})();
+</script>
+<script>
+/* ---------- 产品介绍：4 段锚点 tab（吸顶 + 平滑定位 + 滚动高亮同步） ---------- */
+(function () {
+  if (window.__pdTabs) return;
+  var nav = document.getElementById("pdNav");
+  if (!nav) return;
+  window.__pdTabs = true;
+  var bar = nav.querySelector(".pd-nav-in");
+  var tabs = Array.prototype.slice.call(nav.querySelectorAll(".pd-tab"));
+  var blocks = tabs.map(function (t) { return document.getElementById(t.getAttribute("href").slice(1)); });
+  var NAV = 68;                                   /* 站点顶栏高（.nav 吸顶 top:0） */
+  function topOf(el) { return el.getBoundingClientRect().top + window.scrollY; }
+  /* 当前段 = 最后一个「顶边已进入吸顶条下方」的锚点段 */
+  function current() {
+    var y = window.scrollY + NAV + (nav.offsetHeight || 0) + 28, i = 0;
+    for (var k = 0; k < blocks.length; k++) if (blocks[k] && topOf(blocks[k]) <= y) i = k;
+    return i;
+  }
+  function mark(i) { tabs.forEach(function (t, k) { t.classList.toggle("on", k === i); }); }
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function (e) {
+      e.preventDefault();                          /* 自己滚：不写 hash，免得在沙箱里动 location */
+      var b = blocks[i];
+      if (!b) return;
+      if (window.__pdpNavExpand) window.__pdpNavExpand(1000);   /* 定位全程让一级导航展开，落点才对得上 */
+      b.scrollIntoView({ behavior: "smooth", block: "start" });
+      mark(i);
+      if (bar && bar.scrollWidth > bar.clientWidth + 4) {   /* 窄屏：把点中的 tab 滚进可视区 */
+        var tr = t.getBoundingClientRect(), br = bar.getBoundingClientRect();
+        if (tr.left < br.left) bar.scrollLeft += tr.left - br.left - 12;
+        else if (tr.right > br.right) bar.scrollLeft += tr.right - br.right + 12;
+      }
+    });
+  });
+  var raf = 0;
+  window.addEventListener("scroll", function () {
+    if (raf) return;
+    raf = window.requestAnimationFrame(function () { raf = 0; mark(current()); });
+  }, { passive: true });
+  mark(current());
+})();
+
+/* ---------- tab 条吸住顶后收起一级导航：下滑收、上滑展（点 tab 定位时先展开展） ---------- */
+(function () {
+  if (window.__pdpNavAuto) return;
+  var topNav = document.querySelector(".nav");
+  var bar = document.querySelector(".pd-nav");
+  if (!topNav || !bar) return;
+  window.__pdpNavAuto = true;
+  var H = topNav.offsetHeight || 68;        /* 一级导航高（.nav-inner height:68px，全断点一致） */
+  var sec = bar.parentNode;                 /* tab 条的包含块 = section.pd */
+  var on = false, last = window.pageYOffset, hold = 0;
+  function apply(v) {
+    if (v === on) return;
+    on = v;
+    document.documentElement.classList.toggle("nav-collapsed", v);
+    hold = Date.now() + 420;                /* 过渡窗口内不再翻转，动画不会被打断 */
+    if (v) {                                /* 顶栏一收，挂在它里面的浮层会跟着滑走 —— 先关掉 */
+      Array.prototype.forEach.call(
+        document.querySelectorAll(".user-panel.open, .notif-panel.open"),
+        function (p) { p.classList.remove("open"); }
+      );
+    }
+  }
+  /* 「正吸在 top:H」= 自然位已顶到 H（想再往上被拦住）+ 段落底还容得下它（滚过段落时要放行） */
+  function stuck() {
+    var natTop = bar.getBoundingClientRect().top + (on ? H : 0);    /* 减掉自身位移 = 还原自然位 */
+    return natTop <= H + 1 && sec.getBoundingClientRect().bottom - bar.offsetHeight >= H - 1;
+  }
+  var raf = 0;
+  function step() {
+    raf = 0;
+    var y = window.pageYOffset, d = y - last;
+    last = y;
+    if (Date.now() < hold || Math.abs(d) < 2) return;
+    if (d > 0) { if (stuck()) apply(true); else if (on) apply(false); }
+    else if (on) { apply(false); }
+  }
+  window.addEventListener("scroll", function () {
+    if (!raf) raf = window.requestAnimationFrame(step);
+  }, { passive: true });
+  /* 点 tab 会平滑定位到锚点段：先展开并冻结状态，落点用的 scroll-margin-top 才和终点态一致 */
+  window.__pdpNavExpand = function (ms) { apply(false); hold = Date.now() + (ms || 420); };
+})();
+</script>
+</body>
+</html>

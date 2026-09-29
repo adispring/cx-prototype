@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>登录 / 注册 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+/* ============================================================
+   登录 / 注册 · 与站点设计系统同一套令牌（浅色 + 炭黑 + 品牌绿）
+   ============================================================ */
+.lg-page { display: flex; min-height: 100vh; }
+
+/* ---------------- 左侧品牌区 ---------------- */
+.lg-brand {
+  position: relative; overflow: hidden; flex: 1 1 54%;
+  background: linear-gradient(155deg, #0C1210 0%, #131C17 58%, #0F1A15 100%);
+  color: #fff; padding: 56px 64px 48px;
+  display: flex; flex-direction: column;
+}
+.lg-brand::after {
+  content: ""; position: absolute; right: -180px; top: 140px;
+  width: 620px; height: 620px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(15,163,107,.34) 0%, rgba(74,222,151,.14) 42%, rgba(15,163,107,0) 68%);
+}
+.lg-brand .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
+.lg-brand .brand-name { font-size: 21px; color: #fff; }
+.lg-brand .brand-name i { color: #4ADE97; }
+.lg-slogan { position: relative; margin-top: 64px; max-width: 560px; }
+/* 站点全局 h1-h4 是炭黑，品牌区压在深底上要显式转白 */
+.lg-slogan h1 { font-size: clamp(32px, 3.4vw, 46px); font-weight: 700; line-height: 1.22; letter-spacing: -.03em; color: #fff; }
+.lg-slogan h1 span { color: #4ADE97; }
+.lg-slogan p { margin-top: 16px; color: #93A29A; font-size: 15.5px; line-height: 1.8; }
+.lg-visual {
+  position: relative; margin-top: 44px; align-self: flex-start; width: 100%; max-width: 560px;
+  border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+}
+/* 源图 1536×1024，按 1536/927 取景把底部约 9.5%（生成水印区）裁掉 */
+.lg-visual img { width: 100%; aspect-ratio: 1536 / 927; object-fit: cover; object-position: top; display: block; }
+.lg-stats {
+  position: relative; margin-top: auto; padding-top: 30px;
+  display: flex; gap: 48px; border-top: 1px solid rgba(255,255,255,.12);
+}
+.lg-stats .num { font-size: 23px; font-weight: 700; color: #4ADE97; letter-spacing: -.02em; }
+.lg-stats .lbl { font-size: 13px; color: #93A29A; margin-top: 5px; }
+
+/* ---------------- 右侧表单区 ---------------- */
+.lg-form {
+  flex: 0 0 46%; background: #fff;
+  display: flex; flex-direction: column; padding: 44px 72px 28px;
+}
+.lg-back { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; color: var(--muted); }
+.lg-back:hover { color: var(--green-t); }
+.lg-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; }
+.lg-title { font-size: clamp(26px, 2.2vw, 31px); font-weight: 700; letter-spacing: -.03em; color: var(--ink); }
+.lg-sub { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+.lg-social { display: flex; gap: 12px; margin-top: 32px; }
+.lg-social button {
+  flex: 1; height: 48px; border: 1.5px solid var(--line); border-radius: 12px;
+  background: #fff; display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s ease, background .15s ease;
+}
+.lg-social button:hover { border-color: var(--green); background: var(--green-bg); }
+
+.lg-divider { display: flex; align-items: center; gap: 14px; margin: 26px 0; color: var(--faint); font-size: 12.5px; }
+.lg-divider::before, .lg-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+.lg-field { margin-bottom: 14px; }
+.lg-field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--body); margin-bottom: 6px; }
+.lg-field input {
+  width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; font-family: inherit; background: #fff; color: var(--ink);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.lg-field input::placeholder { color: var(--faint); }
+.lg-field input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
+.lg-field input.bad { border-color: #E5484D; box-shadow: 0 0 0 3px #FEECEB; }
+.lg-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 0 18px; }
+.lg-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.lg-check input { width: 15px; height: 15px; accent-color: var(--green); }
+.lg-forget { font-size: 13px; color: var(--green-t); font-weight: 600; }
+.lg-submit { width: 100%; height: 50px; font-size: 15.5px; }
+.lg-note { margin-top: 16px; font-size: 12px; color: var(--faint); text-align: center; line-height: 1.8; }
+.lg-note a { color: var(--green-t); }
+.lg-switch { margin-top: 14px; font-size: 13.5px; color: var(--muted); text-align: center; }
+.lg-switch a { color: var(--green-t); font-weight: 600; }
+.lg-err { display: none; margin-bottom: 12px; font-size: 13px; color: #B42318; background: #FEECEB; border-radius: 10px; padding: 10px 12px; }
+.lg-err.show { display: block; }
+
+.lg-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-top: 18px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--faint);
+}
+.lg-foot .lang b { color: var(--ink); }
+
+@media (max-width: 1080px) {
+  .lg-brand { padding: 40px; flex-basis: 50%; }
+  .lg-form { flex-basis: 50%; padding: 36px 40px 22px; }
+  .lg-visual { display: none; }
+}
+@media (max-width: 900px) {
+  .lg-page { flex-direction: column; }
+  .lg-brand { padding: 32px 24px 28px; }
+  .lg-slogan { margin-top: 28px; }
+  .lg-stats { display: none; }
+  .lg-form { padding: 30px 24px 20px; }
+  .lg-body { padding: 26px 0 32px; }
+}
+@media (max-width: 640px) {
+  .lg-brand { padding: 24px 18px 22px; }
+  .lg-brand::after { right: -280px; top: 60px; }
+  .lg-form { padding: 24px 18px 16px; }
+  .lg-social { gap: 8px; }
+  .lg-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .lg-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="lg-page">
+  <!-- Section / BrandZone -->
+  <section class="lg-brand">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+
+    <div class="lg-slogan">
+      <h1>让创造<span>更简单</span></h1>
+      <p>3D 打印 · 激光雕刻 · CNC —— 一个账号，畅享硬件、AI 创作、模型库与社区全生态。</p>
+    </div>
+
+    <div class="lg-visual">
+      <img src="assets/img/hero-studio.png" alt="HiMakers 创作工作台">
+    </div>
+
+    <div class="lg-stats">
+      <div><div class="num">10,000+</div><div class="lbl">已服务创客</div></div>
+      <div><div class="num">50+</div><div class="lbl">深度项目教程</div></div>
+      <div><div class="num">5 大模块</div><div class="lbl">统一账号通行</div></div>
+    </div>
+  </section>
+
+  <!-- Section / LoginForm -->
+  <section class="lg-form">
+    <a class="lg-back" href="index.html">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+      返回首页
+    </a>
+
+    <div class="lg-body">
+      <div class="lg-title">欢迎来到 HiMakers</div>
+      <div class="lg-sub">一个账号，畅享商城、AI 创作、模型库、技术支持与设备管理</div>
+
+      <div class="lg-social">
+        <button type="button" title="微信一键登录" aria-label="微信一键登录">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#07C160"><path d="M8.7 4C4.9 4 2 6.6 2 9.9c0 1.9 1 3.5 2.6 4.6l-.7 2.1 2.5-1.3c.6.2 1.3.3 2 .3h.6A5.9 5.9 0 0 1 8.8 14c0-3 2.9-5.4 6.4-5.4h.5C15 6 12.2 4 8.7 4Zm-2 3.2a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Zm4.6 0a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8ZM22 14c0-2.7-2.4-4.9-5.4-4.9s-5.4 2.2-5.4 4.9 2.4 4.9 5.4 4.9c.6 0 1.2-.1 1.8-.3l2 1.1-.6-1.8c1.2-.9 2.2-2.3 2.2-3.9Zm-7.3-1.4a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Zm3.7 0a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Z"></path></svg>
+        </button>
+        <button type="button" title="Google 登录" aria-label="Google 登录">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.5-.3-2.2H12v4.3h6.5c-.1 1.1-.8 2.7-2.4 3.8l3.7 2.9c2.3-2.1 3.7-5.2 3.7-8.8Z"></path><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.7-2.9c-1 .7-2.4 1.2-4.2 1.2-3.2 0-6-2.2-7-5.1L1.1 17.2C3.1 21.2 7.2 24 12 24Z"></path><path fill="#FBBC05" d="M5 14.3c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.1 6.8A12 12 0 0 0 0 12c0 1.9.5 3.7 1.1 5.2L5 14.3Z"></path><path fill="#EA4335" d="M12 4.7c1.8 0 3 .8 3.7 1.4l3.3-3.2C17.9 1.1 15.2 0 12 0 7.2 0 3.1 2.8 1.1 6.8L5 9.7c1-2.9 3.8-5 7-5Z"></path></svg>
+        </button>
+        <button type="button" title="Apple 登录" aria-label="Apple 登录">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0D1310"><path d="M17.05 12.54c0-2.4 1.96-3.55 2.05-3.61-1.12-1.64-2.86-1.86-3.48-1.89-1.48-.15-2.89.87-3.64.87-.75 0-1.9-.85-3.13-.83-1.61.02-3.1.94-3.93 2.38-1.68 2.9-.43 7.2 1.2 9.56.8 1.15 1.75 2.45 3 2.4 1.2-.05 1.66-.78 3.11-.78s1.86.78 3.13.76c1.29-.02 2.11-1.17 2.9-2.33.91-1.33 1.29-2.62 1.31-2.69-.03-.01-2.52-.96-2.52-3.84ZM14.16 5.06c.66-.8 1.1-1.91 1.1-3.06-1.07.04-2.36.71-3.13 1.61-.69.79-1.29 2.07-1.13 3.29 1.19.09 2.4-.6 3.16-1.84Z"></path></svg>
+        </button>
+      </div>
+
+      <div class="lg-divider">或使用邮箱 / 手机号登录</div>
+
+      <form id="lgForm" novalidate>
+        <div class="lg-err" id="lgErr"></div>
+        <div class="lg-field">
+          <label for="lgUser">邮箱或手机号</label>
+          <input id="lgUser" type="text" placeholder="请输入邮箱或手机号" autocomplete="username">
+        </div>
+        <div class="lg-field">
+          <label for="lgPwd">密码</label>
+          <input id="lgPwd" type="password" placeholder="请输入密码" autocomplete="current-password">
+        </div>
+        <div class="lg-row">
+          <label class="lg-check"><input type="checkbox" id="lgKeep">保持登录状态</label>
+          <a class="lg-forget" href="#">忘记密码？</a>
+        </div>
+        <button class="btn btn-primary lg-submit" type="submit">登录 / 注册</button>
+      </form>
+
+      <div class="lg-note">注册即代表同意 <a href="#">《服务条款》</a> 和 <a href="#">《隐私政策》</a></div>
+      <div class="lg-switch">还没有账号？<a href="#">免费注册</a></div>
+    </div>
+
+    <div class="lg-foot">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <span class="lang"><b>中文</b> / English</span>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  var form = document.getElementById("lgForm");
+  var user = document.getElementById("lgUser");
+  var pwd = document.getElementById("lgPwd");
+  var err = document.getElementById("lgErr");
+  function fail(msg, el) {
+    err.textContent = msg;
+    err.classList.add("show");
+    el.classList.add("bad");
+    el.focus();
+  }
+  [user, pwd].forEach(function (el) {
+    el.addEventListener("input", function () {
+      el.classList.remove("bad");
+      err.classList.remove("show");
+    });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var u = user.value.trim(), p = pwd.value;
+    if (!u) return fail("请输入邮箱或手机号", user);
+    if (!/^(\d{6,15}|[^\s@]+@[^\s@]+\.[^\s@]+)$/.test(u)) return fail("邮箱或手机号格式不正确", user);
+    if (p.length < 6) return fail("密码至少 6 位", pwd);
+    location.href = "member.html";
+  });
+  // 第三方登录：演示原型直接进入个人中心
+  document.querySelectorAll(".lg-social button").forEach(function (b) {
+    b.addEventListener("click", function () { location.href = "member.html"; });
+  });
+})();
+</script>
+</body>
+</html>

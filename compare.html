@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机型对比 · HiMakers</title>
+<meta name="description" content="把 HiMakers 在售的 7 款机型摆在同一张表里：加工幅面、核心动力、精度、材料、软件与价格逐项对比。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+/* ============ 机型对比页 ============ */
+.cmp-page { padding: 34px 0 96px; }
+.crumbs { font-size: 13.5px; color: var(--faint); display: flex; gap: 8px; }
+.crumbs a:hover { color: var(--green-t); }
+.crumbs .sep { color: var(--line-2); }
+
+.cmp-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+.cmp-head h1 { font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -.03em; }
+.cmp-head .cmp-lead { color: var(--muted); font-size: 14.5px; margin-top: 10px; max-width: 660px; line-height: 1.75; }
+.cmp-tools { display: flex; align-items: center; gap: 10px; }
+
+.cmp-switch {
+  display: inline-flex; align-items: center; gap: 9px; height: 38px; padding: 0 14px;
+  border: 1.5px solid var(--line-2); border-radius: 999px; background: #fff;
+  font-size: 13.5px; font-weight: 600; color: var(--body); cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+.cmp-switch .sw { position: relative; width: 32px; height: 18px; border-radius: 999px; background: var(--line-2); flex-shrink: 0; transition: background .18s ease; }
+.cmp-switch .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .18s ease; }
+.cmp-switch[aria-pressed="true"] { border-color: var(--green); background: var(--green-bg); color: var(--green-t); }
+.cmp-switch[aria-pressed="true"] .sw { background: var(--green); }
+.cmp-switch[aria-pressed="true"] .sw::after { transform: translateX(14px); }
+
+/* ---------- 机型选择器 ---------- */
+.cmp-picker { margin-top: 26px; padding: 16px 18px 18px; background: #fff; border: 1px solid var(--line); border-radius: 16px; }
+.cmp-picker-t { display: flex; align-items: baseline; gap: 9px; font-size: 13.5px; font-weight: 600; }
+.cmp-picker-t i { font-style: normal; font-size: 12px; font-weight: 400; color: var(--faint); }
+.cmp-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.cmp-chip {
+  display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px;
+  border: 1.5px solid var(--line-2); border-radius: 999px; background: #fff;
+  font-size: 13.5px; color: var(--body); cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+.cmp-chip:hover { border-color: var(--green); color: var(--green-t); }
+.cmp-chip[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+.cmp-chip[aria-disabled="true"]:hover { border-color: var(--line-2); color: var(--body); }
+.cmp-chip.on { background: var(--green-bg); border-color: var(--green); color: var(--green-t); font-weight: 600; }
+.cmp-chip.on::before { content: "✓"; font-size: 11.5px; font-weight: 700; }
+.cmp-chip i { font-style: normal; font-size: 12px; color: var(--faint); }
+.cmp-chip.on i { color: var(--green-t); opacity: .8; }
+
+/* ---------- 对比表 ---------- */
+.cmp-board { margin-top: 20px; }
+.cmp-scroll {
+  /* ⚠️ 这里默认必须是 visible，不能直接写 overflow-x: auto。
+     overflow-x:auto 会让 overflow-y 的 visible 隐式算成 auto → 这个 div 成了「双向滚动容器」，
+     而它高度是 auto（clientHeight === scrollHeight，内部并不纵向滚动），
+     于是 .cmp-namerow 的 position:sticky; top:68px 被这个假纵向滚动容器吃掉，
+     页面滚动时整行机型名完全不吸顶（computed style 仍读得到 68px，是假阳性）。
+     overflow-y: clip / hidden 都救不回来（实测 pinned 仍为 false）。
+     只在真的横向溢出时才由 JS 挂 .is-scroll 建容器——此时才需要牺牲 top-sticky。 */
+  overflow: visible;
+  border: 1px solid var(--line); border-radius: 18px; background: #fff;
+}
+.cmp-scroll.is-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.cmp-table {
+  width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed;
+  /* 列宽与列数：--cmp-n 由 JS 按已选机型数写入；两个尺寸变量必须在这里给默认值，
+     只写在 @media 里的话桌面端变量未定义 → min-width 的 calc 失效（静默退回 0）。 */
+  --cmp-n: 3; --cmp-rh: 168px; --cmp-col: 236px;
+  min-width: calc(var(--cmp-rh) + var(--cmp-col) * var(--cmp-n));
+}
+.cmp-table th, .cmp-table td { text-align: left; vertical-align: top; }
+.cmp-table thead th.cmp-rowh { width: var(--cmp-rh); }
+.cmp-table thead th.cmp-col { width: var(--cmp-col); }
+
+.cmp-table tbody th.cmp-rowh,
+.cmp-table tbody td { border-bottom: 1px solid var(--line); padding: 15px 18px; font-size: 13.5px; line-height: 1.65; }
+.cmp-table tbody th.cmp-rowh { color: var(--muted); font-weight: 500; background: #fff; }
+.cmp-table tbody td { color: var(--body); font-weight: 500; }
+.cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: 0; }
+/* 行 hover：整行浅底（含左侧 sticky 格，否则会露出白块） */
+.cmp-table tbody tr[data-key]:hover th, .cmp-table tbody tr[data-key]:hover td { background: var(--bg-2); }
+
+.cmp-table tbody tr.cmp-group th {
+  padding: 11px 18px; background: var(--bg-2); border-bottom: 1px solid var(--line);
+  font-size: 12px; font-weight: 600; letter-spacing: .06em; color: var(--muted);
+}
+
+/* 表头：上排机型卡（随页面滚走）+ 下排「机型名 + 价」吸在顶栏下方 */
+.cmp-prodrow th { padding: 18px 18px 16px; border-bottom: 1px solid var(--line); background: #fff; }
+.cmp-prodrow th.cmp-rowh { vertical-align: bottom; }
+.cmp-prodrow .cmp-rh-label { font-size: 13px; font-weight: 600; color: var(--ink); display: block; padding-bottom: 4px; }
+.cmp-prodrow .cmp-rh-note { display: block; font-size: 11.5px; font-weight: 400; color: var(--faint); line-height: 1.6; }
+
+.cmp-card { position: relative; }
+.cmp-card .cmp-cat {
+  display: inline-block; font-size: 11px; font-weight: 600; color: var(--green-t);
+  background: var(--green-bg); border-radius: 999px; padding: 3px 9px;
+}
+.cmp-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: var(--bg-2); margin-top: 10px; display: block; }
+.cmp-card .cmp-name { font-size: 16px; font-weight: 700; letter-spacing: -.01em; margin-top: 12px; }
+.cmp-card .cmp-note { font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.6; }
+.cmp-card .cmp-price { display: flex; align-items: baseline; gap: 7px; margin-top: 10px; font-size: 21px; font-weight: 700; letter-spacing: -.03em; }
+.cmp-card .cmp-price .cur { font-size: 13px; font-weight: 600; }
+.cmp-card .cmp-price s { font-size: 12px; font-weight: 400; color: var(--faint); }
+.cmp-card .cmp-acts { display: flex; gap: 8px; margin-top: 14px; }
+.cmp-card .cmp-acts .btn { flex: 1; min-width: 0; padding: 0 12px; font-size: 13px; }
+.cmp-card .cmp-drop {
+  position: absolute; top: -4px; right: -4px; width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--line); background: #fff; color: var(--faint);
+  font-size: 12px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: border-color .16s ease, color .16s ease;
+}
+.cmp-card .cmp-drop:hover { border-color: #E0B4AE; color: #C0392B; }
+
+.cmp-namerow th {
+  position: sticky; top: 68px; z-index: 40; background: #fff;
+  border-bottom: 1px solid var(--line); padding: 12px 18px;
+}
+.cmp-namerow th.cmp-rowh { color: var(--muted); font-size: 12px; font-weight: 400; }
+.cmp-namerow th.cmp-col { display: table-cell; }
+.cmp-namerow b { display: block; font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
+.cmp-namerow em { display: block; font-style: normal; font-size: 12.5px; color: var(--green-t); font-weight: 600; margin-top: 3px; }
+
+/* 左列纵横双向吸边 */
+.cmp-table tbody th.cmp-rowh, .cmp-prodrow th.cmp-rowh, .cmp-namerow th.cmp-rowh, .cmp-group th {
+  position: sticky; left: 0; z-index: 45;
+}
+.cmp-prodrow th.cmp-rowh { z-index: 46; }
+.cmp-namerow th.cmp-rowh { z-index: 47; }
+.cmp-group th { background: var(--bg-2); }
+
+/* 只看差异：完全相同的行收起 */
+.cmp-table tbody.only-diff tr.same { display: none; }
+
+.cmp-hint { display: none; margin-top: 11px; font-size: 12.5px; color: var(--faint); }
+.cmp-hint.show { display: block; }
+.cmp-note { margin-top: 12px; font-size: 12.5px; color: var(--faint); line-height: 1.7; }
+
+/* ---------- 没想好：按产出选 ---------- */
+.cmp-pick { margin-top: 56px; }
+.cmp-pick h2 { font-size: clamp(21px, 2.2vw, 27px); letter-spacing: -.02em; }
+.cmp-pick .cmp-pick-lead { color: var(--muted); font-size: 14px; margin-top: 10px; }
+.cmp-pick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 22px; }
+.cmp-pick-card {
+  display: block; background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  padding: 20px 20px 22px; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.cmp-pick-card:hover { border-color: var(--green); box-shadow: 0 14px 30px -22px rgba(12,18,16,.5); transform: translateY(-2px); }
+.cmp-pick-card .pk-cat { font-size: 12px; color: var(--faint); }
+.cmp-pick-card b { display: block; font-size: 17px; margin-top: 7px; letter-spacing: -.01em; }
+.cmp-pick-card .pk-d { display: block; font-size: 13px; color: var(--muted); line-height: 1.7; margin-top: 8px; }
+.cmp-pick-card .pk-go { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--green-t); margin-top: 14px; }
+.cmp-pick-card:hover .pk-go { color: var(--green); }
+
+.cmp-foot { margin-top: 34px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.cmp-foot .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+@media (max-width: 1180px) {
+  .cmp-table { --cmp-rh: 148px; --cmp-col: 216px; }
+  .cmp-pick-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .cmp-page { padding: 26px 0 76px; }
+  .cmp-table { --cmp-rh: 108px; --cmp-col: 198px; }
+  .cmp-table tbody th.cmp-rowh, .cmp-table tbody td { padding: 13px 12px; font-size: 13px; }
+  .cmp-table tbody tr.cmp-group th { padding: 9px 12px; }
+  .cmp-prodrow th { padding: 14px 12px 12px; }
+  .cmp-namerow th { padding: 10px 12px; top: 60px; }
+  .cmp-prodrow .cmp-rh-note { display: none; }
+  .cmp-card .cmp-acts { flex-direction: column; }
+  .cmp-picker { padding: 14px; }
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <div class="nav-item">
+        <a href="shop.html" class="active">商城</a>
+        <div class="nav-menu" aria-label="商城分类">
+          <div class="wrap nm-in">
+            <div class="nm-col">
+              <div class="nm-h">整机</div>
+              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
+              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
+              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
+              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
+            </div>
+            <div class="nm-prods">
+              <div class="nm-h">热销机型</div>
+              <div class="nm-grid">
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…">
+      </label>
+
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm">注册</a>
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html" class="active">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a><a href="member.html">个人中心</a><a href="orders.html">我的订单</a>
+<a href="compare.html">机型对比</a></div>
+
+<main class="cmp-page">
+  <div class="wrap">
+    <div class="crumbs">
+      <a href="index.html">首页</a><span class="sep">/</span><a href="shop.html">商城</a><span class="sep">/</span><span>机型对比</span>
+    </div>
+
+    <div class="cmp-head">
+      <div>
+        <h1>机型对比 <span class="serif-it" style="color:var(--green)">compare</span></h1>
+        <p class="cmp-lead">把在售的 7 款机型摆在同一张表里：加工幅面、核心动力、精度、材料、软件与价格逐项对齐，勾选最多 4 台一起看。</p>
+      </div>
+      <div class="cmp-tools">
+        <button type="button" class="cmp-switch" id="cmpDiff" aria-pressed="true"><span class="sw"></span>只看差异</button>
+        <button type="button" class="btn btn-ghost sm" id="cmpReset">重置</button>
+      </div>
+    </div>
+
+    <div class="cmp-picker">
+      <div class="cmp-picker-t">选择机型<i id="cmpCount">已选 3 台 · 最多 4 台</i></div>
+      <div class="cmp-chips" id="cmpChips"></div>
+    </div>
+
+    <div class="cmp-board">
+      <div class="cmp-scroll" id="cmpScroll">
+        <table class="cmp-table" id="cmpTable"></table>
+      </div>
+      <div class="cmp-hint" id="cmpHint">左右滑动查看更多机型 →</div>
+      <p class="cmp-note" id="cmpNote"></p>
+    </div>
+
+    <section class="cmp-pick">
+      <h2>还没想好？按你想做的东西倒推</h2>
+      <p class="cmp-pick-lead">先从「成品长什么样」出发，比对着参数表选要快得多。</p>
+      <div class="cmp-pick-grid">
+        <a class="cmp-pick-card" href="pdp-laser.html">
+          <span class="pk-cat">木牌 / 皮革 / 亚克力 平面雕刻</span>
+          <b>XCheng X1 系列</b>
+          <span class="pk-d">一束激光搞定刻字、切割与打标，从礼物定制到小批量接单；幅面从 300×300 到 600×600 三档可选。</span>
+          <span class="pk-go">看激光雕刻机 →</span>
+        </a>
+        <a class="cmp-pick-card" href="pdp-printer.html">
+          <span class="pk-cat">手办 / 零件 / 工具 立体成型</span>
+          <b>Doyao Y2 系列</b>
+          <span class="pk-d">模型库点一下就能打，15 分钟出首件；双喷头版本支持多色与可溶支撑，成型尺寸到 350×350×400mm。</span>
+          <span class="pk-go">看 3D 打印机 →</span>
+        </a>
+        <a class="cmp-pick-card" href="pdp-cnc.html">
+          <span class="pk-cat">金属标牌 / 浮雕 / 结构件 铣削</span>
+          <b>CNC C1 系列</b>
+          <span class="pk-d">木铝通吃，全金属龙门 + 精密导轨，铝铜与工程塑料都能铣；工业级版本行程到 600×600×120mm。</span>
+          <span class="pk-go">看 CNC 雕刻机 →</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="cmp-foot">
+      <span class="dot"></span>7 款在售机型 · 满 ¥999 全球包邮 · 整机 2 年质保 · 30 天无理由退换
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i style="color:#4ADE97">Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="pdp-laser.html">激光雕刻机</a><a href="pdp-printer.html">3D 打印机</a><a href="pdp-cnc.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="orders.html">我的订单</a><a href="cart.html">购物车</a><a href="addresses.html">收货地址</a><a href="aftersale.html">售后与退款</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+<script>
+/* ============ 机型对比 ============ */
+function cmpMoney(n) { return (n || 0).toLocaleString("en-US"); }
+
+var MACHINES = [
+  { id: "x1", name: "XCheng X1", cat: "激光雕刻机", price: 4999, orig: 5999,
+    note: "20W 光斑 · 幅面 400×400mm", img: "assets/img/device-laser.png", pdp: "pdp-laser.html",
+    specs: { type: "激光雕刻机", scene: "全能入门激光，木 / 皮 / 亚克力通吃", area: "400 × 400 mm",
+      power: "20W 定焦激光模组", prec: "0.08 mm 光斑精细度", speed: "480 mm/s · 加速度 8,000 mm/s²",
+      mat: "木材 / 皮革 / 亚克力 / 纸板 / 竹 / 深色石材", calib: "自动对焦 + 一键测厚",
+      conn: "Wi-Fi / USB-C / U 盘离线", soft: "HiMakers Studio / LightBurn / 移动端 App",
+      safe: "封闭式防护罩 · 火焰探测 · 开盖停机", size: "620 × 590 × 320 mm", weight: "12.5 kg",
+      warranty: "整机 2 年 · 核心部件 3 年" } },
+  { id: "x1pro", name: "XCheng X1 Pro", cat: "激光雕刻机", price: 6999, orig: 8299,
+    note: "40W 双激光 · 幅面 600×600mm", img: "assets/img/device-laser-pro.png", pdp: "pdp-laser.html",
+    specs: { type: "激光雕刻机", scene: "大幅面旗舰，厚料与小批量订单", area: "600 × 600 mm",
+      power: "40W 双激光模组（精细光路 + 快切光路）", prec: "0.06 mm 光斑精细度", speed: "720 mm/s · 加速度 12,000 mm/s²",
+      mat: "木材 / 皮革 / 亚克力 / 竹 / 深色石材 / 阳极氧化铝（打标）", calib: "自动对焦 + 一键测厚 + 双光路校准",
+      conn: "Wi-Fi / USB-C / U 盘离线", soft: "HiMakers Studio / LightBurn / 移动端 App",
+      safe: "封闭式防护罩 · 火焰探测 · 开盖停机", size: "820 × 790 × 340 mm", weight: "19.8 kg",
+      warranty: "整机 2 年 · 核心部件 3 年" } },
+  { id: "x1air", name: "XCheng X1 Air", cat: "激光雕刻机", price: 3299, orig: 3999,
+    note: "10W 轻量 · 桌面级 300×300mm", img: "assets/img/device-laser-air.png", pdp: "pdp-laser.html",
+    specs: { type: "激光雕刻机", scene: "轻量桌面激光，小空间的第一台", area: "300 × 300 mm",
+      power: "10W 定焦激光模组", prec: "0.10 mm 光斑精细度", speed: "360 mm/s · 加速度 6,000 mm/s²",
+      mat: "木材 / 皮革 / 纸板 / 浅色亚克力 / 竹", calib: "自动对焦",
+      conn: "Wi-Fi / USB-C", soft: "HiMakers Studio / 移动端 App",
+      safe: "封闭式防护罩 · 开盖停机", size: "480 × 470 × 280 mm", weight: "9.6 kg",
+      warranty: "整机 2 年 · 核心部件 3 年" } },
+  { id: "y2", name: "Doyao Y2", cat: "3D 打印机", price: 3299, orig: 0,
+    note: "单喷头 · 成型 256×256×256mm", img: "assets/img/device-printer.png", pdp: "pdp-printer.html",
+    specs: { type: "3D 打印机", scene: "模型库直打，15 分钟出首件", area: "256 × 256 × 256 mm",
+      power: "单喷头 0.4 mm", prec: "0.05 – 0.3 mm 层厚可调", speed: "500 mm/s · 加速度 20,000 mm/s²",
+      mat: "PLA / PETG / TPU / ABS", calib: "全自动调平 · 振动补偿",
+      conn: "Wi-Fi / 局域网 / U 盘 / App 远程", soft: "HiMakers Studio / 移动端 App / 第三方切片器",
+      safe: "全封闭机身 · 断料续打 · 过热保护", size: "480 × 520 × 620 mm", weight: "14 kg",
+      warranty: "整机 2 年 · 热端 1 年" } },
+  { id: "y2max", name: "Doyao Y2 Max", cat: "3D 打印机", price: 4999, orig: 0,
+    note: "双喷头 · 成型 350×350×400mm", img: "assets/img/device-printer-max.png", pdp: "pdp-printer.html",
+    specs: { type: "3D 打印机", scene: "大尺寸双喷头，多色与工程件", area: "350 × 350 × 400 mm",
+      power: "双喷头 0.4 / 0.6 mm", prec: "0.05 – 0.3 mm 层厚可调", speed: "600 mm/s · 加速度 24,000 mm/s²",
+      mat: "PLA / PETG / TPU / ABS / 光固化树脂", calib: "全自动调平 · 双喷头独立校准 · 振动补偿",
+      conn: "Wi-Fi / 局域网 / U 盘 / App 远程 · 腔体摄像头", soft: "HiMakers Studio / 移动端 App / 第三方切片器",
+      safe: "全封闭机身 · 断料续打 · 过热保护 · HEPA 滤芯", size: "560 × 600 × 720 mm", weight: "22.5 kg",
+      warranty: "整机 2 年 · 热端 1 年" } },
+  { id: "c1", name: "CNC C1", cat: "CNC 雕刻机", price: 5999, orig: 0,
+    note: "入门级 · 行程 400×400×80mm", img: "assets/img/device-cnc.png", pdp: "pdp-cnc.html",
+    specs: { type: "CNC 雕刻机", scene: "木铝通吃，浮雕与结构件一次成型", area: "400 × 400 × 80 mm",
+      power: "500W 无刷主轴", prec: "重复定位精度 ±0.02 mm", speed: "进给 3,000 mm/min · 空程 6,000 mm/min",
+      mat: "木材 / MDF / 亚克力 / 铝 / 铜 / PCB", calib: "自动对刀块 · 断电续雕",
+      conn: "USB-C / 局域网 / U 盘离线", soft: "HiMakers CAM / Fusion 360 / 支持 G-code",
+      safe: "全金属龙门 · 急停开关 · 防尘罩", size: "700 × 680 × 520 mm", weight: "32 kg",
+      warranty: "整机 2 年 · 主轴 1 年" } },
+  { id: "c1pro", name: "CNC C1 Pro", cat: "CNC 雕刻机", price: 8999, orig: 0,
+    note: "工业级 · 行程 600×600×120mm", img: "assets/img/device-cnc-pro.png", pdp: "pdp-cnc.html",
+    specs: { type: "CNC 雕刻机", scene: "工业级加工，长时间跑也稳", area: "600 × 600 × 120 mm",
+      power: "800W 无刷主轴", prec: "重复定位精度 ±0.01 mm", speed: "进给 5,000 mm/min · 空程 10,000 mm/min",
+      mat: "木材 / MDF / 亚克力 / 铝 / 铜 / 钢（轻切削）/ PCB", calib: "自动对刀块 · 断电续雕 · 第四轴（选配）",
+      conn: "USB-C / 局域网 / U 盘离线", soft: "HiMakers CAM / Fusion 360 / 支持 G-code",
+      safe: "全金属龙门 · 精密直线导轨 · 急停开关", size: "880 × 850 × 600 mm", weight: "48 kg",
+      warranty: "整机 2 年 · 主轴 2 年" } }
+];
+
+var ROWS = [
+  { group: "定位与价格" },
+  { key: "type", label: "产品类型" },
+  { key: "price", label: "到手价" },
+  { key: "scene", label: "适合的场景" },
+  { group: "加工能力" },
+  { key: "area", label: "加工幅面 / 成型尺寸" },
+  { key: "power", label: "核心动力" },
+  { key: "prec", label: "精度表现" },
+  { key: "speed", label: "速度" },
+  { key: "mat", label: "支持材料" },
+  { group: "上手与联动" },
+  { key: "calib", label: "自动校准" },
+  { key: "conn", label: "连接方式" },
+  { key: "soft", label: "配套软件" },
+  { key: "safe", label: "安全与结构" },
+  { group: "机身与购买" },
+  { key: "size", label: "整机尺寸" },
+  { key: "weight", label: "净重" },
+  { key: "warranty", label: "官方质保" }
+];
+
+var CMP_MAX = 4, CMP_MIN = 2, CMP_KEY = "himakers-compare-v1";
+var CMP_DEFAULT = ["x1", "x1pro", "x1air"];   /* 默认同系列三台激光：跨品类时每行都不同，「只看差异」会看不出效果 */
+var cmpState = { sel: CMP_DEFAULT.slice(), onlyDiff: true };
+
+function cmpById(id) { return MACHINES.filter(function (m) { return m.id === id; })[0]; }
+function cmpSave() { if (window.hmBoxSet) { try { window.hmBoxSet(CMP_KEY, cmpState); } catch (e) {} } }
+function cmpLoad() {
+  if (!window.hmBoxGet) return;
+  var v = window.hmBoxGet(CMP_KEY, null);
+  if (v && v.sel && v.sel.length >= CMP_MIN) {
+    var ids = v.sel.filter(cmpById).slice(0, CMP_MAX);
+    if (ids.length >= CMP_MIN) cmpState.sel = ids;
+    cmpState.onlyDiff = v.onlyDiff !== false;
+  }
+}
+/* 价格行：到手价 + 划线价（写成一行纯文本，方便「只看差异」逐字比对） */
+function cmpCellText(m, key) {
+  if (key === "price") return "¥" + cmpMoney(m.price) + (m.orig ? " · 原价 ¥" + cmpMoney(m.orig) : "");
+  return (m.specs && m.specs[key]) || "—";
+}
+function cmpCellHtml(m, key) {
+  if (key === "price") {
+    return '<span class="price" style="font-size:15px"><span class="cur">¥</span>' + cmpMoney(m.price) +
+      (m.orig ? '<s>¥' + cmpMoney(m.orig) + '</s>' : '') + '</span>';
+  }
+  return cmpCellText(m, key);
+}
+
+function renderChips() {
+  var box = document.getElementById("cmpChips");
+  if (!box) return;
+  box.innerHTML = MACHINES.map(function (m) {
+    var on = cmpState.sel.indexOf(m.id) >= 0;
+    var full = !on && cmpState.sel.length >= CMP_MAX;
+    return '<button type="button" class="cmp-chip' + (on ? " on" : "") + '" data-pick="' + m.id + '"' +
+      (full ? ' aria-disabled="true"' : '') + '>' + m.name + '<i>¥' + cmpMoney(m.price) + '</i></button>';
+  }).join("");
+  document.getElementById("cmpCount").textContent =
+    "已选 " + cmpState.sel.length + " 台 · 最多 " + CMP_MAX + " 台";
+}
+
+function renderTable() {
+  var table = document.getElementById("cmpTable");
+  if (!table) return;
+  var sel = cmpState.sel.map(cmpById).filter(Boolean);
+  table.style.setProperty("--cmp-n", sel.length);
+
+  var head = '<thead><tr class="cmp-prodrow">' +
+    '<th class="cmp-rowh"><span class="cmp-rh-label">参数</span><span class="cmp-rh-note">共 ' + ROWS.filter(function (r) { return r.key; }).length + ' 项</span></th>' +
+    sel.map(function (m) {
+      return '<th class="cmp-col"><div class="cmp-card">' +
+        '<button type="button" class="cmp-drop" data-drop="' + m.id + '" title="移除 ' + m.name + '" aria-label="移除 ' + m.name + '">✕</button>' +
+        '<span class="cmp-cat">' + m.cat + '</span>' +
+        '<img src="' + m.img + '" alt="' + m.name + '" loading="lazy" decoding="async">' +
+        '<div class="cmp-name">' + m.name + '</div>' +
+        '<div class="cmp-note">' + m.note + '</div>' +
+        '<div class="cmp-price"><span class="cur">¥</span>' + cmpMoney(m.price) +
+          (m.orig ? '<s>¥' + cmpMoney(m.orig) + '</s>' : '') + '</div>' +
+        '<div class="cmp-acts">' +
+          '<button type="button" class="btn btn-primary sm" data-buy="' + m.id + '">加入购物车</button>' +
+          '<a class="btn btn-ghost sm" href="' + m.pdp + '">查看详情</a>' +
+        '</div></div></th>';
+    }).join("") + '</tr><tr class="cmp-namerow">' +
+    '<th class="cmp-rowh">对比机型</th>' +
+    sel.map(function (m) {
+      return '<th class="cmp-col"><b>' + m.name + '</b><em>¥' + cmpMoney(m.price) + '</em></th>';
+    }).join("") + '</tr></thead>';
+
+  var sameCount = 0, rowCount = 0;
+  var body = '<tbody' + (cmpState.onlyDiff ? ' class="only-diff"' : '') + '>' + ROWS.map(function (r) {
+    if (r.group) {
+      return '<tr class="cmp-group"><th colspan="' + (sel.length + 1) + '">' + r.group + '</th></tr>';
+    }
+    rowCount++;
+    var texts = sel.map(function (m) { return cmpCellText(m, r.key); });
+    var same = texts.every(function (t) { return t === texts[0]; });
+    if (same) sameCount++;
+    return '<tr data-key="' + r.key + '"' + (same ? ' class="same"' : '') + '>' +
+      '<th class="cmp-rowh">' + r.label + '</th>' +
+      sel.map(function (m) { return '<td class="cmp-col">' + cmpCellHtml(m, r.key) + '</td>'; }).join("") +
+      '</tr>';
+  }).join("") + '</tbody>';
+
+  table.innerHTML = head + body;
+
+  var diff = rowCount - sameCount;
+  document.getElementById("cmpNote").textContent = cmpState.onlyDiff
+    ? "已隐藏 " + sameCount + " 行完全相同的参数 · 当前有 " + diff + " 项存在差异"
+    : "显示全部 " + rowCount + " 行参数 · 其中 " + diff + " 项存在差异，其余 " + sameCount + " 行完全一致";
+  syncHint();
+}
+
+/* 真的横向溢出时才建滚动容器 .is-scroll + 提示「左右滑动」。
+   ⚠️ 判断不能用 scrollWidth - clientWidth：没建滚动容器时两者永远相等（循环依赖，量不出溢出）。
+   改用几何比较 —— 表格是 table-layout:fixed + width:100% + min-width:calc(...)，
+   盒宽恒等于 max(容器内容宽, min-width)，在「有没有 .is-scroll」两种模式下都能量到真实所需宽度，
+   所以切换后不会来回抖动。 */
+function syncHint() {
+  var sc = document.getElementById("cmpScroll"), hint = document.getElementById("cmpHint"),
+      tbl = document.getElementById("cmpTable");
+  if (!sc || !hint || !tbl) return;
+  var need = tbl.getBoundingClientRect().width - sc.getBoundingClientRect().width > 4;
+  sc.classList.toggle("is-scroll", need);
+  hint.classList.toggle("show", need);
+}
+
+function cmpPick(id) {
+  var i = cmpState.sel.indexOf(id);
+  if (i >= 0) {
+    if (cmpState.sel.length <= CMP_MIN) { if (window.toast) window.toast("至少保留 " + CMP_MIN + " 台机型对比"); return; }
+    cmpState.sel.splice(i, 1);
+  } else {
+    if (cmpState.sel.length >= CMP_MAX) { if (window.toast) window.toast("最多同时对比 " + CMP_MAX + " 台机型"); return; }
+    cmpState.sel.push(id);
+  }
+  cmpSave(); renderChips(); renderTable();
+}
+
+document.getElementById("cmpChips").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-pick]") : null;
+  if (b) cmpPick(b.getAttribute("data-pick"));
+});
+
+document.getElementById("cmpTable").addEventListener("click", function (e) {
+  if (!e.target.closest) return;
+  var buy = e.target.closest("[data-buy]");
+  if (buy) {
+    var m = cmpById(buy.getAttribute("data-buy"));
+    if (m && window.addToCart) window.addToCart({ name: m.name, spec: m.note, price: m.price, img: m.img });
+    return;
+  }
+  var drop = e.target.closest("[data-drop]");
+  if (drop) cmpPick(drop.getAttribute("data-drop"));
+});
+
+document.getElementById("cmpDiff").addEventListener("click", function () {
+  cmpState.onlyDiff = !cmpState.onlyDiff;
+  this.setAttribute("aria-pressed", cmpState.onlyDiff ? "true" : "false");
+  cmpSave(); renderTable();
+});
+
+document.getElementById("cmpReset").addEventListener("click", function () {
+  cmpState.sel = CMP_DEFAULT.slice();
+  cmpState.onlyDiff = true;
+  document.getElementById("cmpDiff").setAttribute("aria-pressed", "true");
+  cmpSave(); renderChips(); renderTable();
+  if (window.toast) window.toast("已重置为推荐对比组合");
+});
+
+window.addEventListener("resize", syncHint);
+window.addEventListener("load", syncHint);   /* 首次布局/字体就绪后再校一次 */
+
+cmpLoad();
+/* 首次进入也要把默认选型落进存储通道，否则「跨页/刷新后保持选择」这条链路的起始态是空的 */
+cmpSave();
+document.getElementById("cmpDiff").setAttribute("aria-pressed", cmpState.onlyDiff ? "true" : "false");
+renderChips();
+renderTable();
+</script>
+</body>
+</html>

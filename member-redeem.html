@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>HiMakers · 积分兑换</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/member.css">
+<style>
+    .redeem-page{overflow:visible}
+    .redeem-tabs{margin-top:22px}
+    .redeem-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-top:18px;padding:26px 28px;border-radius:16px;background:linear-gradient(135deg,#102345 0%,#081528 100%);color:#fff;box-shadow:0 14px 36px rgba(5,18,40,.08)}
+    .redeem-balance-value{font-size:44px;line-height:1;font-weight:700;letter-spacing:-1px}
+    .redeem-hint{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:14px;min-height:96px}
+    .redeem-hint p{margin:0;color:#8EA1BF;font-size:14px;line-height:1.6;text-align:right}
+    .redeem-head .ghost-btn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#fff}
+    .redeem-grid{margin-top:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+    .redeem-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 4px 12px rgba(0,0,0,.02)}
+    .redeem-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .redeem-points{display:flex;align-items:center;gap:8px;color:var(--brand);font-size:15px;font-weight:700}
+    .redeem-points svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+    .redeem-tag{height:26px;padding:0 10px;border-radius:99px;background:#F5FBF8;color:var(--brand);display:inline-flex;align-items:center;font-size:12px;font-weight:600;white-space:nowrap}
+    .redeem-visual{height:180px;border-radius:14px;background:linear-gradient(180deg,#FBFCFD 0%,#F2F5F7 100%);position:relative;overflow:hidden;border:1px solid #EEF1F3}
+    .redeem-visual::before{content:"";position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:64%;height:12px;border-radius:50%;background:rgba(18,28,44,.06);filter:blur(8px)}
+    .gift-machine::after,.gift-filament::after,.gift-toolkit::after,.gift-membership::after,.gift-laser::after,.gift-box::after,.gift-kit::after,.gift-coupon::after{content:"";position:absolute;inset:auto}
+
+    .gift-machine .shape-main{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:118px;height:132px;border-radius:22px;background:linear-gradient(135deg,#FFFFFF 0%,#F5F7F9 58%,#EEF1F3 100%);border:1px solid #E8ECEF;box-shadow:0 8px 18px rgba(12,201,146,.07)}
+    .gift-machine .shape-main:before{content:"";position:absolute;right:0;top:18px;width:40px;height:92px;border-radius:18px;background:linear-gradient(180deg,#FFB06B 0%,#E56A14 100%)}
+    .gift-machine .shape-main:after{content:"";position:absolute;left:18px;top:18px;width:66px;height:98px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px #F0F2F4}
+
+    .gift-filament .roll{position:absolute;border-radius:50%;border:12px solid #232830;background:#F7F8FA;box-shadow:inset 0 0 0 1px #E7EBEF}
+    .gift-filament .roll.one{width:82px;height:82px;left:42px;top:56px}
+    .gift-filament .roll.two{width:82px;height:82px;right:42px;top:56px}
+    .gift-filament .roll:after{content:"";position:absolute;inset:16px;border-radius:50%;background:#fff;border:1px solid #EDF0F3}
+    .gift-filament .line{position:absolute;left:68px;right:68px;top:94px;height:4px;border-radius:4px;background:linear-gradient(90deg,#0CC992,#7CE0BC)}
+
+    .gift-toolkit .plate{position:absolute;left:50%;top:38px;transform:translateX(-50%);width:132px;height:88px;border-radius:18px;background:linear-gradient(145deg,#FFFFFF,#F0F4F7);border:1px solid #E9EDF1}
+    .gift-toolkit .plate:before,.gift-toolkit .plate:after{content:"";position:absolute;top:-10px;width:34px;height:14px;border-radius:10px;background:linear-gradient(180deg,#F2D7A2,#D9B26A)}
+    .gift-toolkit .plate:before{left:18px}.gift-toolkit .plate:after{right:18px}
+    .gift-toolkit .control{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);width:92px;height:34px;border-radius:12px;background:#fff;border:1px solid #E9EDF1}
+    .gift-toolkit .control:before,.gift-toolkit .control:after{content:"";position:absolute;top:50%;transform:translateY(-50%);width:12px;height:12px;border-radius:50%;background:#0CC992}.gift-toolkit .control:before{left:18px}.gift-toolkit .control:after{right:18px}
+
+    .gift-membership .card-stack{position:absolute;left:50%;top:34px;transform:translateX(-50%)}
+    .gift-membership .back,.gift-membership .front{width:128px;height:82px;border-radius:16px;position:absolute;left:0;top:0;border:1px solid #E7EBEE}
+    .gift-membership .back{transform:translate(-12px,10px) rotate(-8deg);background:#EFF9F6}
+    .gift-membership .front{transform:rotate(4deg);background:linear-gradient(145deg,#FFFFFF,#F5FAF8)}
+    .gift-membership .chip{position:absolute;left:18px;top:18px;width:22px;height:16px;border-radius:4px;background:#0CC992}
+    .gift-membership .stripe{position:absolute;right:18px;bottom:18px;width:46px;height:8px;border-radius:8px;background:#CDEFE3}
+
+    .gift-laser .frame{position:absolute;left:50%;top:34px;transform:translateX(-50%);width:136px;height:96px;border-radius:16px;border:7px solid #1F2430;background:#fff}
+    .gift-laser .frame:before{content:"";position:absolute;inset:14px;border-radius:8px;background:linear-gradient(180deg,#F8FBFD,#EEF3F6)}
+    .gift-laser .beam{position:absolute;left:50%;top:52px;transform:translateX(-50%) rotate(-12deg);width:104px;height:4px;border-radius:4px;background:linear-gradient(90deg,#0CC992,#A4ECD3)}
+    .gift-laser .stand{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);width:86px;height:12px;border-radius:10px;background:#2E3340}
+
+    .gift-box .cube{position:absolute;left:50%;top:40px;transform:translateX(-50%) rotate(-10deg);width:94px;height:94px;border-radius:20px;background:linear-gradient(145deg,#FFFFFF,#F0F5F8);border:1px solid #E8ECEF}
+    .gift-box .cube:before{content:"";position:absolute;inset:0;border-radius:20px;background:linear-gradient(90deg,transparent 44%,#0CC992 44%,#0CC992 56%,transparent 56%);opacity:.12}
+    .gift-box .ribbon{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:40px;height:22px;border-radius:22px 22px 6px 6px;border:4px solid #0CC992;border-bottom:0}
+
+    .gift-kit .sheet{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:132px;height:112px;border-radius:18px;background:#fff;border:1px solid #E9EDF1;box-shadow:0 8px 18px rgba(0,0,0,.04)}
+    .gift-kit .sheet:before{content:"";position:absolute;left:18px;right:18px;top:24px;height:10px;border-radius:10px;background:#DFF6ED;box-shadow:0 24px 0 #EDF8F4,0 48px 0 #F4FBF8}
+    .gift-kit .badge{position:absolute;right:24px;bottom:24px;width:34px;height:34px;border-radius:50%;background:#0CC992;box-shadow:0 6px 14px rgba(12,201,146,.22)}
+
+    .gift-coupon .ticket{position:absolute;left:50%;top:46px;transform:translateX(-50%);width:138px;height:78px;border-radius:16px;background:linear-gradient(135deg,#FFFFFF,#F3F8F6);border:1px dashed #BEE8D8}
+    .gift-coupon .ticket:before,.gift-coupon .ticket:after{content:"";position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#F5F7F9;transform:translateY(-50%)}
+    .gift-coupon .ticket:before{left:-7px}.gift-coupon .ticket:after{right:-7px}
+    .gift-coupon .mark{position:absolute;left:50%;top:66px;transform:translateX(-50%);font-size:24px;color:#0CC992;font-weight:700}
+
+    .redeem-title{font-size:18px;line-height:1.45;font-weight:650;color:#20252D;min-height:auto;margin:0}
+    .redeem-desc{margin-top:0;font-size:13px;line-height:1.55;color:#7B838E;min-height:auto}
+    .redeem-actions{display:flex;gap:10px;margin-top:2px}
+    .redeem-actions .ghost-btn,.redeem-actions .primary-btn{flex:1;justify-content:center;height:38px;padding:0 12px;font-size:13px}
+    .redeem-actions .primary-btn{min-width:0}
+    .redeem-footer{margin-top:4px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#8E949D}
+    .redeem-footer b{color:#4B515B;font-weight:600}
+
+    @media (max-width:1280px){.redeem-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:1024px){.redeem-head{grid-template-columns:1fr}.redeem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:767px){.redeem-tabs{margin-top:18px}.redeem-head{padding:22px 18px;flex-direction:column;align-items:flex-start}.redeem-balance-value{font-size:38px}.redeem-hint{align-items:flex-start;min-height:auto}.redeem-hint p{text-align:left}.redeem-grid{grid-template-columns:1fr;gap:14px}.redeem-card{padding:16px;gap:10px}.redeem-visual{height:164px}.redeem-title{min-height:auto}}
+  
+    /* Redeem page refinement */
+    .redeem-title-row{display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;width:100%}
+    .redeem-my-points{font-size:18px;line-height:1.4;color:#4B515B;font-weight:500}
+    .redeem-my-points strong{color:var(--brand);font-size:20px;font-weight:700;margin-left:6px}
+    .redeem-tabs{margin-top:18px}
+    .redeem-grid{margin-top:18px}
+    .redeem-visual{height:182px;border-radius:14px;background:#F7F8F9;position:relative;overflow:hidden;border:1px solid #EEF1F3}
+    .redeem-visual::before{display:none}
+    .redeem-photo{width:100%;height:100%;display:block;object-fit:cover}
+    .redeem-photo.contain{object-fit:contain;padding:12px;background:#FAFAFA}
+    @media (max-width:767px){.redeem-title-row{gap:10px;align-items:center}.redeem-my-points{font-size:15px;margin-left:auto}.redeem-my-points strong{font-size:17px}.redeem-visual{height:168px}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="shop.html">商城</a>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input type="text" placeholder="搜索机器、模型、灵感…"></label>
+
+      <button class="icon-btn" title="购物车"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg><span class="badge-dot cart-count">0</span></button>
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm">注册</a>
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a>
+  <a href="member.html">个人中心</a>
+</div>
+<div class="mc-root">
+<main class="shell">
+<aside class="sidebar">
+<section class="profile-card">
+<div class="profile-avatar-wrap"><a class="avatar-link" href="member-profile-edit.html" aria-label="编辑个人资料"><img alt="创客小宇" class="avatar-lg" src="assets/member/avatar.png"/></a><a aria-label="编辑个人资料" class="edit-badge" href="member-profile-edit.html" title="编辑个人资料"><svg viewbox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></a></div>
+<a class="user-name" href="member-profile-edit.html">创客小宇 <span class="level">L2</span></a>
+<div class="user-id">ID: H9–26242917–0081</div>
+<div class="side-stats">
+<a class="side-stat side-stat-link" href="member-points.html"><strong>3,580</strong><span>积分</span></a>
+<a class="side-stat side-stat-link" href="member-coupons.html"><strong>5</strong><span>优惠券</span></a>
+<a class="side-stat side-stat-link" href="member-devices.html"><strong>3</strong><span>设备</span></a>
+</div>
+</section>
+<nav class="side-menu">
+<a class="side-item" href="member-creation.html"><svg viewbox="0 0 24 24"><path d="M14.7 4.3a3 3 0 0 1 4.2 4.2L9 18.4 4 20l1.6-5 9.1-10.7Z"></path><path d="m13 6 5 5"></path></svg>创作空间</a>
+<a class="side-item" href="member-community.html"><svg viewbox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>社区互动</a>
+<a class="side-item" href="member-orders.html"><svg viewbox="0 0 24 24"><path d="M6 2v4M18 2v4M4 5h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path><path d="M8 11h8M8 15h6"></path></svg>我的订单</a>
+</nav>
+</aside>
+<section class="content-panel redeem-page">
+  <div class="redeem-title-row">
+    <h1 class="module-title">积分兑换</h1>
+    <div class="redeem-my-points">我的积分：<strong>3,580</strong></div>
+  </div>
+
+  <div aria-label="兑换分类切换" class="module-tabs redeem-tabs" role="tablist">
+    <button aria-selected="true" class="active" data-filter="coupon" role="tab" type="button">优惠券</button>
+    <button aria-selected="false" data-filter="goods" role="tab" type="button">商品</button>
+    <button aria-selected="false" data-filter="ai" role="tab" type="button">AI积分</button>
+  </div>
+
+  <section aria-label="兑换商品列表" class="redeem-grid">
+    <article class="redeem-card" data-category="coupon">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>100 积分</div><span class="redeem-tag">优惠券</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/work5.jpg" alt="手机支架商品图"></div>
+      <div class="redeem-title">20 元无门槛券</div>
+      <div class="redeem-desc">商城全品类可用，兑换后自动进入优惠券中心</div>
+      <div class="redeem-footer"><span>即时发放</span><span>每周限兑 1 张</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="coupon">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>500 积分</div><span class="redeem-tag">设备券</span></div>
+      <div class="redeem-visual"><img class="redeem-photo contain" src="assets/member/device-printer-p2.png" alt="HiMakers 设备商品图"></div>
+      <div class="redeem-title">100 元设备满减券</div>
+      <div class="redeem-desc">满 1,000 元可用，适用于设备与指定配件</div>
+      <div class="redeem-footer"><span>有效期 30 天</span><span>每月限兑 1 张</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="coupon">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>300 积分</div><span class="redeem-tag">折扣券</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/work4.jpg" alt="木作模型商品图"></div>
+      <div class="redeem-title">9 折模型素材券</div>
+      <div class="redeem-desc">模板库付费模型与指定数字素材可用</div>
+      <div class="redeem-footer"><span>有效期 15 天</span><span>单笔最高减 80 元</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="goods">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>2,560 积分</div><span class="redeem-tag">设备</span></div>
+      <div class="redeem-visual"><img class="redeem-photo contain" src="assets/member/device-printer-p2.png" alt="桌面智能设备"></div>
+      <div class="redeem-title">桌面智能设备</div>
+      <div class="redeem-desc">适用于桌面创作与轻量制作场景</div>
+      <div class="redeem-footer"><span>库存 <b>12</b></span><span>每人限兑 1 件</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="goods">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>980 积分</div><span class="redeem-tag">配件</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/work1.jpg" alt="桌面收纳配件"></div>
+      <div class="redeem-title">模块化桌面收纳盒</div>
+      <div class="redeem-desc">适合工具、耗材与小型零件分类收纳</div>
+      <div class="redeem-footer"><span>库存 <b>18</b></span><span>7 天内发货</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="goods">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>760 积分</div><span class="redeem-tag">周边</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/work5.jpg" alt="可调节手机支架"></div>
+      <div class="redeem-title">可调节手机支架</div>
+      <div class="redeem-desc">适合桌面展示、拍摄与创作辅助</div>
+      <div class="redeem-footer"><span>库存 <b>24</b></span><span>包邮兑换</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="goods">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>1,180 积分</div><span class="redeem-tag">模型</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/post3.jpg" alt="木制蒸汽列车模型"></div>
+      <div class="redeem-title">木制蒸汽列车模型</div>
+      <div class="redeem-desc">创客精选成品模型，适合作为展示与收藏</div>
+      <div class="redeem-footer"><span>库存 <b>9</b></span><span>限量兑换</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="ai">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>600 积分</div><span class="redeem-tag">AI权益</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/work2.jpg" alt="AI创作效果示例"></div>
+      <div class="redeem-title">AI 高级功能月卡</div>
+      <div class="redeem-desc">解锁高清渲染、进阶生成与更多导出次数</div>
+      <div class="redeem-footer"><span>即时到账</span><span>有效期 30 天</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+
+    <article class="redeem-card" data-category="ai">
+      <div class="redeem-top"><div class="redeem-points"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6.5" ry="2.5"/><path d="M5.5 6v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5V6"/><path d="M5.5 10v4c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-4"/></svg>880 积分</div><span class="redeem-tag">AI次数</span></div>
+      <div class="redeem-visual"><img class="redeem-photo" src="assets/member/work3.jpg" alt="AI模型生成效果示例"></div>
+      <div class="redeem-title">AI 模型生成 50 次包</div>
+      <div class="redeem-desc">用于 AI 建模、风格变体与创意方案生成</div>
+      <div class="redeem-footer"><span>即时到账</span><span>长期有效</span></div>
+      <div class="redeem-actions"><button class="ghost-btn" type="button">查看详情</button><button class="primary-btn compact" type="button">立即兑换</button></div>
+    </article>
+  </section>
+</section>
+</main>
+</div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i>Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+        <div class="footer-social">
+          <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="3.5"></rect><path d="m10.5 9.5 4.5 2.5-4.5 2.5v-5Z"></path></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"></circle></svg></a>
+          <a href="#" aria-label="X"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l16 16M20 4 4 20"></path></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="shop.html">激光雕刻机</a><a href="shop.html">3D 打印机</a><a href="shop.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="member-orders.html">我的订单</a><a href="member-points.html">积分</a><a href="member-coupons.html">优惠券</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  const tabButtons = document.querySelectorAll('.redeem-tabs button');
+  const cards = document.querySelectorAll('.redeem-card');
+  function renderRedeem(filter){
+    tabButtons.forEach(btn => {
+      const active = btn.dataset.filter === filter;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    cards.forEach(card => {
+      const show = filter === 'all' || card.dataset.category === filter;
+      card.style.display = show ? '' : 'none';
+    });
+  }
+  tabButtons.forEach(btn => btn.addEventListener('click', () => renderRedeem(btn.dataset.filter)));
+  renderRedeem('coupon');
+})();
+</script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/member-app.js"></script>
+</body>
+</html>

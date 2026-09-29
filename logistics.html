@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>物流详情 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+
+.pg { padding: 34px 0 70px; }
+.pg-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.pg-head h1 { font-size: 27px; letter-spacing: -.03em; }
+.pg-sub { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+.pg-back { font-size: 13px; color: var(--muted); }
+.pg-back:hover { color: var(--green-t); }
+.pg-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; margin-bottom: 16px; }
+.pg-card h3 { font-size: 15.5px; margin-bottom: 12px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; }
+.field input, .field select, .field textarea {
+  width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 13px;
+  font-size: 13.5px; font-family: inherit; background: #fff; color: var(--ink);
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green); }
+.field textarea { min-height: 92px; resize: vertical; }
+.pg-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pg-note { font-size: 12.5px; color: var(--faint); }
+
+.lg-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 22px 24px; margin-top: 14px; }
+.lg-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.lg-top b { font-size: 15px; }
+.lg-no { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.lg-badge { font-size: 12.5px; font-weight: 600; color: var(--green-t); background: var(--green-bg); padding: 5px 12px; border-radius: 999px; }
+.tl { margin-top: 18px; }
+.tl-step { position: relative; padding-left: 26px; padding-bottom: 22px; }
+.tl-step::before { content: ""; position: absolute; left: 4px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--line-2); }
+.tl-step::after { content: ""; position: absolute; left: 8.5px; top: 16px; width: 1.5px; height: calc(100% - 16px); background: var(--line); }
+.tl-step:last-child { padding-bottom: 0; }
+.tl-step:last-child::after { display: none; }
+.tl-step.done::before { background: var(--green); box-shadow: 0 0 0 4px var(--green-bg); }
+.tl-step.done .tl-d { color: var(--ink); font-weight: 600; }
+.tl-d { font-size: 14px; color: var(--faint); }
+.tl-t { font-size: 12px; color: var(--faint); margin-top: 4px; }
+.lg-addr { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); line-height: 1.8; }
+.lg-addr b { color: var(--ink); }
+
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="shop.html">商城</a>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…">
+      </label>
+
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm">注册</a>
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a><a href="member.html">个人中心</a><a href="orders.html">我的订单</a>
+</div>
+
+<main class="pg">
+  <div class="wrap" style="max-width:760px">
+    <a class="pg-back" href="orders.html">← 返回我的订单</a>
+    <div class="pg-head" style="margin:10px 0 0">
+      <div><h1>物流详情</h1><p class="pg-sub" id="lgSub">载入中…</p></div>
+    </div>
+    <div class="lg-card" id="lgCard"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i style="color:#4ADE97">Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="pdp-laser.html">激光雕刻机</a><a href="pdp-printer.html">3D 打印机</a><a href="pdp-cnc.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="orders.html">我的订单</a><a href="cart.html">购物车</a><a href="addresses.html">收货地址</a><a href="aftersale.html">售后与退款</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/orders.js"></script>
+
+<script>
+function m(n) { return (n || 0).toLocaleString("en-US"); }
+var id = new URLSearchParams(location.search).get("order");
+var o = id ? window.Orders.get(id) : null;
+
+if (!o) {
+  document.getElementById("lgSub").textContent = "未找到订单";
+  document.getElementById("lgCard").innerHTML = '<div class="pg-note">这个订单号不存在。<a class="ck-link" href="orders.html">回到订单列表</a></div>';
+} else {
+  document.getElementById("lgSub").textContent = "订单 " + o.id + " · " + o.createdAt + " 下单";
+  var ex = o.express;
+  if (!ex) {
+    document.getElementById("lgCard").innerHTML =
+      '<div class="pg-note">该订单' + (o.status === "pending" ? "还未付款" : "尚未发货") + '，暂无物流轨迹。' +
+      '<br><br><a class="btn btn-ghost sm" href="order-detail.html?order=' + o.id + '">查看订单详情</a></div>';
+  } else {
+    var steps = ex.steps.slice().reverse();
+    document.getElementById("lgCard").innerHTML =
+      '<div class="lg-top"><div><b>' + ex.company + '</b><div class="lg-no">运单号 ' + ex.no +
+        ' · 共 ' + window.Orders.qty(o) + ' 件商品</div></div>' +
+        '<span class="lg-badge">' + window.Orders.statusMeta(o.status).label + '</span></div>' +
+      '<div class="tl">' + steps.map(function (s) {
+        return '<div class="tl-step' + (s.done ? " done" : "") + '"><div class="tl-d">' + s.d +
+          '</div><div class="tl-t">' + (s.t || "等待更新") + '</div></div>';
+      }).join("") + '</div>' +
+      '<div class="lg-addr">寄往 <b>' + (o.addr ? o.addr.name : "—") + '</b> ' + (o.addr ? o.addr.phone : "") +
+        '<br>' + (o.addr ? o.addr.region + " " + o.addr.detail : "") + '</div>' +
+      '<div style="margin-top:16px;display:flex;gap:10px"><a class="btn btn-ghost sm" href="order-detail.html?order=' + o.id +
+        '">订单详情</a><a class="btn btn-ghost sm" href="aftersale.html?order=' + o.id + '">申请售后</a></div>';
+  }
+}
+</script>
+
+</body>
+</html>

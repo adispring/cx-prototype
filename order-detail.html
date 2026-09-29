@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>订单详情 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+
+.oc-status { font-size: 12.5px; font-weight: 600; padding: 4px 11px; border-radius: 999px; white-space: nowrap; }
+.oc-status.warn { color: #B45309; background: #FEF3C7; }
+.oc-status.info { color: #1D4ED8; background: #DBEAFE; }
+.oc-status.go { color: var(--green-t); background: var(--green-bg); }
+.oc-status.ok { color: #475569; background: #F1F5F9; }
+.oc-status.mute { color: var(--faint); background: var(--bg-2); }
+.oc-item { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.oc-item:last-child { border-bottom: none; }
+.oc-item img { width: 58px; height: 58px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.oc-item .oi-mid { flex: 1; min-width: 0; }
+.oc-item .oi-n { font-size: 14px; font-weight: 600; }
+.oc-item .oi-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.oc-item .oi-r { font-size: 13.5px; font-weight: 600; white-space: nowrap; text-align: right; }
+.oc-item .oi-r i { display: block; font-style: normal; font-size: 12px; color: var(--faint); font-weight: 400; margin-top: 2px; }
+.oc-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.od { padding: 34px 0 70px; }
+.od-back { font-size: 13px; color: var(--muted); }
+.od-back:hover { color: var(--green-t); }
+.od-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 12px 0 20px; }
+.od-head h1 { font-size: 26px; letter-spacing: -.03em; }
+.od-id { font-size: 12.5px; color: var(--faint); margin-top: 5px; }
+.od-layout { display: grid; grid-template-columns: 1fr 330px; gap: 20px; align-items: start; }
+.od-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; margin-bottom: 16px; }
+.od-card h3 { font-size: 15.5px; margin-bottom: 12px; }
+.od-line { display: flex; justify-content: space-between; font-size: 13.5px; padding: 7px 0; }
+.od-line.total { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 13px; font-weight: 600; font-size: 15px; }
+.od-line.total .price { font-size: 23px; font-weight: 700; }
+.od-line.total .cur { font-size: 14px; }
+.express { background: var(--bg-2); border-radius: 14px; padding: 14px 16px; }
+.ex-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
+.ex-top b { font-weight: 600; }
+.ex-step { position: relative; padding-left: 20px; font-size: 13px; padding-bottom: 12px; }
+.ex-step::before { content: ""; position: absolute; left: 3px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
+.ex-step::after { content: ""; position: absolute; left: 6.5px; top: 15px; width: 1px; height: calc(100% - 15px); background: var(--line); }
+.ex-step:last-child { padding-bottom: 0; }
+.ex-step:last-child::after { display: none; }
+.ex-step.done::before { background: var(--green); }
+.ex-step.done { color: var(--ink); }
+.ex-step:not(.done) { color: var(--faint); }
+.ex-step i { display: block; font-style: normal; font-size: 11.5px; color: var(--faint); margin-top: 2px; }
+.ex-none { font-size: 13px; color: var(--muted); }
+.od-addr { font-size: 13px; line-height: 1.8; color: var(--muted); }
+.od-addr b { color: var(--ink); }
+.od-acts { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.od-acts .btn { width: 100%; }
+@media (max-width: 1080px) { .od-layout { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .od-head h1 { font-size: 22px; } }
+
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="shop.html">商城</a>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…">
+      </label>
+
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm">注册</a>
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a><a href="member.html">个人中心</a><a href="orders.html">我的订单</a>
+</div>
+
+<main class="od">
+  <div class="wrap">
+    <a class="od-back" href="orders.html">← 返回订单列表</a>
+    <div class="od-head">
+      <div><h1 id="odTitle">订单详情</h1><div class="od-id" id="odId"></div></div>
+      <div id="odStatus"></div>
+    </div>
+    <div id="odEmpty" class="my-empty" style="display:none">
+      <div class="ce-ico">🔍</div><p>没有找到这个订单</p><a class="btn btn-primary" href="orders.html">回到订单列表</a>
+    </div>
+    <div class="od-layout" id="odLayout" style="display:none">
+      <div>
+        <section class="od-card">
+          <h3>商品清单<span style="font-weight:400;color:var(--faint);font-size:12.5px;margin-left:8px" id="odCount"></span></h3>
+          <div id="odItems"></div>
+        </section>
+        <section class="od-card">
+          <h3>物流信息</h3>
+          <div id="odExpress"></div>
+        </section>
+        <section class="od-card">
+          <h3>收货信息</h3>
+          <div class="od-addr" id="odAddr"></div>
+        </section>
+      </div>
+      <aside>
+        <div class="od-card">
+          <h3>金额明细</h3>
+          <div class="od-line"><span>商品小计</span><b id="odSub">¥0</b></div>
+          <div class="od-line"><span>运费</span><b id="odShip">¥0</b></div>
+          <div class="od-line"><span>优惠</span><b id="odDis">-¥0</b></div>
+          <div class="od-line total"><span>实付</span><span class="price"><span class="cur">¥</span><span id="odTotal">0</span></span></div>
+          <div class="od-acts" id="odActs"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i style="color:#4ADE97">Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="pdp-laser.html">激光雕刻机</a><a href="pdp-printer.html">3D 打印机</a><a href="pdp-cnc.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="orders.html">我的订单</a><a href="cart.html">购物车</a><a href="addresses.html">收货地址</a><a href="aftersale.html">售后与退款</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/orders.js"></script>
+
+<script>
+
+function m(n) { return (n || 0).toLocaleString("en-US"); }
+function st(s) { return window.Orders.statusMeta(s); }
+function statusHTML(s) { var meta = st(s); return '<span class="oc-status ' + meta.tone + '">' + meta.label + '</span>'; }
+function itemsHTML(items) {
+  return (items || []).map(function (it) {
+    return '<div class="oc-item"><img src="' + it.img + '" alt="">' +
+      '<div class="oi-mid"><div class="oi-n">' + it.name + '</div><div class="oi-s">' + it.spec + '</div></div>' +
+      '<div class="oi-r">¥' + m(it.price) + '<i>× ' + (it.qty || 1) + '</i></div></div>';
+  }).join("");
+}
+function actionsHTML(o) {
+  var s = o.status;
+  var a = [];
+  if (s === "pending") a.push('<button class="btn btn-primary sm" data-act="pay" data-id="' + o.id + '">去付款</button>');
+  if (s === "shipped") {
+    a.push('<button class="btn btn-soft sm" data-act="logistics" data-id="' + o.id + '">查看物流</button>');
+    a.push('<button class="btn btn-primary sm" data-act="receive" data-id="' + o.id + '">确认收货</button>');
+  }
+  if (s === "done" || s === "aftersale") a.push('<button class="btn btn-soft sm" data-act="aftersale" data-id="' + o.id + '">申请售后</button>');
+  if (s === "done") a.push('<button class="btn btn-ghost sm" data-act="reorder" data-id="' + o.id + '">再次购买</button>');
+  a.push('<button class="btn btn-ghost sm" data-act="detail" data-id="' + o.id + '">订单详情</button>');
+  return a.join("");
+}
+document.addEventListener("click", function (e) {
+  var btn = e.target.closest("[data-act]");
+  if (!btn) return;
+  var id = btn.getAttribute("data-id");
+  var act = btn.getAttribute("data-act");
+  var o = window.Orders.get(id);
+  if (!o) return;
+  if (act === "pay") {
+    window.Orders.update(id, { status: "paid", pay: o.pay === "待选择" ? "信用卡 / 借记卡" : o.pay });
+    toast("支付成功 · 已进入备货，我们会尽快发货");
+  } else if (act === "receive") {
+    window.Orders.update(id, { status: "done" });
+    toast("已确认收货 · 期待你的开箱作品");
+  } else if (act === "logistics") {
+    location.href = "logistics.html?order=" + id; return;
+  } else if (act === "aftersale") {
+    location.href = "aftersale.html?order=" + id; return;
+  } else if (act === "reorder") {
+    (o.items || []).forEach(function (it) { window.Cart.add({ name: it.name, spec: it.spec, price: it.price, img: it.img, qty: it.qty || 1 }); });
+    toast("已把 " + (o.items || []).length + " 件商品放回购物车");
+  } else if (act === "detail") {
+    location.href = "order-detail.html?order=" + id; return;
+  }
+  if (window.renderOrders) window.renderOrders();
+  if (window.renderDetail) window.renderDetail();
+});
+
+var id = new URLSearchParams(location.search).get("order");
+
+window.renderDetail = function () {
+  var o = id ? window.Orders.get(id) : null;
+  if (!o) {
+    document.getElementById("odEmpty").style.display = "";
+    document.getElementById("odLayout").style.display = "none";
+    document.getElementById("odTitle").textContent = "订单不存在";
+    return;
+  }
+  document.getElementById("odLayout").style.display = "";
+  document.getElementById("odEmpty").style.display = "none";
+  document.getElementById("odTitle").textContent = "订单 " + o.id;
+  document.getElementById("odId").textContent = "下单时间 " + o.createdAt + " · 支付方式 " + o.pay;
+  document.getElementById("odStatus").innerHTML = statusHTML(o.status);
+  document.getElementById("odCount").textContent = "共 " + window.Orders.qty(o) + " 件 · " + (o.items || []).length + " 个商品项";
+  document.getElementById("odItems").innerHTML = itemsHTML(o.items);
+  document.getElementById("odSub").textContent = "¥" + m(window.Orders.subtotal(o));
+  document.getElementById("odShip").textContent = (o.ship ? "¥" + m(o.ship) : "包邮");
+  document.getElementById("odDis").textContent = "-¥" + m(o.discount || 0);
+  document.getElementById("odTotal").textContent = m(window.Orders.total(o));
+  document.getElementById("odActs").innerHTML = actionsHTML(o);
+  if (o.addr) {
+    document.getElementById("odAddr").innerHTML = "<b>" + o.addr.name + "</b> " + o.addr.phone +
+      "<br>" + o.addr.region + " " + o.addr.detail +
+      "<br><span style='font-size:12px'>标签：" + o.addr.tag + "</span>";
+  }
+  if (o.express && o.express.steps && o.express.steps.length) {
+    var last = o.express.steps.filter(function (s) { return s.done; }).pop();
+    document.getElementById("odExpress").innerHTML =
+      '<div class="express"><div class="ex-top"><b>' + o.express.company + '</b><span>运单号 ' + o.express.no + '</span></div>' +
+      o.express.steps.slice().reverse().map(function (s) {
+        return '<div class="ex-step' + (s.done ? " done" : "") + '">' + s.d +
+          (s.t ? '<i>' + s.t + '</i>' : '<i>等待更新</i>') + '</div>';
+      }).join("") +
+      '<div style="margin-top:10px"><a class="ck-link" href="logistics.html?order=' + o.id + '">查看完整物流轨迹 →</a></div></div>';
+  } else {
+    document.getElementById("odExpress").innerHTML =
+      '<div class="ex-none">该订单尚未发货' + (o.status === "pending" ? "（待付款，付款后 24 小时内发出）" : "，我们正在备货") + '。</div>';
+  }
+};
+
+window.renderDetail();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="IXMeO3mfC0BatwrGu0NTHA">
+<head data-page-node-id="IBYfK4JFaKdpHGqJV6YPBw">
+<meta charset="UTF-8" data-page-node-id="Krb7Oz2QimGHmN1I8zejsQ">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="jPMuVbo3N2KmYJRB0hJ8Vv">
+<title>确认订单 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="6CtHaVgsArOteSFq0VTqEX">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" data-page-node-id="HaXlWOSqrst7qyKQPCslew">
+<link rel="stylesheet" href="assets/css/site.css" data-page-node-id="2a6JKX5D00eIXiBwAMGhPE">
+<style>
+
+.ck { padding: 34px 0 70px; }
+.ck-head h1 { font-size: 28px; letter-spacing: -.03em; }
+.ck-sub { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+.ck-layout { display: grid; grid-template-columns: 1fr 340px; gap: 22px; align-items: start; margin-top: 22px; }
+/* 左侧卡片一律无外框：保留 1px 透明描边占位（不写 border:none，避免 2px 布局位移） */
+.ck-card { background: #fff; border: 1px solid transparent; border-radius: 20px; padding: 18px 20px; margin-bottom: 16px; }
+.ck-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.ck-card h3 { font-size: 16px; margin-bottom: 12px; }
+.ck-card-head h3 { margin-bottom: 0; }
+.ck-link { font-size: 13px; color: var(--green-t); font-weight: 600; }
+.addr-item { border: 1.5px solid var(--line); border-radius: 14px; padding: 13px 15px; margin-bottom: 10px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; transition: border-color .18s ease, background .18s ease; }
+.addr-item:hover { border-color: var(--green); }
+.addr-item.on { border-color: var(--green); background: var(--green-bg); }
+.ai-radio { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--line-2); margin-top: 4px; flex-shrink: 0; }
+.addr-item.on .ai-radio { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 3px #fff; }
+.ai-name { font-weight: 600; font-size: 14px; }
+.ai-tag { font-size: 11.5px; color: var(--green-t); background: #fff; border: 1px solid var(--green); border-radius: 999px; padding: 1px 8px; margin-left: 8px; font-weight: 600; }
+.ai-detail { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.6; }
+.ck-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.ck-item:last-child { border-bottom: none; }
+.ck-item img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.ck-item .ci-mid { flex: 1; min-width: 0; }
+.ck-item .ci-n { font-size: 14px; font-weight: 600; }
+.ck-item .ci-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.ck-item .ci-r { text-align: right; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.ck-item .ci-r i { display: block; font-style: normal; font-size: 12px; color: var(--faint); font-weight: 400; margin-top: 3px; }
+.opt-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.opt { border: 1.5px solid var(--line); border-radius: 14px; padding: 11px 15px; cursor: pointer; min-width: 160px; transition: all .18s ease; }
+.opt:hover { border-color: var(--green); }
+.opt.on { border-color: var(--green); background: var(--green-bg); }
+.opt b { display: block; font-size: 13.5px; font-weight: 600; }
+.opt i { font-style: normal; font-size: 12px; color: var(--muted); }
+.ck-side { position: sticky; top: 92px; }
+.ck-sum { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; }
+.ck-line { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; padding: 7px 0; }
+.ck-line b { font-weight: 600; }
+.ck-line.total { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 13px; font-size: 15px; font-weight: 600; }
+.ck-line.total .price { font-size: 25px; font-weight: 700; letter-spacing: -.02em; }
+.ck-line.total .cur { font-size: 15px; }
+.ck-empty { text-align: center; padding: 70px 20px; }
+.ck-empty .ce-ico { font-size: 46px; margin-bottom: 14px; }
+.ck-empty h2 { font-size: 19px; margin-bottom: 8px; }
+.ck-empty p { color: var(--muted); font-size: 13.5px; margin-bottom: 18px; }
+.ck-empty .ce-cta { display: flex; gap: 10px; justify-content: center; }
+/* 左侧 6 张卡全部无框（收货地址 / 商品清单 / 配送方式 / 积分抵扣 / 优惠券 / 支付方式）；
+   右侧「金额明细」.ck-sum 仍保留描边 —— 用户未要求改它，它也是页面上唯一的容器边界 */
+/* 提交订单：压低高度、撑满卡片宽度（.block 在站点 CSS 里没有定义，原先是 inline-flex 内容宽 = 112px） */
+.ck-sum .btn.block { width: 100%; height: 46px; padding: 0 20px; font-size: 15px; }
+/* 积分抵扣 */
+.ck-pt-hint { font-size: 12.5px; color: var(--muted); }
+.ck-pt-hint b { color: var(--green-t); font-weight: 600; }
+.ck-pt-row { display: flex; gap: 10px; }
+.ck-pt-field { position: relative; flex: 1; min-width: 0; }
+.ck-pt-field input { width: 100%; height: 44px; padding: 0 48px 0 14px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
+.ck-pt-field input::placeholder { color: var(--faint); }
+.ck-pt-field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
+.ck-pt-field input:disabled { background: var(--bg-2); color: var(--muted); }
+.ck-pt-suffix { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 12.5px; color: var(--faint); pointer-events: none; }
+.ck-pt-row .btn { height: 44px; min-width: 92px; padding: 0 20px; font-size: 14px; flex-shrink: 0; }
+.ck-pt-note { font-size: 12.5px; color: var(--faint); margin-top: 9px; }
+.ck-pt-note b { color: var(--green-t); font-weight: 600; }
+@media (max-width: 1080px) { .ck-layout { grid-template-columns: 1fr; } .ck-side { position: static; } }
+@media (max-width: 640px) { .opt { min-width: 100%; } .ck-head h1 { font-size: 23px; } }
+
+</style>
+</head>
+<body data-page-node-id="32GLbOjqxdN5AryxW0JJei">
+<header class="nav" data-page-node-id="55SioE3Mw0aAhFkll8Z60T">
+  <div class="nav-inner" data-page-node-id="VU1XcBwrFeps7zvRKXZBuL">
+    <a class="brand" href="index.html" data-page-node-id="YlJGu0FBLb3LgMg4BADs6K">
+      <span class="brand-mark" data-page-node-id="eJbPj7uChDnZn3qNfAIIXn"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="C58t4sBYCdbsDHj3RKKPYj"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="8i9T4aKTi6y8VF3gc9sFZZ"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="NpG1kH7I7PMIhsAK5eCDjJ"></path></svg></span>
+      <span class="brand-name" data-page-node-id="kcurUQDdFp8qxPNcWEPN54">Hi<i data-page-node-id="jwSjjJqqZIQPibHlRs5b3E">Makers</i></span>
+    </a>
+    <nav class="nav-links" data-page-node-id="Kqom0yU0iSgG2qvDp6WJiz">
+      <a href="index.html" data-page-node-id="XFbrMZvFaeBhhkLPchaoaJ">首页</a>
+      <div class="nav-item">
+        <a href="shop.html" data-page-node-id="iVtoKTFgbZfpNfr8D1TYss">商城</a>
+        <div class="nav-menu" aria-label="商城分类">
+          <div class="wrap nm-in">
+            <div class="nm-col">
+              <div class="nm-h">整机</div>
+              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
+              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
+              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
+              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
+            </div>
+            <div class="nm-prods">
+              <div class="nm-h">热销机型</div>
+              <div class="nm-grid">
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="ai.html" data-page-node-id="t579eHKcGBDzHWW1Bko3Gm">AI 创作</a>
+      <a href="models.html" data-page-node-id="70QPfm6OvkNMaFF8hwGZfH">模型库</a>
+      <a href="community.html" data-page-node-id="SfltCXyBEBoDqz3rq8KziK">社区</a>
+    </nav>
+    <div class="nav-actions" data-page-node-id="nXxDaHBp89sFu2gQbWDhTQ">
+      <label class="nav-search" data-page-node-id="2pJWAWlS9XRtCp7nwTLdkr">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="n6HLHRdDJzgc1aP899yyhN"><circle cx="11" cy="11" r="7" data-page-node-id="CLgFFlU01MllKExhladiEC"></circle><path d="m20 20-3.5-3.5" data-page-node-id="mWoCJDB365MsZTkzyvMuGa"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…" data-page-node-id="LDQpo5KXWV2Vh4Vm8Kvdbx">
+      </label>
+
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm" data-page-node-id="hc0QtxLyYChm6UpK7cQTKp">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm" data-page-node-id="TmAwnD6XuEjwgn554Ucu4R">注册</a>
+      <button class="icon-btn nav-burger" data-page-node-id="QZuFgMuKvkDVzopMC5AGUi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="HpJtJGGffT3AdGBXBolGyh"><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="80kgFgRN1uX8FDrpH3RQS8"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" data-page-node-id="9pbNy03XCycF1o5SQwOqA6">
+  <a href="index.html" data-page-node-id="LYMA26URnynD3BHQjnDEjC">首页</a><a href="shop.html" data-page-node-id="HgukGYTLKJrXRPddly87RN">商城</a><a href="ai.html" data-page-node-id="qXtyx0IEJjZWXy9jRjHFRx">AI 创作</a><a href="models.html" data-page-node-id="64pcPV0m9O2ofGRs34ugNP">模型库</a><a href="community.html" data-page-node-id="TSw8lCFu8hwFlu3Qk8BYqE">社区</a><a href="member.html" data-page-node-id="X8Dm0YPMydTDVIMGHNp4KE">个人中心</a><a href="orders.html" data-page-node-id="3pSQdOi0I5sWBiVdmbLSkP">我的订单</a>
+</div>
+
+<main class="ck" data-page-node-id="v8jyoV0XiNXhNFa7EeKWPF">
+  <div class="wrap" data-page-node-id="ciuSeC5TkW2N26VOkDmSNE">
+    <div class="ck-head" data-page-node-id="lVxCJBYgJEgd8mpW64K4Ul">
+      <h1 data-page-node-id="HcIumuYWr2qLCTNFko7g14">确认订单</h1>
+      <p class="ck-sub" id="ckSub" data-page-node-id="0pt2vO8ki7cCGcjPpBZf1F">正在载入…</p>
+    </div>
+    <div id="ckEmpty" class="ck-empty" style="display:none" data-page-node-id="GevU8HGugdC655OmX7mWpg">
+      <div class="ce-ico" data-page-node-id="Rps56vAug7woECDpoRvBmb">🛒</div>
+      <h2 data-page-node-id="70xAIooYAQEMbmo7HtHMDW">还没有可结算的商品</h2>
+      <p data-page-node-id="k6ez6zwhF4W2HGqs0qfBbs">先去商城挑一台机器，或回到购物车确认商品。</p>
+      <div class="ce-cta" data-page-node-id="JX18q1bGQRm8lH0zEFpXW2"><a class="btn btn-primary" href="shop.html" data-page-node-id="ab3OBY0ejwwCGJmltqBptr">去商城看看</a><a class="btn btn-ghost" href="cart.html" data-page-node-id="AWgcKNACXyBXqxGLio38bL">返回购物车</a></div>
+    </div>
+    <div class="ck-layout" id="ckLayout" style="display:none" data-page-node-id="cFc7EH12AvidISbaln96Y0">
+      <div class="ck-main" data-page-node-id="yps4JEXfSBrqtlxRBBhnR2">
+        <section class="ck-card" data-page-node-id="o4ezTA2NyW2OvBRwmUT90C">
+          <div class="ck-card-head" data-page-node-id="DhwfOuUZc8M5cS76tRpcGE"><h3 data-page-node-id="yXaCb3XnFJg2nsB3KLI1xW">收货地址</h3><a class="ck-link" href="addresses.html" data-page-node-id="lNZHlmbCJyjuUayRwLpxjh">管理地址 →</a></div>
+          <div id="addrList" data-page-node-id="8hrWS4ZQpDRevbA4kO7Uc3"></div>
+        </section>
+        <section class="ck-card" data-page-node-id="wz9nJFTt1nDfd30igl0xJt">
+          <h3 data-page-node-id="zsyVI3EKhGB4p0ZzinI2EU">商品清单<span style="font-weight:400;color:var(--faint);font-size:12.5px;margin-left:8px" id="ckCount" data-page-node-id="a9vrQ5NIDEOe95STaq1HQA"></span></h3>
+          <div id="ckItems" data-page-node-id="nc8D7NNROHzCXDpw9pzhvY"></div>
+        </section>
+        <section class="ck-card" data-page-node-id="Rvem1EvxVIWmnxCWGJETPf">
+          <h3 data-page-node-id="jCrzenf1as1FAcCEFMnyzZ">配送方式</h3>
+          <div class="opt-row" id="shipOpts" data-page-node-id="OkFQnSZFFy8lYunFFXB7kf"></div>
+        </section>
+        <section class="ck-card" data-page-node-id="Rt2PqLwMzXo9dNfVgHe4Ks">
+          <div class="ck-card-head" data-page-node-id="Bc7VnQkLm2SdRxTpYe8UwZ"><h3 data-page-node-id="Jd4KmWzPq8TnVbXsLr2EcN">积分抵扣</h3><span class="ck-pt-hint" id="ptHint" data-page-node-id="Hz6YwUsCq3NdTkRmAb9PjL"></span></div>
+          <div class="ck-pt-row" data-page-node-id="Nt5RvEwKy7BmQsXpLd3Hca">
+            <div class="ck-pt-field" data-page-node-id="Pf8XmZbTq2WsNvRkDc6Lgy">
+              <input id="ptInput" type="text" inputmode="numeric" autocomplete="off" placeholder="输入要使用的积分" data-page-node-id="Qw3TyLkRm9BnVdXsZf5Hje">
+              <span class="ck-pt-suffix" data-page-node-id="Mb7LrQxTz4KwPnVdYs2Cta">积分</span>
+            </div>
+            <button class="btn btn-ghost" id="ptApply" type="button" data-page-node-id="Xc9VnBqLm3SdKwRtYp7Uza">使用</button>
+          </div>
+          <p class="ck-pt-note" id="ptNote" data-page-node-id="Ls4KmWpQr8TnVbXdZc2Fye"></p>
+        </section>
+        <section class="ck-card" data-page-node-id="MFa8KO32xIyZ7nx9TqvbXU">
+          <h3 data-page-node-id="hM3kQ7AGCtEWsqrF9KacGy">优惠券</h3>
+          <div class="opt-row" id="couponOpts" data-page-node-id="W5mkT2hu9JENRQPoUpG3Xt"></div>
+        </section>
+        <section class="ck-card" data-page-node-id="4bWJ8Uh8Cr724HNFA5hpKl">
+          <h3 data-page-node-id="D5zVL2ePtDNxhu2hJswaW6">支付方式</h3>
+          <div class="opt-row" id="payOpts" data-page-node-id="v5yR17MLseAQhi00lPwx51"></div>
+        </section>
+      </div>
+      <aside class="ck-side" data-page-node-id="XJu5FUYH0lLhOSOlvodVDc">
+        <div class="ck-sum" data-page-node-id="BmlBjYZvA6BcOQG0z9at7D">
+          <h3 data-page-node-id="XQEpiQLyWq4K0Tjsz8UnaE">金额明细</h3>
+          <div class="ck-line" data-page-node-id="T0yVbvz1sqQFiPF89hzjK0"><span data-page-node-id="KPgm7IjLKVLW6XGWSEvpGP">商品小计</span><b id="sumSub" data-page-node-id="LjONe76oHxwG7eCFVaAcXL">¥0</b></div>
+          <div class="ck-line" data-page-node-id="gQXMR9dlkluLcWIZSqLVv5"><span data-page-node-id="uj1qvEdHHs09Eg3lHIbolF">运费</span><b id="sumShip" data-page-node-id="QGOZFazjrTeZkJE3R9lQQK">¥0</b></div>
+          <div class="ck-line" data-page-node-id="dEWu1lTuoNO01naa3mCzH8"><span data-page-node-id="MUrI2YVVkWIpLQmsn7L2g8">优惠</span><b id="sumDis" data-page-node-id="xUAAs1G9aWvpGQ4PGgJq5e">-¥0</b></div>
+          <div class="ck-line" data-page-node-id="Tk6YwLqRm2BdNvXsZf8Hja"><span data-page-node-id="Vb3PqLmRt7KwNdYsXc5Hze">积分抵扣</span><b id="sumPt" data-page-node-id="Rq9XmZbTk3WsNvLdYp6Uca">-¥0</b></div>
+          <div class="ck-line total" data-page-node-id="ZPHrA0BnJ5mAzF0EwKQoqU"><span data-page-node-id="GgNfcQ2JDEuDaIo2ADNEad">应付总额</span><span class="price" data-page-node-id="UJYyrhhnZtRkvfcYkJSCcy"><span class="cur" data-page-node-id="PJO4oxifdV3MdQcSHHpHp7">¥</span><span id="sumTotal" data-page-node-id="nlSQWUPZdmLptFOOUJVfdG">0</span></span></div>
+          <button class="btn btn-primary lg block" id="ckSubmit" style="margin-top:14px" data-page-node-id="u9VKP0KMmRVCuSDPD5wK0p">提交订单</button>
+          <p class="cp-note" style="margin-top:10px" data-page-node-id="gdz37HpwJ8XhFuLHMGbIuD">提交后进入支付 · 30 天无理由退换 · 整机 2 年质保</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" data-page-node-id="HRPSMpX1NJbxrrBlZoS1wC">
+  <div class="footer-inner" data-page-node-id="foeCpS4BCkwvIwPITFbBEw">
+    <div class="footer-top" data-page-node-id="pRFDKTgRI1snj7Edrxb1Eo">
+      <div class="footer-brand" data-page-node-id="PHQ6qRAtWzX5czTarCtxfj">
+        <a class="brand" href="index.html" data-page-node-id="NByMnb81sLIwU1IJ1XhdD6">
+          <span class="brand-mark" data-page-node-id="EEOhxc1wplzJz7vUeJ0So9"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="Z1KbHZE56vvYPY5GrL2zKQ"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="RkxzUfNRu9sFkFGpF8fn5d"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="P4TPYZGoyPglhzly1tpY95"></path></svg></span>
+          <span class="brand-name" data-page-node-id="yZLCmr0WzlRFCGi7QwFwrC">Hi<i style="color:#4ADE97" data-page-node-id="G1kkTuwz2mgfoQQjGo9g7U">Makers</i></span>
+        </a>
+        <p class="footer-slogan" data-page-node-id="G7cY9Yg4KSGHNo8TDHHh8X">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col" data-page-node-id="ONa3bPqpS6oxCCntCl99ZE"><h4 data-page-node-id="2ImkiS96ltR4XFNov2ICMC">产品</h4><a href="pdp-laser.html" data-page-node-id="913YhDMa0gSBtQGo4QLKa3">激光雕刻机</a><a href="pdp-printer.html" data-page-node-id="o91BGpn6La0hqa7yLcKQw6">3D 打印机</a><a href="pdp-cnc.html" data-page-node-id="2ZDotxjcXqUVnHmEOCExir">CNC 雕刻机</a><a href="shop.html" data-page-node-id="VCcjeF9j6CJEG57jB9nSMw">配件与耗材</a></div>
+      <div class="footer-col" data-page-node-id="VQA1h0QBTIgUxkoXI1FMAl"><h4 data-page-node-id="e9ETTE1zWavPfrDP1bVHHF">创作</h4><a href="ai.html" data-page-node-id="11L8aIuxBJ6NZzYHgezGfE">AI 创作</a><a href="models.html" data-page-node-id="Gi3r93rGsFQ76JZYw7PCIS">模型库</a><a href="ai.html" data-page-node-id="54tEo4x2Nr92QSfqrmpEBn">设计工具</a></div>
+      <div class="footer-col" data-page-node-id="OWTpVqtgACSDlmjOKM9BQ7"><h4 data-page-node-id="xQVCBOFfJVE3mOxJ82aoeM">账户</h4><a href="member.html" data-page-node-id="AqOPMgImHktFNpLwWTp1KL">个人中心</a><a href="orders.html" data-page-node-id="q1M4ggj79gWtHxPB5GhjxF">我的订单</a><a href="cart.html" data-page-node-id="jF2zlXkf5ublrs3kAsgtDK">购物车</a><a href="addresses.html" data-page-node-id="nLknGfkrHlPpYc0HV05HFk">收货地址</a><a href="aftersale.html" data-page-node-id="jhjYa1iVaZ6b8qkYMFTonc">售后与退款</a></div>
+      <div class="footer-col" data-page-node-id="5UkPmjLpA5miyb8alaCn22"><h4 data-page-node-id="y0SZxQ2Zqx46C9egPlklpw">支持</h4><a href="#" data-page-node-id="FawFCK55oHlGDlkZ2n635j">帮助中心</a><a href="#" data-page-node-id="fuBQmvvNaEEG413zMp1KsN">固件下载</a><a href="#" data-page-node-id="JOd0FBzqM6QobcVvfcpiFe">保修政策</a><a href="#" data-page-node-id="Lfn8Yff9CNvwtI55TwrfNB">联系我们</a></div>
+    </div>
+    <div class="footer-bottom" data-page-node-id="ZOmhnrq0p84KXJfKEOBzxg">
+      <span data-page-node-id="pgfIRYryR9hv5iKbLSoV2A">© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links" data-page-node-id="HCpRoeB48hMpLmJquSfkCo"><a href="#" data-page-node-id="eH3wCXKDka3Xkmq5fIuaT4">隐私政策</a><a href="#" data-page-node-id="xOUSjBjz60Q2c9lQJQ4sZd">服务条款</a><a href="#" data-page-node-id="6nZLVvfbye9qkEOBNOTNfu">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/orders.js"></script>
+
+<script>
+var params = new URLSearchParams(location.search);
+var mode = params.get("mode");
+var items = [];
+if (mode === "buynow") {
+  items = window.hmBuyNow ? window.hmBuyNow() : [];
+  if (!items.length) { try { items = JSON.parse(localStorage.getItem("himakers_buynow") || "[]"); } catch (e) { items = []; } }
+} else {
+  items = window.Cart.all();
+}
+
+var SHIPS = [
+  { id: "std", name: "标准配送", fee: 0, note: "3-5 个工作日 · 满 ¥999 包邮" },
+  { id: "fast", name: "加急配送", fee: 49, note: "次日达 · 顺丰速运" }
+];
+/* 支付方式：美国主流（信用卡组织 + 钱包 + BNPL） */
+var PAYS = [
+  { id: "card", name: "信用卡 / 借记卡", note: "Visa · Mastercard · American Express · Discover" },
+  { id: "paypal", name: "PayPal", note: "用 PayPal 余额或绑定的卡 / 银行支付" },
+  { id: "apple", name: "Apple Pay", note: "iPhone / Mac 上用 Face ID 一键支付" },
+  { id: "google", name: "Google Pay", note: "Android 设备一键支付" },
+  { id: "klarna", name: "Klarna", note: "分 4 期免息" }
+];
+var COUPONS = [
+  { id: "none", name: "不使用优惠券", v: 0, note: "—" },
+  { id: "new", name: "新人券", v: 100, note: "满 ¥1,000 可用" },
+  { id: "vip", name: "Maker 会员券", v: 300, note: "满 ¥5,000 可用" }
+];
+/* 积分：100 积分抵 ¥1，单笔最多抵商品小计的 20%，且不超过余额 */
+var PT_BAL = 2860, PT_RATE = 100, PT_CAP_RATIO = 0.2;
+var state = { addrId: null, ship: "std", pay: PAYS[0].id, coupon: "none", points: 0 };
+
+function m(n) { return (n || 0).toLocaleString("en-US"); }
+function subtotal() { return items.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0); }
+function count() { return items.reduce(function (s, it) { return s + (it.qty || 1); }, 0); }
+function shipFee() { return SHIPS.filter(function (x) { return x.id === state.ship; })[0].fee; }
+function couponVal() {
+  var c = COUPONS.filter(function (x) { return x.id === state.coupon; })[0];
+  if (!c || !c.v) return 0;
+  var need = c.id === "vip" ? 5000 : 1000;
+  return subtotal() >= need ? c.v : 0;
+}
+/* 可用积分上限（100 的整倍数） */
+function ptCap() {
+  var byMoney = Math.floor(subtotal() * PT_CAP_RATIO) * PT_RATE;
+  var byBal = Math.floor(PT_BAL / PT_RATE) * PT_RATE;
+  return Math.min(byMoney, byBal);
+}
+function ptVal() { return Math.floor(state.points / PT_RATE); }
+function payName() { return (PAYS.filter(function (p) { return p.id === state.pay; })[0] || PAYS[0]).name; }
+function total() { return Math.max(0, subtotal() + shipFee() - couponVal() - ptVal()); }
+
+function renderAddr() {
+  var list = window.Addr.all();
+  if (!state.addrId) {
+    var d = list.filter(function (a) { return a.def; })[0] || list[0];
+    if (d) state.addrId = d.id;
+  }
+  document.getElementById("addrList").innerHTML = list.map(function (a) {
+    return '<div class="addr-item' + (a.id === state.addrId ? " on" : "") + '" data-addr="' + a.id + '">' +
+      '<span class="ai-radio"></span><div><div class="ai-name">' + a.name + ' ' + a.phone +
+      '<span class="ai-tag">' + a.tag + '</span></div>' +
+      '<div class="ai-detail">' + a.region + ' ' + a.detail + '</div></div></div>';
+  }).join("");
+}
+
+function renderItems() {
+  document.getElementById("ckCount").textContent = "共 " + count() + " 件";
+  document.getElementById("ckItems").innerHTML = items.map(function (it) {
+    return '<div class="ck-item"><img src="' + it.img + '" alt="">' +
+      '<div class="ci-mid"><div class="ci-n">' + it.name + '</div><div class="ci-s">' + it.spec + '</div></div>' +
+      '<div class="ci-r">¥' + m(it.price) + '<i>× ' + (it.qty || 1) + '</i></div></div>';
+  }).join("");
+}
+
+function renderOpts() {
+  document.getElementById("shipOpts").innerHTML = SHIPS.map(function (s) {
+    return '<div class="opt' + (s.id === state.ship ? " on" : "") + '" data-ship="' + s.id + '"><b>' + s.name +
+      (s.fee ? " · ¥" + s.fee : " · 免运费") + '</b><i>' + s.note + '</i></div>';
+  }).join("");
+  document.getElementById("payOpts").innerHTML = PAYS.map(function (p) {
+    return '<div class="opt' + (p.id === state.pay ? " on" : "") + '" data-pay="' + p.id + '"><b>' + p.name + '</b><i>' +
+      (p.id === "klarna" ? p.note + " · 每期约 ¥" + m(Math.round(total() / 4)) :
+        (p.id === "card" ? "推荐 · " + p.note : p.note)) + '</i></div>';
+  }).join("");
+  document.getElementById("couponOpts").innerHTML = COUPONS.map(function (c) {
+    var ok = !c.v || subtotal() >= (c.id === "vip" ? 5000 : 1000);
+    return '<div class="opt' + (c.id === state.coupon ? " on" : "") + '" data-coupon="' + c.id + '"><b>' + c.name +
+      (c.v ? " · -¥" + c.v : "") + '</b><i>' + (ok ? c.note : "当前订单未达门槛") + '</i></div>';
+  }).join("");
+}
+
+function renderSum() {
+  document.getElementById("sumSub").textContent = "¥" + m(subtotal());
+  document.getElementById("sumShip").textContent = shipFee() ? "¥" + m(shipFee()) : "包邮";
+  document.getElementById("sumDis").textContent = "-¥" + m(couponVal());
+  document.getElementById("sumPt").textContent = "-¥" + m(ptVal());
+  document.getElementById("sumTotal").textContent = m(total());
+}
+
+/* 积分抵扣：输入 → 使用 / 取消 */
+function renderPoints() {
+  var cap = ptCap();
+  var inp = document.getElementById("ptInput");
+  var btn = document.getElementById("ptApply");
+  document.getElementById("ptHint").innerHTML = "100 积分抵 ¥1 · 可用 <b>" + m(PT_BAL) + "</b> 积分";
+  if (state.points > 0) {
+    inp.value = m(state.points);
+    inp.disabled = true;
+    btn.textContent = "取消";
+    btn.className = "btn btn-ghost";
+    document.getElementById("ptNote").innerHTML =
+      "已使用 <b>" + m(state.points) + "</b> 积分，抵扣 <b>¥" + m(ptVal()) + "</b> · 点「取消」可撤销";
+  } else {
+    inp.value = "";
+    inp.disabled = false;
+    btn.textContent = "使用";
+    btn.className = "btn btn-ghost";
+    document.getElementById("ptNote").textContent =
+      cap > 0 ? "本单最多可用 " + m(cap) + " 积分（抵 ¥" + m(Math.floor(cap / PT_RATE)) + "）" : "当前无可抵扣的积分";
+  }
+}
+
+function renderAll() {
+  if (!items.length) {
+    document.getElementById("ckEmpty").style.display = "";
+    document.getElementById("ckLayout").style.display = "none";
+    document.getElementById("ckSub").textContent = "暂无商品";
+    return;
+  }
+  document.getElementById("ckLayout").style.display = "";
+  document.getElementById("ckEmpty").style.display = "none";
+  document.getElementById("ckSub").textContent = mode === "buynow"
+    ? "立即购买 · 共 " + count() + " 件商品"
+    : "来自购物车 · 共 " + count() + " 件商品";
+  renderAddr(); renderItems(); renderOpts(); renderPoints(); renderSum();
+}
+
+document.addEventListener("click", function (e) {
+  var a = e.target.closest("[data-addr]");
+  if (a) { state.addrId = a.getAttribute("data-addr"); renderAddr(); return; }
+  var s = e.target.closest("[data-ship]");
+  if (s) { state.ship = s.getAttribute("data-ship"); renderOpts(); renderSum(); return; }
+  var p = e.target.closest("[data-pay]");
+  if (p) { state.pay = p.getAttribute("data-pay"); renderOpts(); return; }
+  var c = e.target.closest("[data-coupon]");
+  if (c) { state.coupon = c.getAttribute("data-coupon"); renderOpts(); renderSum(); return; }
+});
+
+/* 积分输入：只保留数字，按 100 取整，超出上限则取上限 */
+document.getElementById("ptApply").onclick = function () {
+  var inp = document.getElementById("ptInput");
+  if (state.points > 0) { state.points = 0; renderPoints(); renderOpts(); renderSum(); return; }
+  var n = parseInt(String(inp.value).replace(/[^\d]/g, ""), 10) || 0;
+  n = Math.floor(n / PT_RATE) * PT_RATE;
+  var cap = ptCap();
+  if (n > cap) n = cap;
+  if (n <= 0) { toast(cap > 0 ? "请输入 100 的整倍数积分" : "当前无可抵扣的积分"); return; }
+  state.points = n;
+  renderPoints(); renderOpts(); renderSum();
+};
+document.getElementById("ptInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("ptApply").click(); }
+});
+
+document.getElementById("ckSubmit").onclick = function () {
+  if (!items.length) { toast("还没有可结算的商品"); return; }
+  var addr = window.Addr.get(state.addrId) || window.Addr.def();
+  var order = window.Orders.place({
+    items: items, addr: addr, pay: payName(),
+    ship: shipFee(), discount: couponVal() + ptVal(), status: "pending"
+  });
+  if (mode === "buynow") {
+    if (window.hmSetBuyNow) window.hmSetBuyNow([]);
+    try { localStorage.removeItem("himakers_buynow"); } catch (e) {}
+  } else {
+    window.Cart.clear();
+  }
+  location.href = "order-success.html?order=" + order.id;
+};
+
+renderAll();
+</script>
+
+</body>
+</html>

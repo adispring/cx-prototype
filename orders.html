@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="8Mqsdw27yXgWhhoBTqfql9" data-dm-ref="2"><head data-page-node-id="NpM5VkEgbdNkzsJJeNgixI">
+<meta charset="UTF-8" data-page-node-id="sWS09BhPKoZIOUX0lykRRK">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="ot68IgwRm3B2Hh7udcUsvi">
+<title>我的订单 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="BhO7ndvdbIumEtdJOpluNn">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" data-page-node-id="KPwoxZMMx8CIGOqr06xA0M">
+<link rel="stylesheet" href="assets/css/site.css" data-page-node-id="3WO7ky242Gtu90FTk5wFcP">
+<style>
+
+.oc-status { font-size: 12.5px; font-weight: 600; padding: 4px 11px; border-radius: 999px; white-space: nowrap; }
+.oc-status.warn { color: #B45309; background: #FEF3C7; }
+.oc-status.info { color: #1D4ED8; background: #DBEAFE; }
+.oc-status.go { color: var(--green-t); background: var(--green-bg); }
+.oc-status.ok { color: #475569; background: #F1F5F9; }
+.oc-status.mute { color: var(--faint); background: var(--bg-2); }
+.oc-item { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.oc-item:last-child { border-bottom: none; }
+.oc-item img { width: 58px; height: 58px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.oc-item .oi-mid { flex: 1; min-width: 0; }
+.oc-item .oi-n { font-size: 14px; font-weight: 600; }
+.oc-item .oi-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.oc-item .oi-r { font-size: 13.5px; font-weight: 600; white-space: nowrap; text-align: right; }
+.oc-item .oi-r i { display: block; font-style: normal; font-size: 12px; color: var(--faint); font-weight: 400; margin-top: 2px; }
+.oc-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.my { padding: 34px 0 70px; }
+.my-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.my-head h1 { font-size: 28px; letter-spacing: -.03em; }
+.my-sub { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+.my-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 18px; }
+.my-tab { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.my-tab.on { border-color: var(--green); background: var(--green-bg); color: var(--green-t); }
+.ord-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; margin-bottom: 14px; }
+.oc-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.oc-id { font-size: 13.5px; font-weight: 600; }
+.oc-id span { font-weight: 400; color: var(--faint); margin-left: 6px; }
+.oc-time { font-size: 12.5px; color: var(--faint); }
+.oc-head .oc-status { margin-left: auto; }
+.oc-more { font-size: 12.5px; color: var(--muted); padding: 8px 0 0; }
+.oc-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.oc-sum { font-size: 13px; color: var(--muted); }
+.oc-sum b { font-size: 19px; font-weight: 700; color: var(--ink); margin-left: 4px; }
+.oc-sum i { font-style: normal; margin-left: 8px; }
+.my-empty { text-align: center; padding: 70px 20px; background: #fff; border: 1px solid var(--line); border-radius: 20px; }
+.my-empty .ce-ico { font-size: 44px; margin-bottom: 12px; }
+.my-empty p { color: var(--muted); font-size: 13.5px; margin-bottom: 16px; }
+@media (max-width: 640px) { .my-head h1 { font-size: 23px; } .oc-foot { flex-direction: column; align-items: flex-start; } }
+
+</style>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<body data-page-node-id="j6dByJK3H7nEnRNtGVIqyh" style="">
+<header class="nav" data-page-node-id="A5sRIqveCeKIE251cOlucU">
+  <div class="nav-inner" data-page-node-id="YqRgu3oLwdZJ2jc6XhshoS">
+    <a class="brand" href="index.html" data-page-node-id="ueEQR24Dn96VmmSEXEf3mx">
+      <span class="brand-mark" data-page-node-id="c2K551u20OAcfESNgDxsYk"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="3hwsKCEcpoHsFjJlgG8ZbP"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="n4LtvapCRqFMQd7bG80yM0"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="2H9h4YfvR3AS6jPMtdTuqF"></path></svg></span>
+      <span class="brand-name" data-page-node-id="uUCgvR8ahn0uWz4UTSwQ6o">Hi<i data-page-node-id="gk4SQTMysE9vAGTGtNjFbU">Makers</i></span>
+    </a>
+    <nav class="nav-links" data-page-node-id="eaiVLuV31YOON5iQKpoXhp">
+      <a href="index.html" data-page-node-id="py1wAAuFNYH5VcnYa8aCi6">首页</a>
+      <a href="shop.html" data-page-node-id="hCKbmDG3TSQU7c5mnaIEC1">商城</a>
+      <a href="ai.html" data-page-node-id="PODTHzW6r6kOu6pY4qD5My">AI 创作</a>
+      <a href="models.html" data-page-node-id="WF7zcj0W0NGg5CdMh4cXvJ">模型库</a>
+      <a href="community.html" data-page-node-id="loEyvzPWt88iM2pE8pw69C">社区</a>
+    </nav>
+    <div class="nav-actions" data-page-node-id="HmtqJ8cGKIrcWZsu4DCdig">
+      <label class="nav-search" data-page-node-id="Tr4FdMUHTbanZ6WriQPZBl">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="pRGg39e6EnNBJ10UD9OKDW"><circle cx="11" cy="11" r="7" data-page-node-id="z6DIETGCbJyusOS3IHSejn"></circle><path d="m20 20-3.5-3.5" data-page-node-id="3ftUohniqVUhYG6VsGKRIT"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…" data-page-node-id="sWUMudgj0KEgpXHPlllNyL">
+      </label>
+      
+      
+      <a href="login.html" class="btn btn-ghost sm hide-sm" data-page-node-id="sAhBobM3MXmTLUaDjDGk6Y">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm" data-page-node-id="orVzLXMgAJy19sj1kXDaAh">注册</a>
+      <div class="notif-wrap"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0"></path></svg><span class="badge-dot notif-count show">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知"><div class="np-head"><h4>通知中心<span class="np-count" id="notifUnreadCount">3 条未读</span></h4><button class="np-mark" id="notifMarkAll">全部已读</button></div><div class="np-tabs"><button class="np-tab on" data-cat="全部">全部</button><button class="np-tab" data-cat="互动">互动</button><button class="np-tab" data-cat="订单">订单</button><button class="np-tab" data-cat="系统">系统</button></div><div class="np-list" id="notifList"><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot"><a href="community.html">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart="" aria-label="购物车"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg><span class="badge-dot cart-count show">2</span></button><button class="icon-btn nav-burger" data-page-node-id="ipt8owCjuvHc2pDBpSNOMt"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="BqHd8aZDAGeugSKaTgsDNH"><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="rk4m4wvMenKgWnvVgOTe0M"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" data-page-node-id="EAYanyFHDt1aORkyk05GDA">
+  <a href="index.html" data-page-node-id="2osdt7gYNFIpbzjZC0aw23">首页</a><a href="shop.html" data-page-node-id="oAnaTB8Jo6Hh50QsG2EgqE">商城</a><a href="ai.html" data-page-node-id="i9wAn135RV3mDZiXwN97N6">AI 创作</a><a href="models.html" data-page-node-id="vnRersasCpYXfVK2mbz8Sy">模型库</a><a href="community.html" data-page-node-id="fkHGaDuNQ9WX555EXKyMYy">社区</a><a href="member.html">个人中心</a><a href="orders.html" data-page-node-id="cB01QIHTfxPCrKMQGQWlWa">我的订单</a>
+</div>
+
+<main class="my" data-page-node-id="D5ype8YJsyZCKOXTH13A7v">
+  <div class="wrap" data-page-node-id="6Hs1WabFeYOWQFmMP13O19">
+    <div class="my-head" data-page-node-id="z7ULettv1VeDfuPTlMuK4E">
+      <div data-page-node-id="WsjuHCCtzpV8oODXoEcnhr"><h1 data-page-node-id="cDIssBFb5faSi0XD4GZrzg">我的订单</h1><p class="my-sub" id="mySub" data-page-node-id="oNGqAMM57BHYzC2qBNM9XQ">共 4 笔订单 · 含多产品组合订单与配件耗材单</p></div>
+      <a class="ck-link" href="shop.html" data-page-node-id="uEpHa03DZyhZBnCX7ojPc5">继续购物 →</a>
+    </div>
+    <div class="my-tabs" id="myTabs" data-page-node-id="sl3NJHI7kAGqrh59CAuWS6"><button class="my-tab on" data-tab="全部">全部（4）</button><button class="my-tab" data-tab="pending">待付款（1）</button><button class="my-tab" data-tab="paid">待发货（0）</button><button class="my-tab" data-tab="shipped">待收货（1）</button><button class="my-tab" data-tab="done">已完成（1）</button><button class="my-tab" data-tab="aftersale">售后中（1）</button></div>
+    <div id="orderList" data-page-node-id="LkmeJ5Fea4waC5lE86bFso"><div class="ord-card"><div class="oc-head"><span class="oc-id">HM-20507<span>下单 2026-09-23 20:18</span></span><span class="oc-status warn">待付款</span></div><div style="margin-top:8px"><div class="oc-item"><img src="assets/img/device-printer-max.png" alt=""><div class="oi-mid"><div class="oi-n">Doyao Y2 Max 3D 打印机</div><div class="oi-s">旗舰套装 · 双喷头</div></div><div class="oi-r">¥4,999<i>× 1</i></div></div><div class="oc-item"><img src="assets/img/models/hex-box.png" alt=""><div class="oi-mid"><div class="oi-n">PEI 纹理打印板</div><div class="oi-s">适配 Doyao Y2 / Y2 Max</div></div><div class="oi-r">¥199<i>× 1</i></div></div></div><div class="oc-foot"><div class="oc-sum">共 2 件 · 合计<b>¥5,198</b><i>含运费 ¥0</i></div><div class="oc-acts"><button class="btn btn-primary sm" data-act="pay" data-id="HM-20507">去付款</button><button class="btn btn-ghost sm" data-act="detail" data-id="HM-20507">订单详情</button></div></div></div><div class="ord-card"><div class="oc-head"><span class="oc-id">HM-20418<span>下单 2026-09-20 14:32</span></span><span class="oc-status go">待收货</span></div><div style="margin-top:8px"><div class="oc-item"><img src="assets/img/device-laser.png" alt=""><div class="oi-mid"><div class="oi-n">XCheng X1 激光雕刻机</div><div class="oi-s">进阶套装 · 20W 光斑</div></div><div class="oi-r">¥4,999<i>× 1</i></div></div><div class="oc-item"><img src="assets/img/materials-flatlay.png" alt=""><div class="oi-mid"><div class="oi-n">认证材质探索包</div><div class="oi-s">木 / 皮革 / 亚克力 共 24 件</div></div><div class="oi-r">¥299<i>× 1</i></div></div><div class="oc-item"><img src="assets/img/device-laser.png" alt=""><div class="oi-mid"><div class="oi-n">旋转雕刻轴 R1</div><div class="oi-s">适配 XCheng X1 · 圆柱体雕刻</div></div><div class="oi-r">¥899<i>× 1</i></div></div><div class="oc-item"><img src="assets/img/shop/pla-filament.png" alt=""><div class="oi-mid"><div class="oi-n">PLA 环保耗材</div><div class="oi-s">1kg × 2 · 鼠尾草绿 / 陶土白</div></div><div class="oi-r">¥258<i>× 2</i></div></div></div><div class="oc-more">多产品组合订单 · 共 4 个商品项</div><div class="oc-foot"><div class="oc-sum">共 5 件 · 合计<b>¥6,413</b><i>含运费 ¥0 · 优惠 -¥300</i></div><div class="oc-acts"><button class="btn btn-soft sm" data-act="logistics" data-id="HM-20418">查看物流</button><button class="btn btn-primary sm" data-act="receive" data-id="HM-20418">确认收货</button><button class="btn btn-ghost sm" data-act="detail" data-id="HM-20418">订单详情</button></div></div></div><div class="ord-card"><div class="oc-head"><span class="oc-id">HM-20396<span>下单 2026-09-15 11:05</span></span><span class="oc-status ok">已完成</span></div><div style="margin-top:8px"><div class="oc-item"><img src="assets/img/shop/uv-resin.png" alt=""><div class="oi-mid"><div class="oi-n">UV 光固化树脂 1kg</div><div class="oi-s">高精度 · 8 色</div></div><div class="oi-r">¥199<i>× 2</i></div></div><div class="oc-item"><img src="assets/img/models/robot-arm-joint.png" alt=""><div class="oi-mid"><div class="oi-n">硬质合金喷头组 ×3</div><div class="oi-s">耐磨 · 3 支装</div></div><div class="oi-r">¥249<i>× 1</i></div></div></div><div class="oc-foot"><div class="oc-sum">共 3 件 · 合计<b>¥587</b><i>含运费 ¥0 · 优惠 -¥60</i></div><div class="oc-acts"><button class="btn btn-soft sm" data-act="aftersale" data-id="HM-20396">申请售后</button><button class="btn btn-ghost sm" data-act="reorder" data-id="HM-20396">再次购买</button><button class="btn btn-ghost sm" data-act="detail" data-id="HM-20396">订单详情</button></div></div></div><div class="ord-card"><div class="oc-head"><span class="oc-id">HM-20361<span>下单 2026-09-09 16:44</span></span><span class="oc-status warn">售后中</span></div><div style="margin-top:8px"><div class="oc-item"><img src="assets/img/device-cnc.png" alt=""><div class="oi-mid"><div class="oi-n">CNC C1 雕刻机</div><div class="oi-s">标准版 · 含入门刀组</div></div><div class="oi-r">¥5,999<i>× 1</i></div></div></div><div class="oc-foot"><div class="oc-sum">共 1 件 · 合计<b>¥6,048</b><i>含运费 ¥49</i></div><div class="oc-acts"><button class="btn btn-soft sm" data-act="aftersale" data-id="HM-20361">申请售后</button><button class="btn btn-ghost sm" data-act="detail" data-id="HM-20361">订单详情</button></div></div></div></div>
+  </div>
+</main>
+
+<footer class="footer" data-page-node-id="QnGIPB2qBx57lMQbyDwljr">
+  <div class="footer-inner" data-page-node-id="rovBscEi8C1mD2mxbfNORU">
+    <div class="footer-top" data-page-node-id="tcMVNntwQi2H1CmNfd4J1F">
+      <div class="footer-brand" data-page-node-id="ZopfgvnrEYztlBRpJ1kOAC">
+        <a class="brand" href="index.html" data-page-node-id="OojqaSrhwF7y49itO0Z5IH">
+          <span class="brand-mark" data-page-node-id="JnLR98vPoEoQTlDmoSPzPG"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="2fAoBDDgLGmRtegffmfqmC"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="KDtZW4FqomgblboJjeo0TN"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="JjEySjWvTxcwYIcdg8SzsE"></path></svg></span>
+          <span class="brand-name" data-page-node-id="kpnMJa7nRWdl5vuYPG4Jx3">Hi<i style="color:#4ADE97" data-page-node-id="UcvCbnkYC4XkBsox2VaX1E">Makers</i></span>
+        </a>
+        <p class="footer-slogan" data-page-node-id="UrKM9eLEBtMhHh9UqbvXxh">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col" data-page-node-id="MaAIJALcrle0ggwPfvKhY1"><h4 data-page-node-id="Y5CNI5Jk4wgqAuaKuKmq9N">产品</h4><a href="pdp-laser.html" data-page-node-id="CLBY5QHkaKKPA5rDCjWkFZ">激光雕刻机</a><a href="pdp-printer.html" data-page-node-id="jBghRPEfoCvftPD3hAtqbX">3D 打印机</a><a href="pdp-cnc.html" data-page-node-id="Sr2qxK50Y8AZMdJRO3EMpW">CNC 雕刻机</a><a href="shop.html" data-page-node-id="7yjx2jGPkLr6Yo5NKRXuOg">配件与耗材</a></div>
+      <div class="footer-col" data-page-node-id="mzsjOnEBiwNZZSzD9edHF8"><h4 data-page-node-id="BSAiNv922K59aOFem03j0r">创作</h4><a href="ai.html" data-page-node-id="7c3c5E13EkUE3bPIRxUrvd">AI 创作</a><a href="models.html" data-page-node-id="LrgcUMigxJKfV5tHYNqT6C">模型库</a><a href="ai.html" data-page-node-id="zY47AGjqjXduwkQmJgIDT0">设计工具</a></div>
+      <div class="footer-col" data-page-node-id="rrU56g0btpU5LwHIrUOhof"><h4 data-page-node-id="P0wkHX5xuQEwqggEfgrtVN">账户</h4><a href="member.html">个人中心</a><a href="orders.html" data-page-node-id="yCjQjGpk8vVS9SEA27C2Ly">我的订单</a><a href="cart.html" data-page-node-id="jBbhec6w18xYoolhGWUJFL">购物车</a><a href="addresses.html" data-page-node-id="Dv0SRs4QXr2Aa6I2Kz2wuv">收货地址</a><a href="aftersale.html" data-page-node-id="gbK3I4eOgV6thM8LeThJQT">售后与退款</a></div>
+      <div class="footer-col" data-page-node-id="rUS8xPHHdT9ZlVLa6L1Gnw"><h4 data-page-node-id="Z2lOLFo5gx96DqIboWbByI">支持</h4><a href="#" data-page-node-id="le3lDt4xpZHNJTpiLCI0hk">帮助中心</a><a href="#" data-page-node-id="OdR3DiAJIqFOBdrY13tedB">固件下载</a><a href="#" data-page-node-id="VlHhgBnFo2b46ymEs4ImIk">保修政策</a><a href="#" data-page-node-id="0K6SinOKZfJUkxbqVkOFmz">联系我们</a></div>
+    </div>
+    <div class="footer-bottom" data-page-node-id="kHTcEQJN7hMZz6JSlCpVW8">
+      <span data-page-node-id="UUpjAHQIdKujutOPnoFmNY">© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links" data-page-node-id="kC6hef972zHcr8Hx2aqteS"><a href="#" data-page-node-id="91CVeIBw7BKsLFCWZlGyAo">隐私政策</a><a href="#" data-page-node-id="FK6X0lPHbQt9BZ0WurlKP7">服务条款</a><a href="#" data-page-node-id="XOBnF3lydUaUcxRw39gJoY">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/orders.js"></script>
+
+<script>
+
+function m(n) { return (n || 0).toLocaleString("en-US"); }
+function st(s) { return window.Orders.statusMeta(s); }
+function statusHTML(s) { var meta = st(s); return '<span class="oc-status ' + meta.tone + '">' + meta.label + '</span>'; }
+function itemsHTML(items) {
+  return (items || []).map(function (it) {
+    return '<div class="oc-item"><img src="' + it.img + '" alt="">' +
+      '<div class="oi-mid"><div class="oi-n">' + it.name + '</div><div class="oi-s">' + it.spec + '</div></div>' +
+      '<div class="oi-r">¥' + m(it.price) + '<i>× ' + (it.qty || 1) + '</i></div></div>';
+  }).join("");
+}
+function actionsHTML(o) {
+  var s = o.status;
+  var a = [];
+  if (s === "pending") a.push('<button class="btn btn-primary sm" data-act="pay" data-id="' + o.id + '">去付款</button>');
+  if (s === "shipped") {
+    a.push('<button class="btn btn-soft sm" data-act="logistics" data-id="' + o.id + '">查看物流</button>');
+    a.push('<button class="btn btn-primary sm" data-act="receive" data-id="' + o.id + '">确认收货</button>');
+  }
+  if (s === "done" || s === "aftersale") a.push('<button class="btn btn-soft sm" data-act="aftersale" data-id="' + o.id + '">申请售后</button>');
+  if (s === "done") a.push('<button class="btn btn-ghost sm" data-act="reorder" data-id="' + o.id + '">再次购买</button>');
+  a.push('<button class="btn btn-ghost sm" data-act="detail" data-id="' + o.id + '">订单详情</button>');
+  return a.join("");
+}
+document.addEventListener("click", function (e) {
+  var btn = e.target.closest("[data-act]");
+  if (!btn) return;
+  var id = btn.getAttribute("data-id");
+  var act = btn.getAttribute("data-act");
+  var o = window.Orders.get(id);
+  if (!o) return;
+  if (act === "pay") {
+    window.Orders.update(id, { status: "paid", pay: o.pay === "待选择" ? "信用卡 / 借记卡" : o.pay });
+    toast("支付成功 · 已进入备货，我们会尽快发货");
+  } else if (act === "receive") {
+    window.Orders.update(id, { status: "done" });
+    toast("已确认收货 · 期待你的开箱作品");
+  } else if (act === "logistics") {
+    location.href = "logistics.html?order=" + id; return;
+  } else if (act === "aftersale") {
+    location.href = "aftersale.html?order=" + id; return;
+  } else if (act === "reorder") {
+    (o.items || []).forEach(function (it) { window.Cart.add({ name: it.name, spec: it.spec, price: it.price, img: it.img, qty: it.qty || 1 }); });
+    toast("已把 " + (o.items || []).length + " 件商品放回购物车");
+  } else if (act === "detail") {
+    location.href = "order-detail.html?order=" + id; return;
+  }
+  if (window.renderOrders) window.renderOrders();
+  if (window.renderDetail) window.renderDetail();
+});
+
+var TABS = [["全部","全部"],["pending","待付款"],["paid","待发货"],["shipped","待收货"],["done","已完成"],["aftersale","售后中"]];
+var filter = "全部";
+
+function list() {
+  var all = window.Orders.all();
+  return filter === "全部" ? all : all.filter(function (o) { return o.status === filter; });
+}
+
+window.renderOrders = function () {
+  var all = window.Orders.all();
+  document.getElementById("mySub").textContent = "共 " + all.length + " 笔订单 · 含多产品组合订单与配件耗材单";
+  document.getElementById("myTabs").innerHTML = TABS.map(function (t) {
+    var n = t[0] === "全部" ? all.length : all.filter(function (o) { return o.status === t[0]; }).length;
+    return '<button class="my-tab' + (filter === t[0] ? " on" : "") + '" data-tab="' + t[0] + '">' + t[1] + '（' + n + '）</button>';
+  }).join("");
+  var rows = list();
+  if (!rows.length) {
+    document.getElementById("orderList").innerHTML =
+      '<div class="my-empty"><div class="ce-ico">📦</div><p>这个状态下还没有订单</p>' +
+      '<a class="btn btn-primary" href="shop.html">去商城逛逛</a></div>';
+    return;
+  }
+  document.getElementById("orderList").innerHTML = rows.map(function (o) {
+    var total = window.Orders.total(o);
+    var cnt = window.Orders.qty(o);
+    return '<div class="ord-card">' +
+      '<div class="oc-head">' +
+        '<span class="oc-id">' + o.id + '<span>下单 ' + o.createdAt + '</span></span>' +
+        statusHTML(o.status) +
+      '</div>' +
+      '<div style="margin-top:8px">' + itemsHTML(o.items) + '</div>' +
+      ((o.items || []).length > 2 ? '<div class="oc-more">多产品组合订单 · 共 ' + (o.items || []).length + ' 个商品项</div>' : '') +
+      '<div class="oc-foot">' +
+        '<div class="oc-sum">共 ' + cnt + ' 件 · 合计<b>¥' + m(total) + '</b>' +
+          '<i>含运费 ¥' + m(o.ship || 0) + (o.discount ? ' · 优惠 -¥' + m(o.discount) : '') + '</i></div>' +
+        '<div class="oc-acts">' + actionsHTML(o) + '</div>' +
+      '</div></div>';
+  }).join("");
+};
+
+document.addEventListener("click", function (e) {
+  var tb = e.target.closest("[data-tab]");
+  if (tb) { filter = tb.getAttribute("data-tab"); window.renderOrders(); }
+});
+
+window.renderOrders();
+</script>
+
+
+
+</body></html>

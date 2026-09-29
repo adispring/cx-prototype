@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="GbH4OyKSACGKEgSViKYCFi" data-dm-ref="1"><head data-page-node-id="arnVSEYoGzTkehTs4TFZZS">
+<meta charset="UTF-8" data-page-node-id="51CwFXd4mzXHDiFAnCb4D8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="Wy0kKV9UMXezJE6me1Ev6Z">
+<title>HiMakers · 从灵感到成品，一个地方完成创作</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="9MDAomH2wuJ4y9dqTAbdLA">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet" data-page-node-id="DTH7ERBPO5r6iAnLM4XshR">
+<link rel="stylesheet" href="assets/css/site.css" data-page-node-id="vDrfU7tdofUVzo7XMUWijX">
+<style>
+/* ============================================================
+   HiMakers 首页 · 杂志式极简
+   导购逻辑：创作场景（而非品类）
+   语言：通栏氛围大图 + 极简文字 + 细线 + 大留白
+   ============================================================ */
+:root { --hair: rgba(16,22,19,.10); }
+body { font-weight: 400; }
+section[id] { scroll-margin-top: 0; }
+
+/* ---------- 顶层导航：Hero 上透明 ---------- */
+body.has-hero .nav { background: transparent; border-bottom-color: transparent; }
+body.has-hero .nav.scrolled { background: rgba(255,255,255,.86); border-bottom-color: var(--line); }
+body.has-hero .nav:not(.scrolled) .brand-name { color: #fff; }
+body.has-hero .nav:not(.scrolled) .nav-links a { color: rgba(255,255,255,.8); }
+body.has-hero .nav:not(.scrolled) .nav-links a:hover { background: none; color: #fff; font-weight: 600; }
+body.has-hero .nav:not(.scrolled) .nav-links a.active { color: #fff; background: none; }
+body.has-hero .nav:not(.scrolled) .nav-links a.active::after { background: #4ADE97; }
+body.has-hero .nav:not(.scrolled) .icon-btn { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.24); color: #fff; }
+body.has-hero .nav:not(.scrolled) .icon-btn:hover { background: rgba(255,255,255,.22); }
+body.has-hero .nav:not(.scrolled) .nav-search { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.7); }
+body.has-hero .nav:not(.scrolled) .nav-search input { color: #fff; }
+body.has-hero .nav:not(.scrolled) .nav-search input::placeholder { color: rgba(255,255,255,.6); }
+body.has-hero .nav:not(.scrolled) .btn-ghost { border-color: rgba(255,255,255,.4); color: #fff; }
+body.has-hero .nav:not(.scrolled) .btn-ink { background: #fff; color: var(--ink); }
+
+/* ---------- 极简排版基元 ---------- */
+.kicker { font-size: 11.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.kicker.on-dark { color: rgba(255,255,255,.6); }
+.mega { font-size: clamp(32px, 4.4vw, 58px); font-weight: 500; letter-spacing: -.035em; line-height: 1.14; }
+.mega em { font-style: normal; font-weight: inherit; letter-spacing: inherit; color: var(--green-t); }
+.mini { font-size: 13.5px; color: var(--muted); line-height: 1.8; }
+.head-min { max-width: 760px; margin: 0 auto 52px; text-align: center; }
+.head-min .mini { margin-top: 14px; }
+.head-side { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 44px; }
+.rule { height: 1px; background: var(--hair); border: 0; }
+.pad { padding: 0 24px; }
+
+/* ---------- 右侧路径导航 ---------- */
+.path-rail { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 150; display: flex; flex-direction: column; gap: 7px; align-items: flex-end; }
+.rail-item { display: flex; align-items: center; gap: 10px; justify-content: flex-end; background: none; border: none; padding: 4px 0; }
+.rail-item .ri-label { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: var(--muted); opacity: 0; transform: translateX(6px); transition: all .22s ease; white-space: nowrap; }
+.rail-item .ri-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(16,22,19,.22); transition: all .22s ease; }
+.rail-item:hover .ri-label { opacity: 1; transform: none; }
+.rail-item.on .ri-dot { background: var(--green); transform: scale(1.5); }
+.rail-item.on .ri-label { opacity: 1; transform: none; color: var(--green-t); }
+@media (max-width: 1280px) { .path-rail { display: none; } }
+
+/* ================= S1 · HERO ================= */
+body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
+.hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; background: var(--ink); }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: kb 30s ease-in-out infinite alternate; }
+@keyframes kb { from { transform: scale(1.04); } to { transform: scale(1.14) translate3d(-1.2%,-1%,0); } }
+@media (prefers-reduced-motion: reduce) { .hero img { animation: none; } }
+.hero::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,15,12,.62) 0%, rgba(10,15,12,.18) 34%, rgba(10,15,12,.55) 78%, rgba(10,15,12,.86) 100%);
+}
+.hero-copy {
+  position: absolute; left: 0; right: 0; z-index: 2;
+  top: calc(50% + 34px); transform: translateY(-50%);
+}
+.hero-copy .wrap { padding-left: calc(24px + var(--hero-indent, 88px)); }
+.hero-copy .mega { color: #fff; max-width: 14em; }
+.hero-copy .mega em { color: #4ADE97; }
+.hero-sub { color: rgba(255,255,255,.72); font-size: 15.5px; line-height: 1.8; max-width: 400px; margin-top: 20px; font-weight: 300; }
+.hero-cta { display: flex; align-items: center; gap: 16px; margin-top: 30px; flex-wrap: wrap; }
+.hero-vid { font-size: 13px; color: rgba(255,255,255,.6); display: inline-flex; align-items: center; gap: 7px; }
+.hero-vid:hover { color: #fff; }
+.hero-vid svg { color: #4ADE97; }
+
+/* 路径条（细） */
+.pathbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; border-top: 1px solid rgba(255,255,255,.16); background: rgba(10,15,12,.34); backdrop-filter: blur(10px); }
+.pathbar-inner { max-width: 1328px; margin: 0 auto; padding: 15px 24px; display: flex; align-items: center; gap: 0; }
+.pb-item { flex: 1; display: flex; align-items: baseline; gap: 9px; cursor: pointer; padding-right: 16px; }
+.pb-item + .pb-item { border-left: 1px solid rgba(255,255,255,.14); padding-left: 18px; }
+.pb-n { font-family: var(--font-num); font-size: 10.5px; font-weight: 700; color: #4ADE97; letter-spacing: .04em; }
+.pb-t { font-size: 13.5px; color: rgba(255,255,255,.86); font-weight: 500; transition: color .15s ease; }
+.pb-item:hover .pb-t { color: #4ADE97; }
+
+/* ================= S2 · 创作场景导购 ================= */
+.scenes { padding: 116px 0 0; }
+.scene-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 8px; }
+.scene { position: relative; height: 52vh; min-height: 400px; overflow: hidden; cursor: pointer; background: var(--bg-2); }
+.scene img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.22,.61,.36,1); }
+.scene:hover img { transform: scale(1.05); }
+.scene::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(10,15,12,.72) 100%); }
+.scene .sc-copy { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 40px 44px; color: #fff; }
+.scene .sc-n { font-family: var(--font-num); font-size: 11px; font-weight: 700; color: #4ADE97; letter-spacing: .08em; }
+.scene h3 { color: #fff; font-size: clamp(21px, 2.1vw, 28px); font-weight: 500; letter-spacing: -.02em; margin-top: 12px; }
+.scene .sc-line { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.22); }
+.scene .sc-kit { font-size: 13px; color: rgba(255,255,255,.7); font-weight: 300; }
+.scene .sc-price { font-size: 15px; font-weight: 600; color: #fff; white-space: nowrap; }
+.scene .sc-go { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #4ADE97; margin-top: 14px; }
+.scene:hover .sc-go .arr { transform: translateX(4px); }
+.scene .sc-go .arr { transition: transform .18s ease; }
+.sc-add { position: absolute; right: 44px; bottom: 40px; z-index: 3; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(255,255,255,.1); backdrop-filter: blur(6px); color: #fff; display: flex; align-items: center; justify-content: center; transition: all .18s ease; }
+.sc-add:hover { background: #4ADE97; border-color: #4ADE97; color: #06210F; }
+.scenes-foot { text-align: center; padding: 34px 24px 0; }
+
+/* ================= S3 · AI 创作 ================= */
+.ai-wrap { position: relative; margin-top: 116px; padding: 120px 0; overflow: hidden; }
+.ai-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ai-wrap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(9,14,11,.9) 0%, rgba(9,14,11,.72) 46%, rgba(9,14,11,.5) 100%); }
+.ai-inner { position: relative; z-index: 2; max-width: 1328px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+.ai-inner .mega { color: #fff; }
+.ai-inner .mega em { color: #4ADE97; }
+.ai-inner .mini { color: rgba(255,255,255,.62); margin-top: 18px; font-weight: 300; }
+.panel { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 22px; padding: 22px; backdrop-filter: blur(18px); }
+.gen-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.gen-in { flex: 1; min-width: 240px; display: flex; align-items: center; gap: 11px; height: 54px; padding: 0 15px; border-radius: 13px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.14); }
+.gen-in:focus-within { border-color: #4ADE97; }
+.gen-in svg { color: #4ADE97; flex-shrink: 0; }
+.gen-in input { flex: 1; border: 0; outline: 0; background: none; color: #EAF2EC; font-size: 14.5px; height: 100%; }
+.gen-in input::placeholder { color: #6E7B73; }
+.gen-chips { display: flex; gap: 8px; margin-top: 13px; flex-wrap: wrap; }
+.gen-chips .gc { font-size: 12.5px; color: #9DB0A5; border: 1px solid rgba(255,255,255,.16); padding: 5px 13px; border-radius: 999px; background: none; transition: all .15s ease; }
+.gen-chips .gc:hover { border-color: rgba(74,222,151,.6); color: #4ADE97; }
+.gen-chips .gc.on { border-color: #4ADE97; color: #4ADE97; background: rgba(74,222,151,.13); font-weight: 600; }
+.gen-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+.g-cell { aspect-ratio: 1; border-radius: 12px; overflow: hidden; position: relative; background: rgba(255,255,255,.06); transition: all .2s ease; }
+.g-cell img { width: 100%; height: 100%; object-fit: cover; }
+.g-cell.pick { cursor: pointer; }
+.g-cell.pick:hover { transform: translateY(-3px); }
+.g-cell.sel { outline: 2px solid #4ADE97; outline-offset: 2px; }
+.g-cell .gt { position: absolute; left: 7px; bottom: 7px; font-size: 10.5px; font-weight: 600; color: #CFDCD4; background: rgba(13,19,16,.7); padding: 2px 8px; border-radius: 999px; }
+.g-cell.loading::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(255,255,255,.02) 30%, rgba(74,222,151,.18) 50%, rgba(255,255,255,.02) 70%); background-size: 220% 100%; animation: sh 1.15s linear infinite; }
+@keyframes sh { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+.gen-status { margin-top: 13px; font-size: 12.5px; color: #8FA096; min-height: 18px; }
+.gen-status .bar { display: inline-block; width: 160px; height: 3px; background: rgba(255,255,255,.12); border-radius: 2px; overflow: hidden; vertical-align: middle; margin: 0 9px; }
+.gen-status .bar i { display: block; height: 100%; width: 0; background: #4ADE97; transition: width .5s ease; }
+.gen-status .st { color: #4ADE97; }
+.gen-make { margin-top: 16px; display: none; align-items: center; gap: 15px; padding: 14px 16px; border-radius: 15px; background: rgba(74,222,151,.09); border: 1px solid rgba(74,222,151,.24); }
+.gen-make.show { display: flex; animation: fu .4s ease; }
+@keyframes fu { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.gen-make .gm-i { width: 56px; height: 56px; border-radius: 11px; overflow: hidden; flex-shrink: 0; }
+.gen-make .gm-i img { width: 100%; height: 100%; object-fit: cover; }
+.gen-make .gm-c { flex: 1; min-width: 0; }
+.gen-make .gm-t { color: #fff; font-size: 15px; font-weight: 600; }
+.gen-make .gm-s { color: #9DB0A5; font-size: 12.5px; margin-top: 3px; }
+.gen-make .gm-s b { color: #4ADE97; }
+.gen-make .gm-a { display: flex; gap: 8px; flex-shrink: 0; }
+.gen-note { margin-top: 14px; font-size: 12px; color: #6E7B73; }
+
+/* ================= S4 · 作品墙（通栏） ================= */
+.works { padding: 116px 0 0; }
+.tile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.tile { position: relative; height: 36vh; min-height: 260px; overflow: hidden; cursor: pointer; background: var(--bg-2); }
+.tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.22,.61,.36,1); }
+.tile:hover img { transform: scale(1.05); }
+.tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(10,15,12,.66) 100%); }
+.tile .ti { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 22px 26px; color: #fff; }
+.tile .ti-n { font-size: 15.5px; font-weight: 500; letter-spacing: -.01em; }
+.tile .ti-d { font-size: 12px; color: rgba(255,255,255,.72); margin-top: 5px; }
+.tile .ti-d b { color: #4ADE97; font-weight: 600; }
+
+/* ================= S5 · 社区通栏 ================= */
+.commu { position: relative; margin-top: 116px; min-height: 76vh; display: flex; align-items: center; overflow: hidden; }
+.commu > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.commu::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,15,12,.86) 0%, rgba(10,15,12,.6) 44%, rgba(10,15,12,.28) 100%); }
+.commu-in { position: relative; z-index: 2; max-width: 1328px; margin: 0 auto; padding: 90px 24px; width: 100%; }
+.commu-q { color: #fff; font-size: clamp(20px, 2.3vw, 30px); font-weight: 300; line-height: 1.6; max-width: 20em; letter-spacing: -.02em; }
+.commu-q em { font-style: normal; color: #4ADE97; }
+.commu-steps { display: flex; gap: 34px; margin-top: 34px; flex-wrap: wrap; }
+.commu-step { display: flex; align-items: baseline; gap: 9px; font-size: 13.5px; color: rgba(255,255,255,.78); font-weight: 300; }
+.commu-step b { font-family: var(--font-num); font-size: 11px; font-weight: 700; color: #4ADE97; }
+.commu-u { display: flex; align-items: center; gap: 12px; margin-top: 34px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.18); max-width: 460px; }
+.commu-u img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+.commu-u b { display: block; color: #fff; font-size: 14px; font-weight: 600; }
+.commu-u span { font-size: 12.5px; color: rgba(255,255,255,.56); }
+
+/* ================= S6 · 收尾 ================= */
+.outro { position: relative; margin-top: 2px; min-height: 78vh; display: flex; align-items: center; overflow: hidden; }
+.outro > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.outro::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,15,12,.4) 0%, rgba(10,15,12,.78) 100%); }
+.outro-in { position: relative; z-index: 2; width: 100%; max-width: 1328px; margin: 0 auto; padding: 100px 24px; text-align: center; }
+.outro .mega { color: #fff; }
+.outro .mega em { color: #4ADE97; }
+.outro p { color: rgba(255,255,255,.68); font-size: 15px; font-weight: 300; margin-top: 18px; }
+.outro-cta { display: flex; gap: 12px; justify-content: center; margin-top: 34px; flex-wrap: wrap; }
+.outro-stats { display: flex; justify-content: center; gap: 56px; margin-top: 56px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.18); flex-wrap: wrap; }
+.outro-stat .os-n { font-size: 30px; font-weight: 600; color: #fff; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.outro-stat .os-n em { font-style: normal; color: #4ADE97; }
+.outro-stat .os-l { font-size: 12.5px; color: rgba(255,255,255,.6); margin-top: 3px; }
+
+/* ---------- 页脚（简） ---------- */
+.footer { margin-top: 0; }
+.footer-top { grid-template-columns: 1.5fr repeat(5, 1fr); gap: 32px; padding-bottom: 44px; }
+@media (max-width: 1080px) { .footer-top { grid-template-columns: 1fr 1fr; row-gap: 36px; } }
+@media (max-width: 640px) { .footer-top { grid-template-columns: 1fr; gap: 28px; } }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1080px) {
+  .hero-copy .wrap { padding-left: calc(24px + var(--hero-indent, 48px)); }
+  .ai-inner { grid-template-columns: 1fr; gap: 44px; }
+  .scene-grid { grid-template-columns: 1fr; }
+  .scene { height: 44vh; }
+  .tile-grid { grid-template-columns: repeat(2, 1fr); }
+  .commu::after, .outro::after { background: rgba(10,15,12,.68); }
+}
+@media (max-width: 640px) {
+  .scenes, .works { padding-top: 72px; }
+  .ai-wrap { margin-top: 72px; padding: 80px 0; }
+  .commu, .outro { margin-top: 72px; }
+  .scene .sc-copy { padding: 28px 24px; }
+  .sc-add { right: 24px; bottom: 28px; }
+  .tile-grid { grid-template-columns: 1fr; }
+  .hero-copy .wrap { padding-left: calc(24px + var(--hero-indent, 20px)); }
+  .pathbar-inner { flex-wrap: wrap; gap: 10px 0; }
+  .pb-item { flex: 0 0 50%; }
+  .pb-item + .pb-item { border-left: 0; }
+  .gen-grid { grid-template-columns: repeat(2, 1fr); }
+  .gen-make { flex-wrap: wrap; }
+  .gen-make .gm-a { width: 100%; }
+  .gen-make .gm-a .btn { flex: 1; }
+  .outro-stats { gap: 28px; }
+}
+</style>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<body class="has-hero" data-page-node-id="YvmnMLwsDh59yryDDFAqQu" style="">
+
+<!-- ================= 导航 ================= -->
+<header class="nav scrolled" data-page-node-id="29Kjm9ZjJc5jc7UP7cOfEG">
+  <div class="nav-inner" data-page-node-id="vcaTayRf5FgBDrkveHCEtq">
+    <a class="brand" href="index.html" data-page-node-id="3O908tqaUb7zz05Nc6iN3B">
+      <span class="brand-mark" data-page-node-id="6sLZkqqGbqGqEQamE0vWlV"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="BoTNmml8ZpDPG8Uc0mzhab"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="nHPP7A8Enhhs7YPX4pSS6D"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="dDgvTT8XH5SQeCwFTbL7SL"></path></svg></span>
+      <span class="brand-name" data-page-node-id="rwzLhqv8WvRNfLltKh2H5B">Hi<i data-page-node-id="eiZucm2uSOpkM7R48H1fCS">Makers</i></span>
+    </a>
+    <nav class="nav-links" data-page-node-id="zK9F7qrl0GqwKoaocN7ld8">
+      <a href="index.html" class="active" data-page-node-id="dJG2dqwSotsJEkzEdfu3Pj">首页</a>
+      <a href="shop.html" data-page-node-id="kaMmdtvObQ75mzLBJNTkRf">商城</a>
+      <a href="ai.html" data-page-node-id="OC97aSEjCTvs6korh4fEjr">AI 创作</a>
+      <a href="models.html" data-page-node-id="YcTeB0x66NncpFkpzQjtiI">模型库</a>
+      <a href="community.html" data-page-node-id="gciXAT6H9OGXFQYY9wBwz7">社区</a>
+    </nav>
+    <div class="nav-actions" data-page-node-id="8eYeSpAX0R1EcCX0pns7xf">
+      <label class="nav-search" data-page-node-id="WzePURAhTg6BjIVhnHEDG6">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="hmudD3YgC2XAg2FSE6gyUX"><circle cx="11" cy="11" r="7" data-page-node-id="lsPuJJH8lRcFrFWK5KWUnz"></circle><path d="m20 20-3.5-3.5" data-page-node-id="FcHccB6qblEwdP5S19BkcS"></path></svg>
+        <input type="text" placeholder="搜索灵感、模型、机器…" data-page-node-id="dt8pa31bEbn4ya41o3qZvJ">
+      </label>
+      <div class="notif-wrap"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0"></path></svg><span class="badge-dot notif-count show">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知"><div class="np-head"><h4>通知中心<span class="np-count" id="notifUnreadCount">3 条未读</span></h4><button class="np-mark" id="notifMarkAll">全部已读</button></div><div class="np-tabs"><button class="np-tab on" data-cat="全部">全部</button><button class="np-tab" data-cat="互动">互动</button><button class="np-tab" data-cat="订单">订单</button><button class="np-tab" data-cat="系统">系统</button></div><div class="np-list" id="notifList"><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot"><a href="community.html">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart data-page-node-id="amjGdqEaO24708E9mV4Gtz">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ZjpW7IfFTQGbkHNMEpToZj"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z" data-page-node-id="viL9fQ6uSCMD6tlPKLS1JB"></path><path d="M9 9V6a3 3 0 0 1 6 0v3" data-page-node-id="EJjkeNjYo1fpOtFVM6Saan"></path></svg>
+        <span class="badge-dot cart-count" data-page-node-id="sGJuWkldHmXKsFfQPAY2xi">0</span>
+      </button>
+      <a href="login.html" class="btn btn-ghost sm hide-sm" data-page-node-id="T5TGVgIfkb8eA6qY2XeGdv">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm" data-page-node-id="BRbYbYeLoCsKfB5MFc9IpF">注册</a>
+      <button class="icon-btn nav-burger" title="菜单" data-page-node-id="3C9bvKCAiffLGO6YscFIbF">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="7reHXvaMyoKtf52uxgvAiX"><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="sedKFokP0t90oFzRVaLOiI"></path></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" data-page-node-id="K0I7BFr4B7ByizC1gkDnzu">
+  <a href="index.html" class="active" data-page-node-id="VGcxvXipM1tKi9BUD6MHv6">首页</a><a href="shop.html" data-page-node-id="lBnKpHcs9vOfGP1m8YwEgC">商城</a><a href="ai.html" data-page-node-id="RmJOuLDpqAiLc59jVJyPXF">AI 创作</a><a href="models.html" data-page-node-id="zZGEDQ72WtjBvlXkwuwVkn">模型库</a><a href="community.html" data-page-node-id="5bTDc6txjYJuiov0vmCHtG">社区</a>
+<a href="member.html">个人中心</a></div>
+
+<!-- 右侧路径 -->
+<nav class="path-rail" aria-label="体验路径" data-page-node-id="e6B9sCjXxRpfmMYPNOH8BB">
+  
+  
+  
+  
+</nav>
+
+<!-- ============================================================
+     S1 · HERO
+     ============================================================ -->
+<section class="hero" data-page-node-id="4L92ZTUVf2fLo0TP2FfX4h">
+  <img src="assets/img/hero-studio.png" alt="创作者在工作室用 HiMakers 机器制作作品" data-page-node-id="z6MzYrDCEpPMKUmkuvkPPj">
+  <div class="hero-copy" data-page-node-id="iXvsn2CmgzHqNe0zN89Iqr">
+    <div class="wrap" data-page-node-id="jvo9KkXHCPUSc5Ly4WbvBB">
+      
+      <h1 class="mega" style="margin-top:22px" data-page-node-id="N9FwUoH7i79YeL9FKCPkvc">从 AI 生成到真实成品，<br data-page-node-id="csud1CbGivZFeNHjrVUFUn"><em data-page-node-id="sHsop3rhE8bdBKPQWTsmZY">一个地方完成创作​</em></h1>
+      
+      <div class="hero-cta" data-page-node-id="TuXpzLBcBoBt4i57v4bEwZ">
+        <a class="btn btn-primary lg" href="ai.html" data-page-node-id="qRAqxu3EgDg227pR8OMfHg">体验 AI 创作 <span class="arr" data-page-node-id="sM9rAdj8zVI9h8aWxINvMC">→</span></a>
+        <a class="btn btn-ghost on-dark lg" href="#s-works" data-page-node-id="H9FmSqzYeU2QC4b90nT0WO">开始探索</a>
+        
+      </div>
+    </div>
+  </div>
+  <div class="pathbar" data-page-node-id="4p9lCdr4YTG6VvRhp7UufD">
+    
+  </div>
+</section>
+
+<!-- ============================================================
+     S2 · 创作场景导购（用场景替代品类）
+     ============================================================ -->
+<section class="scenes" id="s-scenes" data-page-node-id="ahkvha1XAm3J7tfyf0cb29">
+  <div class="wrap" data-page-node-id="gBWl3qxZ2rtyqozxmNhdHz">
+    <div class="head-min reveal in" data-page-node-id="YyKKvi3fcteReN2mpQKq0G">
+      
+      <h2 class="mega" data-page-node-id="h5dkoLlEKPSUkVBQO28MuL">你想<em data-page-node-id="EFldStyfQffwRifgv4gBRr">做什么</em>？</h2>
+      <p class="mini" data-page-node-id="RiX0QuC8zmTFAATIMltZD6">不用先懂机器。挑一个你想完成的场景，机器、耗材和入门模型都由我们配好。</p>
+    </div>
+  </div>
+
+  <div class="scene-grid" data-page-node-id="ENOo9i3jyuZfyDZ71Nz2zy">
+    <div class="scene reveal in" data-page-node-id="jlnPDjbxhuBL8Pa2CQs6EA">
+      <img src="assets/img/scene-gift.png" alt="送一份自己做的礼物" data-page-node-id="suQPplUKv5tz5BGkEstDNO">
+      <div class="sc-copy" data-page-node-id="0DKeZ3tAH1CHIW4y2P7Br2">
+        
+        <h3 data-page-node-id="4AtsFdfvwQL2iMIQcfHqsB">送一份别人买不到的礼物</h3>
+        <div class="sc-line" data-page-node-id="byWx8urevCZ2aZ02CcBGQu"><span class="sc-kit" data-page-node-id="7B9BFAnt0czs9KVpIPdxOG">XCheng X1 入门套装 · 含 20 个新手模型</span><span class="sc-price" data-page-node-id="iDMbByE7T0YywgPcSTRXbx">¥4,499</span></div>
+        <span class="sc-go" data-page-node-id="xYXhkxPmX0wMH6G6YSHBiC">这个场景怎么配 <span class="arr" data-page-node-id="rdVxZ47lCnF1TNvrnKqgph">→</span></span>
+      </div>
+      
+    </div>
+
+    <div class="scene reveal d1 in" data-page-node-id="copkKl37src1UkyoN5KN1z">
+      <img src="assets/img/scene-home.png" alt="给家里添几件自己做的东西" data-page-node-id="FDt7QWq0s1q2aDRVH8UqZ1">
+      <div class="sc-copy" data-page-node-id="npKct5qGYXxX7CqHTeYDdV">
+        
+        <h3 data-page-node-id="admdVz4aK5vxBYqPHywQMn">给家里添几件自己做的东西</h3>
+        <div class="sc-line" data-page-node-id="ajRgaqIembD1SZtX0fotbJ"><span class="sc-kit" data-page-node-id="sI7LBqzNoZFcSm1Ss1LrW4">XCheng X1 + Doyao Y2 · 双材质耗材包</span><span class="sc-price" data-page-node-id="SvQ0TLkDV9P6WCBDpusLEY">¥7,899</span></div>
+        <span class="sc-go" data-page-node-id="vetOHYbe4Dtu2gPs5hZFhW">这个场景怎么配 <span class="arr" data-page-node-id="dSIcDFvzfp028sN9Ovo9Hl">→</span></span>
+      </div>
+      
+    </div>
+
+    <div class="scene reveal in" data-page-node-id="s90milugXEGLEvjpCfBhA0">
+      <img src="assets/img/scene-order.png" alt="把爱好做成一门小生意" data-page-node-id="l69IIcfzhMCJmpBvtqHWkw">
+      <div class="sc-copy" data-page-node-id="HkdmmaRCDAp8TV9k3tQiG2">
+        
+        <h3 data-page-node-id="4rjtyhhvGATXtbW85Cd5Dj">把爱好做成一门小生意</h3>
+        <div class="sc-line" data-page-node-id="x4wXdH9jH7BmKXUgVF2k2Z"><span class="sc-kit" data-page-node-id="oUXK09rat5Z1vIkCL2tzcm">专业三机套装 · 集尘旋转轴 + 会员年卡</span><span class="sc-price" data-page-node-id="hAgSfuba67Hyl91pE3gJNA">¥13,999</span></div>
+        <span class="sc-go" data-page-node-id="mgNC7mTOEmtTqXF0c9jrl4">这个场景怎么配 <span class="arr" data-page-node-id="tLB59aYVmRecPUQGgCYm0H">→</span></span>
+      </div>
+      
+    </div>
+
+    <div class="scene reveal d1 in" data-page-node-id="9rp0TEUgOh9hl3EFFi5RgG">
+      <img src="assets/img/scene-family.png" alt="陪孩子把想象变成实物" data-page-node-id="c6JPrSSYqGEutoAUkz5QIK">
+      <div class="sc-copy" data-page-node-id="koHpN6YeNf4xk32EcFU7HX">
+        
+        <h3 data-page-node-id="EXiAcdEEW9KkzFmvm00W1F">陪孩子把想象变成实物</h3>
+        <div class="sc-line" data-page-node-id="ZniepbTpSFFiQw2wmEyVN3"><span class="sc-kit" data-page-node-id="mbaraPWzBCeueOhoeamPy3">Doyao Y2 家庭版 · 安全耗材 + 亲子课程</span><span class="sc-price" data-page-node-id="AmhBNlrRzvYAKx0BAh80Jn">¥3,299</span></div>
+        <span class="sc-go" data-page-node-id="lHwbfrOQNZMIjAywgqElkr">这个场景怎么配 <span class="arr" data-page-node-id="QOYHvZEScAOhkUOE4FBoBW">→</span></span>
+      </div>
+      
+    </div>
+  </div>
+
+  <p class="scenes-foot mini" data-page-node-id="VW94bNOpNQTrAgq7MbWDwR">也可以按机器挑：<a class="link-more" href="shop.html" data-page-node-id="uKlD7XceFVCUsEElWFZu4K">激光雕刻机 / 3D 打印机 →</a></p>
+</section>
+
+<!-- ============================================================
+     S3 · AI 创作
+     ============================================================ -->
+<section class="ai-wrap" id="s-ai" data-page-node-id="BFZizhxFO8NLoSycAHnimK">
+  <img src="assets/img/ai-craft.png" alt="AI 生成图案被雕刻成实物" data-page-node-id="DiU8xM8BGhDknDolkd1LGP">
+  <div class="ai-inner" data-page-node-id="C6IFlMqb8CyiKUtfHwEhhD">
+    <div class="reveal in" data-page-node-id="fFYhdH54nEZTGHVExEgwVu">
+      
+      <h2 class="mega" data-page-node-id="tkHb7vAwgH5S5E7HBP86wX">说一句话，<br data-page-node-id="CvUC1ilSUYDzLNa4RDwaOk">看看它<em data-page-node-id="dP6QB9wcMKXNWewf5Uy8vV">变成什么</em></h2>
+      <p class="mini" data-page-node-id="9WdRSXkYU1o4lNZWudMhoC">不用会画图，不用懂参数。先试一句，满意了再上机。</p>
+    </div>
+
+    <div class="panel reveal d1 in" data-page-node-id="HgCcGDf0lYnr160s8CXeIK">
+      <div class="gen-row" data-page-node-id="6TAu3g2aBWbj7AKfTpCM1h">
+        <label class="gen-in" data-page-node-id="p2qspoU4j6tljN9zpo8xPE">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="WOKO4BTsd0x5UL1phwAXTs"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z" data-page-node-id="2S49vCHri8hylHHUru06C2"></path></svg>
+          <input id="genText" type="text" value="一只在星空下奔跑的机械鹿，等高线风格" placeholder="描述你想做的东西" data-page-node-id="luc1wCrEqmReTJp3DgfDlT">
+        </label>
+        <button class="btn btn-primary" id="genBtn" style="height:54px;border-radius:13px" data-page-node-id="5WeC4V54Mir6yjwCDlwzsQ"><span id="genBtnTxt" data-page-node-id="ClDpUG6jU6PcxiBzQa0yEl">生成</span> <span class="arr" data-page-node-id="tCRn8ps2yNL2KdNv36iKWJ">→</span></button>
+      </div>
+      <div class="gen-chips" id="genChips" data-page-node-id="t0uWyZwD91lxpduzLlTV4P">
+        <button class="gc on" data-dev="laser" data-page-node-id="1G4gCcMfxuXH0hJALgSDIV">线稿雕刻</button>
+        <button class="gc" data-dev="printer" data-page-node-id="YoipTpOfrMkD73QCtzX5Es">3D 立体</button>
+        <button class="gc" data-dev="cnc" data-page-node-id="fh543ZVNEE82G6rURqMYbi">金属结构</button>
+      </div>
+      <div class="gen-grid" id="genGrid" data-page-node-id="CvJEMGb8HXAZzVB9wwLDpM"><div class="g-cell pick sel"><img src="assets/img/works/wood-relief.png" alt=""><span class="gt">方案 1</span></div><div class="g-cell pick"><img src="assets/img/works/acrylic-sign.png" alt=""><span class="gt">方案 2</span></div><div class="g-cell pick"><img src="assets/img/models/lattice-vase.png" alt=""><span class="gt">方案 3</span></div><div class="g-cell pick"><img src="assets/img/models/robot-arm-joint.png" alt=""><span class="gt">方案 4</span></div></div>
+      <div class="gen-status" id="genStatus" data-page-node-id="PduklvWfydxENZn2igBTRs">示例方案 · 换成你的想法，点「生成」换一批</div>
+      <div class="gen-make show" id="genMake" data-page-node-id="NljmTRl3IXhAcLHFHiRkMc">
+        <div class="gm-i" data-page-node-id="5bTKZ2CIAfvZ3PXzuzyYx7"><img id="gmImg" src="assets/img/device-laser.png" alt="" data-page-node-id="2IDq2jadZT1ERnfiNmeVDy"></div>
+        <div class="gm-c" data-page-node-id="tekzFgcormz78QcvhCAC0y">
+          <div class="gm-t" id="gmTitle" data-page-node-id="qNvMKEsh5CLeWUNLaUnBwZ">用 XCheng X1 把它变成实物</div>
+          <div class="gm-s" id="gmSub" data-page-node-id="nucUpgVyZe5oqyFN0fgw1y">木板 · 20W · 18 分钟 · <b>¥4,999 起</b></div>
+        </div>
+        <div class="gm-a" data-page-node-id="jpBNw1zxN4wklGlq6GViId"><a class="btn btn-primary sm" href="shop.html" data-page-node-id="wg84UwR7QiNd1q6DKFxGOD">看看设备</a><a class="btn btn-ghost on-dark sm" href="ai.html" data-page-node-id="VB7wApSf5AFO63j39yldOM">继续</a></div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     S4 · 作品墙（内容代替商品）
+     ============================================================ -->
+<section class="works" id="s-works" data-page-node-id="F1FlCYEaBmyybcRGF45qjE">
+  <div class="wrap" data-page-node-id="1AXzFxLZiujYrDEq9KszoF">
+    <div class="head-min reveal in" data-page-node-id="BKVHZZnofiy7TfO1AxC91G">
+      
+      <h2 class="mega" data-page-node-id="bB3C2qEA8immUxxgVePKs8">先被<em data-page-node-id="fWHGZuLPTykzEtfOIDHueG">作品</em>打动，再被工具说服</h2>
+      <p class="mini" data-page-node-id="gxPnFEowQByaXrLjtdEOgD">每件都标注了用什么机器做出来。点开任意一个，都能追回它的制作工具。</p>
+    </div>
+  </div>
+  <div class="tile-grid" id="tileGrid" data-page-node-id="ioqENEVCNiGlnL8eIbZVTh"><div class="tile reveal" data-i="0"><img src="assets/img/models/lattice-vase.png" alt="晶格花瓶"><div class="ti"><div class="ti-n">晶格花瓶</div><div class="ti-d">由 <b>Doyao Y2</b> 3D 打印制作 · 免费 · ↓12.4k</div></div></div><div class="tile reveal d1" data-i="1"><img src="assets/img/works/wood-relief.png" alt="等高线木刻浮雕"><div class="ti"><div class="ti-n">等高线木刻浮雕</div><div class="ti-d">由 <b>XCheng X1</b> 激光雕刻制作 · ¥9.9 · ↓21.7k</div></div></div><div class="tile reveal d2" data-i="2"><img src="assets/img/works/acrylic-sign.png" alt="霓虹亚克力灯牌"><div class="ti"><div class="ti-n">霓虹亚克力灯牌</div><div class="ti-d">由 <b>XCheng X1</b> 激光切割制作 · ¥12 · ↓9.8k</div></div></div><div class="tile reveal" data-i="3"><img src="assets/img/models/planetary-gear.png" alt="行星减速齿轮组"><div class="ti"><div class="ti-n">行星减速齿轮组</div><div class="ti-d">由 <b>Doyao Y2</b> 3D 打印制作 · PRO · ↓8.9k</div></div></div><div class="tile reveal d1" data-i="4"><img src="assets/img/models/drone-frame.png" alt="穿越机机架 5 寸"><div class="ti"><div class="ti-n">穿越机机架 5 寸</div><div class="ti-d">由 <b>CNC C1</b> CNC 铣削制作 · PRO · ↓4.3k</div></div></div><div class="tile reveal d2" data-i="5"><img src="assets/img/works/phone-stand.png" alt="磁吸折叠手机支架"><div class="ti"><div class="ti-n">磁吸折叠手机支架</div><div class="ti-d">由 <b>XCheng X1</b> 激光切割制作 · 免费 · ↓18.2k</div></div></div></div>
+  <p class="scenes-foot mini" data-page-node-id="QgqjtsAgKWqNZPZCaJ3bdT">26 万+ 模型 · <a class="link-more" href="models.html" data-page-node-id="8zJAWAAEEYPku0NHf5fvIO">进入模型库 →</a></p>
+</section>
+
+<!-- ============================================================
+     S5 · 社区通栏
+     ============================================================ -->
+<section class="commu" id="s-commu" data-page-node-id="VBClPiNpkDNXgCYeUJgjf0">
+  <img src="assets/img/community-makers.png" alt="社区创作者" data-page-node-id="AtcpLd06THwn4cH2Jx4WqC">
+  <div class="commu-in" data-page-node-id="mGl3vtMyyo8zjJ0qwANnMC">
+    
+    <p class="commu-q" data-page-node-id="PErpwLP9WnQu3H0h9qGOWO" style="">「我在模型库刷到亚克力灯牌，改了图案，用 AI 重新生成了自己店的 logo，XCheng X1 切了两版就定稿。现在每周靠它出 <em data-page-node-id="8Wh7XBd9hXTBog2VSwle4M">30 多单</em>。」</p>
+    
+    <div class="commu-u" data-page-node-id="Itcsb48jk3oYwfxk5aedGg">
+      <img src="assets/img/avatar.jpg" alt="" data-page-node-id="prdaD2heL9vRiGQ5ym6RuQ">
+      <div data-page-node-id="j41hQNi5OHfLMlOSNBhx48"><b data-page-node-id="DuwAA2Qc9MRl190CEmxTpP">阿哲 · 木十手作工作室</b><span data-page-node-id="2wzcmEacBfGmSk44LDbtTq">XCheng X1 用户 · 深圳 · 加入社区 14 个月</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     S6 · 收尾
+     ============================================================ -->
+<section class="outro" data-page-node-id="LbxEoRLgINuPeVHf6DMeGt">
+  <img src="assets/img/bundle-pro.png" alt="专业创作工作台" data-page-node-id="TQGklKBPbb0VHhbAMKBHYv">
+  <div class="outro-in" data-page-node-id="syEALee0OukMYZIC24FAdO">
+    <h2 class="mega" data-page-node-id="js8y5hqw1KfVOEnGE0SGx0">现在，把想法<em data-page-node-id="5q2kJcgIjrOyhsd3R2ve06">做出来</em></h2>
+    <p data-page-node-id="hQ3FpUHqiyBa3rq6bYSfCI">加入 38 万创客，从第一件作品开始。</p>
+    <div class="outro-cta" data-page-node-id="EYFxhvkLISnK4rCTm5sECt">
+      <a class="btn btn-primary lg" href="shop.html" data-page-node-id="Z75x8buUDluYoxwhh4khRl">按场景挑一套 <span class="arr" data-page-node-id="clgGE9u8ysTcLBDadOGD3k">→</span></a>
+      <a class="btn btn-ghost on-dark lg" href="community.html" data-page-node-id="zFivUBumYEkHh475f1L0ax">加入社区</a>
+    </div>
+    <div class="outro-stats" data-page-node-id="PgN32N0KcKw2Ichu6xkRXw">
+      <div class="outro-stat" data-page-node-id="YM6AxT919FttbnjACbi8zn"><div class="os-n" data-page-node-id="MU3YK2bUfU0nF17w9PXlyj"><span data-count="38" data-suffix="万" data-page-node-id="GpyHcFnM7pjSJnXy37AyhO">0</span><em data-page-node-id="kugWpvVthIAtp2Ic04AFIQ">+</em></div><div class="os-l" data-page-node-id="26RpU5vfSJeACHCqirI30L">位创作者</div></div>
+      <div class="outro-stat" data-page-node-id="ESsQOvR8g1N3uRK9pQ3nbq"><div class="os-n" data-page-node-id="o3iU2o9ohokf6RuprDYC51"><span data-count="26" data-suffix="万" data-page-node-id="ibsYFpIZSBBNvwRiUKL8vE">0</span><em data-page-node-id="aA5qcvj7APJXdNaDQ2wF8I">+</em></div><div class="os-l" data-page-node-id="4gFeQV4hcZ3LH3v6WhOVJq">个可商用模型</div></div>
+      <div class="outro-stat" data-page-node-id="S8C2XtmXdKHqGLV7Ce81Tr"><div class="os-n" data-page-node-id="YO4Cc6zOcMyLoRkqeTvLnN"><span data-count="48" data-suffix="万" data-page-node-id="KoXhLhmv0pwtg4v3HqouFq">0</span><em data-page-node-id="n5ypfrD1PCorTddi61E0Bj">+</em></div><div class="os-l" data-page-node-id="bO7FEcAmjT9BY1IOpyyUkg">件社区作品</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 页脚 ================= -->
+<footer class="footer" data-page-node-id="kPLAQAGkfZ1CZ7Vxtt4Uzs">
+  <div class="footer-inner" data-page-node-id="t2dyKfOA7EO5MrknRUTsdH">
+    <div class="footer-top" data-page-node-id="HzlVsh9HkuWKpTRVJjIA0R">
+      <div class="footer-brand" data-page-node-id="X3hVzm15mjyG8wmSreeDzk">
+        <a class="brand" href="index.html" data-page-node-id="boqZt2EfICFHD7r76BgKHY">
+          <span class="brand-mark" data-page-node-id="GOLbFmjyQNBcyDGxAyG8vc"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="YlGrB1Yrj3oRKH38mUpNO6"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="0Cgcekotemg5miCi1xwVym"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="8gcfZtGLqI9A9VWyxrb5L8"></path></svg></span>
+          <span class="brand-name" data-page-node-id="ig9dDz1ACOC9h6IiC1hDXr">Hi<i style="color:#4ADE97" data-page-node-id="jhwKDXSQREEnuOCM2TUMjk">Makers</i></span>
+        </a>
+        <p class="footer-slogan" data-page-node-id="kOlc35RHjKMSxdCJEiMeCf">让每个想法都有实物。</p>
+        <div class="footer-social" data-page-node-id="rIo5OqtaUXTzzRQBGF5UJr">
+          <a href="#" title="YouTube" data-page-node-id="2nZ50wPJuEg4MS7pfJ5GtT"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" data-page-node-id="fCvrjCL2TrFEVzw9VEJZqE"><rect x="2.5" y="6" width="19" height="12" rx="3.5" data-page-node-id="H1ZRPVz00khJ6bhcXm6Dbs"></rect><path d="m10.5 9.5 4.5 2.5-4.5 2.5v-5Z" data-page-node-id="qDLKjy0L6aCYVCt60HSFhl"></path></svg></a>
+          <a href="#" title="Instagram" data-page-node-id="vS4alOQ6n2CtiP4IsFj3Of"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" data-page-node-id="JZhiOGogix3swGlSUD1wts"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" data-page-node-id="aZLVzD0rDNoF43eASAr12E"></rect><circle cx="12" cy="12" r="4" data-page-node-id="pWZ7jwcRAvLxgdj6ZXFlZM"></circle><circle cx="17.2" cy="6.8" r=".6" fill="currentColor" data-page-node-id="iartItBFelBqZBK5N3iGSZ"></circle></svg></a>
+          <a href="#" title="X" data-page-node-id="4QXx2AbrqHF9rHSfwLoxMY"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="fG7Tfnl9liEXivku8tMK5t"><path d="M4 4l16 16M20 4 4 20" data-page-node-id="dPIs6GBbGmyKnPK0UeMF1q"></path></svg></a>
+          <a href="#" title="Discord" data-page-node-id="8WWh0tly5ib7OJJS8922Rk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="NjMMHHeFrNc2OprRdulInc"><path d="M8.5 5.5A14 14 0 0 1 12 5c1.2 0 2.4.2 3.5.5M8.5 5.5C6.7 6 5.2 6.8 4 7.8 3 10.8 2.8 14 3.4 17.2c1.4 1 3 1.7 4.6 2.1l1-1.8M15.5 5.5c1.8.5 3.3 1.3 4.5 2.3 1 3 1.2 6.2.6 9.4-1.4 1-3 1.7-4.6 2.1l-1-1.8M9 13.2v.1m6-.1v.1" data-page-node-id="4SIe4RAQAkEb2P3Rty0RUE"></path></svg></a>
+        </div>
+      </div>
+      <div class="footer-col" data-page-node-id="9V9i1KiJncuUF9i8J0QBMA">
+        <h4 data-page-node-id="qweuEi6PfvqY545TrSbZ2z">按场景</h4>
+        <a href="shop.html" data-page-node-id="eNGubiHdqZ2FvISHbDYImo">送礼定制</a><a href="shop.html" data-page-node-id="v8YOiD2Cv0hLBzUPp1NRSU">家居好物</a><a href="shop.html" data-page-node-id="jWnIlzi4oazTcRfv8oToZO">接单创业</a><a href="shop.html" data-page-node-id="ASH8XYXUU5DVvoiF3XfmEy">亲子教育</a>
+      </div>
+      <div class="footer-col" data-page-node-id="uYqeWaR7RHW84i0MlDkgTD">
+        <h4 data-page-node-id="b80H2Mp1G5woA65I1B34fh">创作</h4>
+        <a href="ai.html" data-page-node-id="3N7s9kGRRkzBrsOiiBdCz8">AI 创作</a><a href="models.html" data-page-node-id="tosbNZQCbO7ZKbCMXc1zxT">模型库</a><a href="models.html" data-page-node-id="0NGx7UrvdrhUxQbgm9jvqb">免费素材</a>
+      </div>
+      <div class="footer-col" data-page-node-id="woYgsB4C7TjGuf1I1FB6cK">
+        <h4 data-page-node-id="3vcmmgzOzzAXHBpEJSw1Iu">社区与支持</h4>
+        <a href="community.html" data-page-node-id="NFHwARsHVHEuwjBRXmsTzB">作品广场</a><a href="community.html" data-page-node-id="ItNIbesDuScgJlAaICJOP1">挑战赛</a><a href="#" data-page-node-id="9j5LqfN7ZQwURNCaS065tE">帮助中心</a>
+      </div>
+      <div class="footer-col">
+        <h4>服务支持</h4>
+        <a href="#">配送与退换</a><a href="#">保修与维修</a><a href="shop.html">配件与耗材</a><a href="#">联系客服</a>
+      </div>
+      <div class="footer-col">
+        <h4>关于我们</h4>
+        <a href="#">品牌故事</a><a href="#">新闻中心</a><a href="#">加入我们</a><a href="#">合作伙伴</a>
+      </div>
+    </div>
+    <div class="footer-bottom" data-page-node-id="R76paDJbrkylCbLXM9uSmK">
+      <span data-page-node-id="BSPMllLn2onb5ERhJajD6F">© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links" data-page-node-id="Ouw3zFHaqdnaVpMCtkcRpE">
+        <a href="#" data-page-node-id="qBeFlEzM03iCfn7hbGEmFy">隐私政策</a><a href="#" data-page-node-id="F2GJwA5QDCWIW5wiBmXrpZ">服务条款</a><a href="#" data-page-node-id="bsUjv7P4Nrh7hPpz5kBnsZ">Cookie 设置</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= 作品详情弹窗 ================= -->
+<div class="modal" id="workModal" data-page-node-id="aC9kZkhMVDEml1sWbZ9TDV">
+  <div class="modal-box" data-page-node-id="vkTtArc10wIuCg3VTzkpSj">
+    <button class="x-btn modal-close" data-close="" data-page-node-id="BekeuUBwYt8VBWrgn5WKEI">✕</button>
+    <div class="modal-img" data-page-node-id="R52fIdVcl8Ezsd1mwKn5FQ"><img id="wmImg" src="" alt="" data-page-node-id="hiVDOJzR2PU8HX7Rz8xblr"></div>
+    <div class="modal-body" id="wmBody" style="padding:32px;overflow-y:auto" data-page-node-id="ghN71xPmJKKgpb1YN9ieoz"></div>
+  </div>
+</div>
+
+<!-- ================= 购物车抽屉 ================= -->
+<div class="overlay" id="overlay" data-close="" data-page-node-id="wULppRzxqhIaGDABfW9eES"></div>
+
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- 路径跳转 ---------- */
+  function goTo(id) {
+    var el = document.getElementById(id);
+    var nav = document.querySelector(".nav");
+    var off = nav ? nav.offsetHeight : 0;
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - off + 1, behavior: "smooth" });
+  }
+  document.querySelectorAll("[data-target]").forEach(function (b) {
+    b.addEventListener("click", function () { goTo(b.getAttribute("data-target")); });
+  });
+
+  var railItems = Array.prototype.slice.call(document.querySelectorAll(".rail-item"));
+  var sections = railItems.map(function (r) { return document.getElementById(r.getAttribute("data-target")); });
+  function syncRail() {
+    var mid = window.scrollY + window.innerHeight * 0.45, best = -1, bestD = Infinity;
+    sections.forEach(function (s, i) {
+      if (!s) return;
+      var d = Math.abs(s.getBoundingClientRect().top + window.scrollY - mid);
+      if (d < bestD) { bestD = d; best = i; }
+    });
+    railItems.forEach(function (r, i) { r.classList.toggle("on", i === best && window.scrollY > 300); });
+  }
+  window.addEventListener("scroll", syncRail, { passive: true });
+  syncRail();
+
+  /* ---------- 场景块点击 → 商城 ---------- */
+  document.querySelectorAll(".scene").forEach(function (s) {
+    s.addEventListener("click", function () { window.location.href = "shop.html"; });
+  });
+
+  /* ================= S3 · AI 生成器 ================= */
+  var POOL = [
+    "assets/img/works/wood-relief.png", "assets/img/models/hex-box.png",
+    "assets/img/works/acrylic-sign.png", "assets/img/models/planetary-gear.png",
+    "assets/img/models/lattice-vase.png", "assets/img/works/gearbox.png",
+    "assets/img/models/robot-arm-joint.png", "assets/img/works/phone-stand.png"
+  ];
+  var DEV = {
+    laser:   { name: "XCheng X1", img: "assets/img/device-laser.png", craft: "激光雕刻", mat: "木板 · 20W", time: "18 分钟", price: "¥4,999 起" },
+    printer: { name: "Doyao Y2", img: "assets/img/device-printer.png", craft: "3D 打印", mat: "PLA · 0.16mm", time: "4 小时 20 分", price: "¥3,299 起" },
+    cnc:     { name: "CNC C1", img: "assets/img/device-cnc.png", craft: "CNC 铣削", mat: "铝 · 2mm 刀", time: "52 分钟", price: "¥5,999 起" }
+  };
+  var genGrid = document.getElementById("genGrid");
+  var genStatus = document.getElementById("genStatus");
+  var genMake = document.getElementById("genMake");
+  var genBtn = document.getElementById("genBtn");
+  var genBtnTxt = document.getElementById("genBtnTxt");
+  var genChips = document.getElementById("genChips");
+  var curDev = "laser", curStart = 0, busy = false;
+
+  genChips.addEventListener("click", function (e) {
+    var b = e.target.closest(".gc");
+    if (!b) return;
+    genChips.querySelectorAll(".gc").forEach(function (x) { x.classList.remove("on"); });
+    b.classList.add("on");
+    curDev = b.getAttribute("data-dev");
+    if (genMake.classList.contains("show")) showMake();
+  });
+
+  function renderResults(picks, selFirst) {
+    genGrid.innerHTML = picks.map(function (p, i) {
+      return '<div class="g-cell' + (selFirst && i === 0 ? " pick sel" : " pick") + '"><img src="' + p + '" alt=""><span class="gt">方案 ' + (i + 1) + "</span></div>";
+    }).join("");
+    genGrid.querySelectorAll(".g-cell").forEach(function (c) {
+      c.addEventListener("click", function () {
+        genGrid.querySelectorAll(".g-cell").forEach(function (x) { x.classList.remove("sel"); });
+        c.classList.add("sel");
+        showMake();
+      });
+    });
+  }
+
+  function showMake() {
+    var d = DEV[curDev];
+    document.getElementById("gmImg").src = d.img;
+    document.getElementById("gmTitle").textContent = "用 " + d.name + " 把它变成实物";
+    document.getElementById("gmSub").innerHTML = d.mat + " · " + d.time + " · <b>" + d.price + "</b>";
+    genMake.classList.add("show");
+  }
+
+  renderResults([POOL[0], POOL[2], POOL[4], POOL[6]], true);
+  showMake();
+  genStatus.textContent = "示例方案 · 换成你的想法，点「生成」换一批";
+
+  genBtn.addEventListener("click", function () {
+    if (busy) return;
+    busy = true; genBtn.disabled = true; genBtnTxt.textContent = "生成中…";
+    genMake.classList.remove("show");
+    var picks = [];
+    for (var i = 0; i < 4; i++) picks.push(POOL[(curStart + i * 2) % POOL.length]);
+    curStart = (curStart + 3) % POOL.length;
+    genGrid.querySelectorAll(".g-cell").forEach(function (c) { c.classList.add("loading"); });
+    var steps = [["理解描述…", 24], ["生成" + DEV[curDev].craft + "方案…", 60], ["匹配材质与参数…", 88], ["完成 · 可直接上机", 100]];
+    genStatus.innerHTML = '<span class="st"></span><span class="bar"><i></i></span>';
+    var stEl = genStatus.querySelector(".st"), barEl = genStatus.querySelector(".bar i");
+    steps.forEach(function (s, idx) {
+      setTimeout(function () {
+        stEl.textContent = s[0]; barEl.style.width = s[1] + "%";
+        if (idx === steps.length - 1) {
+          renderResults(picks, true); showMake();
+          genStatus.textContent = "4 个方案已生成 · 消耗 1 枚灵感点";
+          busy = false; genBtn.disabled = false; genBtnTxt.textContent = "再生成";
+        }
+      }, 700 * (idx + 1));
+    });
+  });
+
+  /* ================= S4 · 作品墙 ================= */
+  var WORKS = [
+    { img: "assets/img/models/lattice-vase.png", name: "晶格花瓶", dev: "printer", craft: "3D 打印", price: "免费", down: "12.4k", by: "MAKER·林一", mat: "PLA 哑光 · 198g", time: "4 小时 12 分", diff: "入门", desc: "参数化晶格结构，无需支撑，0.16mm 层高一版成型。最受欢迎的新手第一件。" },
+    { img: "assets/img/works/wood-relief.png", name: "等高线木刻浮雕", dev: "laser", craft: "激光雕刻", price: "¥9.9", down: "21.7k", by: "HiMakers 官方", mat: "胡桃木 · 20W", time: "26 分钟", diff: "入门", desc: "AI 生成的等高线地形图，附分层功率曲线，深浅过渡一次成型。" },
+    { img: "assets/img/works/acrylic-sign.png", name: "霓虹亚克力灯牌", dev: "laser", craft: "激光切割", price: "¥12", down: "9.8k", by: "阿哲 · 木十", mat: "亚克力 3mm + 灯带", time: "42 分钟", diff: "进阶", desc: "含切割轮廓与导光槽设计，配 5V 灯带即可用，支持任意文字替换。" },
+    { img: "assets/img/models/planetary-gear.png", name: "行星减速齿轮组", dev: "printer", craft: "3D 打印", price: "PRO", down: "8.9k", by: "GearLab", mat: "PETG · 320g", time: "6 小时 40 分", diff: "进阶", desc: "可真实运转的三级行星减速机构，含装配说明与公差建议。" },
+    { img: "assets/img/models/drone-frame.png", name: "穿越机机架 5 寸", dev: "cnc", craft: "CNC 铣削", price: "PRO", down: "4.3k", by: "FPV_KE", mat: "3K 碳板 · 4mm", time: "1 小时 10 分", diff: "高阶", desc: "含刀路文件与公差补偿表，社区实测装机合格率 96%。" },
+    { img: "assets/img/works/phone-stand.png", name: "磁吸折叠手机支架", dev: "laser", craft: "激光切割", price: "免费", down: "18.2k", by: "Studio Nine", mat: "桦木板 3mm", time: "14 分钟", diff: "入门", desc: "零胶水榫卯结构，一块板 14 分钟出成品，新手试机首选。" }
+  ];
+
+  var tg = document.getElementById("tileGrid");
+  tg.innerHTML = WORKS.map(function (w, i) {
+    var d = DEV[w.dev];
+    return '<div class="tile reveal' + (i % 3 === 1 ? " d1" : i % 3 === 2 ? " d2" : "") + '" data-i="' + i + '">' +
+      '<img src="' + w.img + '" alt="' + w.name + '">' +
+      '<div class="ti"><div class="ti-n">' + w.name + '</div>' +
+      '<div class="ti-d">由 <b>' + d.name + '</b> ' + w.craft + "制作 · " + w.price + " · ↓" + w.down + "</div></div></div>";
+  }).join("");
+
+  if ("IntersectionObserver" in window) {
+    var tio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); tio.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+    tg.querySelectorAll(".tile.reveal").forEach(function (el) { tio.observe(el); });
+  } else {
+    tg.querySelectorAll(".tile.reveal").forEach(function (el) { el.classList.add("in"); });
+  }
+
+  var wmImg = document.getElementById("wmImg"), wmBody = document.getElementById("wmBody");
+  tg.addEventListener("click", function (e) {
+    var t = e.target.closest(".tile");
+    if (!t) return;
+    var w = WORKS[parseInt(t.getAttribute("data-i"), 10)], d = DEV[w.dev];
+    wmImg.src = w.img;
+    wmBody.innerHTML =
+      '<span class="eyebrow">作品详情 · 来自社区</span>' +
+      '<h3 style="font-size:23px;margin-top:14px">' + w.name + "</h3>" +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">' +
+        '<span class="tag ' + (w.price === "免费" ? "green" : w.price === "PRO" ? "pro" : "warm") + '">' + w.price + "</span>" +
+        '<span class="tag outline">' + w.craft + '</span><span class="tag outline">' + w.diff + "</span></div>" +
+      '<p style="font-size:14.5px;color:var(--muted);line-height:1.8;margin-top:16px">' + w.desc + "</p>" +
+      '<div style="margin-top:20px">' +
+        '<div style="display:flex;justify-content:space-between;font-size:14px;padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">作者</span><b style="color:var(--ink)">@' + w.by + "</b></div>" +
+        '<div style="display:flex;justify-content:space-between;font-size:14px;padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">推荐耗材</span><b style="color:var(--ink)">' + w.mat + "</b></div>" +
+        '<div style="display:flex;justify-content:space-between;font-size:14px;padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">预计工时</span><b style="color:var(--ink)">' + w.time + "</b></div>" +
+      "</div>" +
+      '<div style="margin-top:22px;background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px">' +
+        '<img src="' + d.img + '" alt="" style="width:60px;height:60px;border-radius:12px;object-fit:cover;background:#fff">' +
+        '<div style="flex:1;min-width:0"><div style="font-size:12.5px;color:var(--muted)">这件作品由它制作</div>' +
+        '<div style="font-size:15.5px;font-weight:600;color:var(--ink)">' + d.name + " · " + d.craft + "</div>" +
+        '<div style="font-size:13px;color:var(--green-t);font-weight:600;margin-top:2px">' + d.price + "</div></div>" +
+        '<a class="btn btn-ink sm" href="shop.html">去看看 →</a>' +
+      "</div>" +
+      '<div style="display:flex;gap:10px;margin-top:20px">' +
+        '<button class="btn btn-primary" style="flex:1" onclick="toast(\'演示原型：跳转模型库并自动匹配 ' + d.name + " 参数'\">下载模型</button>" +
+        '<a class="btn btn-ghost" href="ai.html">改成我的版本</a></div>';
+    openLayer("workModal");
+  });
+})();
+</script>
+
+
+
+
+
+
+
+</body></html>

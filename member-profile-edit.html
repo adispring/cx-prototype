@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" data-page-node-id="rNlgbHKDnP0a7mDIDotMzB">
+<head data-page-node-id="RNAgs8n8kJBy9hdBFnbspI">
+<meta charset="utf-8" data-page-node-id="exK0Lz6LsJLzwCF1kYoB1c"/>
+<meta content="width=device-width, initial-scale=1" name="viewport" data-page-node-id="DtnDnIr3iCNpt3nfqmIpJQ"/>
+<title>HiMakers · 设置</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="OaAVihAFCfA1ERby2loor2">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet" data-page-node-id="2o2d1yhYttHxdugMKKNlmL">
+<link rel="stylesheet" href="assets/css/site.css" data-page-node-id="3CsjthpTvLtbEWw6kz6R31">
+<link rel="stylesheet" href="assets/css/member.css" data-page-node-id="iLVpHtmlTKEqwu4qoS1hB1">
+<style>
+.interest-tags-editor{display:flex;flex-wrap:wrap;gap:12px;margin-top:2px}
+.interest-tag-chip{position:relative;min-height:42px;padding:0 30px 0 18px;border-radius:999px;border:1px solid #89E2C0;background:#F2FBF7;color:#0CC992;font-size:15px;font-weight:500;display:inline-flex;align-items:center;cursor:default}
+.interest-tag-remove{position:absolute;right:6px;top:-7px;width:18px;height:18px;border-radius:50%;border:1px solid #CFEDE2;background:#fff;color:#7C9189;display:grid;place-items:center;padding:0;font-size:13px;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.interest-tag-remove:hover{border-color:#8FDCC0;color:#0CC992;background:#F7FEFB}
+.interest-tag-chip.add-chip{padding:0 18px;border-color:#D7DEE7;background:#fff;color:#4E5A68;cursor:pointer}
+.interest-tag-chip.add-chip:hover{border-color:#89E2C0;color:#0CC992;background:#F7FEFB}
+.settings-secondary-btn{height:40px;padding:0 18px;border-radius:10px;border:1px solid #0CC992;background:#0CC992;color:#fff;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s,border-color .2s,transform .2s;box-shadow:0 8px 18px rgba(12,201,146,.14)}
+.settings-secondary-btn:hover{background:#08B786;border-color:#08B786}
+.settings-secondary-btn:active{transform:translateY(1px)}
+.social-login-row{align-items:flex-start;gap:28px;padding-top:18px;padding-bottom:18px}
+.social-login-copy{min-width:150px;padding-top:3px}
+.social-login-copy strong{display:block;font-size:13px;line-height:20px;font-weight:600;color:#373C43}
+.social-login-copy span{display:block;margin-top:4px;font-size:12px;line-height:18px;color:#969CA5}
+.social-login-main{flex:1;min-width:0}
+.social-bind-list{display:flex;flex-wrap:wrap;gap:12px 18px;padding:0}
+.social-bind-item{display:inline-flex;align-items:center;gap:8px;min-width:auto;padding:0;border:none}
+.social-bind-icon{width:18px;height:18px;display:grid;place-items:center;color:#96A0AD;flex:0 0 auto}
+.social-bind-icon svg{width:18px;height:18px;display:block;fill:currentColor}
+.social-bind-icon.wechat{color:#21C15F}
+.social-bind-icon.phone{color:#5C6B7C}
+.social-bind-icon.google{color:#4C82F7}
+.social-bind-icon.apple{color:#111827}
+.social-bind-icon.facebook{color:#2F80ED}
+.social-bind-name{font-size:13px;line-height:1;color:#4E5865;font-weight:500}
+.social-bind-status{height:28px;padding:0 10px;border-radius:6px;border:1px solid #E5E9E8;background:#F7F8F9;color:#818A94;font-size:12px;font-weight:600;display:inline-flex;align-items:center}
+.social-bind-status.bound{border-color:#D1EFE4;background:#EFFAF6;color:#0B9D73}
+.social-login-row>button{margin-top:2px}
+.verify-note{padding:12px 14px;border-radius:8px;background:#F7F9F8;color:#6E7680;font-size:12px;line-height:1.6}
+.verify-code-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
+.verify-code-row button{height:40px;padding:0 14px;border-radius:7px;border:1px solid #DDE4E1;background:#fff;color:#0B9D73;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tag-library{display:flex;flex-direction:column;gap:18px}
+.tag-library-selected{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-height:54px;padding:11px 14px;border:1px dashed #DCE6E1;border-radius:9px;background:#FAFCFB}
+.tag-library-selected-label{font-size:12px;color:#8A9199;white-space:nowrap}
+.tag-library-selected-label b{color:#0CC992;font-weight:650}
+.tag-library-selected-list{display:flex;flex-wrap:wrap;gap:8px}
+.tag-library-selected-empty{font-size:12px;color:#A9B0B7}
+.tag-library-tag{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 7px 0 11px;border-radius:999px;border:1px solid #89E2C0;background:#F2FBF7;color:#0CC992;font-size:12px;font-weight:500}
+.tag-library-tag button{width:15px;height:15px;padding:0;border:0;background:transparent;color:#7C9189;font-size:13px;line-height:1;cursor:pointer}
+.tag-library-tag button:hover{color:#0CC992}
+.tag-library-groups{display:flex;flex-direction:column;gap:15px}
+.tag-library-group h4{margin:0 0 9px;font-size:12px;font-weight:600;color:#555B64}
+.tag-library-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tag-library-chip{height:32px;padding:0 13px;border-radius:999px;border:1px solid #E1E6E4;background:#fff;color:#5A626B;font:inherit;font-size:12px;cursor:pointer;transition:border-color .15s ease,background-color .15s ease,color .15s ease}
+.tag-library-chip:hover{border-color:#89E2C0;color:#0CC992;background:#F7FEFB}
+.tag-library-chip.is-selected{border-color:#0CC992;background:#EDFBF6;color:#0B9D73;font-weight:600}
+.tag-library-search{display:flex;align-items:center;gap:9px;height:42px;padding:0 12px;border:1px solid #DDE1E4;border-radius:9px;background:#fff;transition:border-color .15s ease,box-shadow .15s ease}
+.tag-library-search:focus-within{border-color:#0CC992;box-shadow:0 0 0 3px rgba(12,201,146,.08)}
+.tag-library-search-icon{flex:0 0 auto;display:grid;place-items:center}
+.tag-library-search-icon svg{width:16px;height:16px;stroke:#9AA1A9;fill:none;stroke-width:1.8;stroke-linecap:round}
+.tag-library-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:13px;color:#333840}
+.tag-library-search input::placeholder{color:#AEB5BC}
+.tag-library-search input::-webkit-search-cancel-button{display:none}
+.tag-library-search-clear{flex:0 0 auto;width:22px;height:22px;padding:0;border:0;border-radius:50%;background:#F1F3F2;display:grid;place-items:center;cursor:pointer}
+.tag-library-search-clear:hover{background:#E6EAE8}
+.tag-library-search-clear svg{width:12px;height:12px;stroke:#6E757D;fill:none;stroke-width:2;stroke-linecap:round}
+.tag-library-chip-check{margin-right:5px}
+.tag-library-hit{padding:0 1px;border-radius:3px;background:#D9F7EC;color:#0B9D73;font-weight:650}
+.tag-library-empty{margin:0;padding:26px 14px;border:1px dashed #E4EAE7;border-radius:9px;background:#FBFCFC;text-align:center;font-size:12px;color:#9AA1A9}
+.tag-library-search-clear[hidden],.tag-library-chip[hidden],.tag-library-group[hidden],.tag-library-empty[hidden]{display:none}
+@media (max-width: 768px){
+  .tag-library-search{height:44px}
+  .interest-tags-editor{gap:10px}
+  .interest-tag-chip{min-height:38px;padding:0 28px 0 16px;font-size:14px}
+  .interest-tag-chip.add-chip{padding:0 16px}
+  .social-login-row{flex-direction:column;gap:12px}
+  .social-login-copy{min-width:0}
+  .social-bind-list{gap:10px 14px}
+  .social-login-row>button{align-self:flex-start}
+  .verify-code-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body data-page-node-id="wvXC2fJoxjkvKjlFVynvFK">
+<header class="nav" data-page-node-id="NhtWL79FO4LG4N7yu15AvX">
+  <div class="nav-inner" data-page-node-id="mhSXS5mb0ha4GhYTkAs1li">
+    <a class="brand" href="index.html" data-page-node-id="uOHUWho4yhxiG11GZICFIC">
+      <span class="brand-mark" data-page-node-id="6OA1owHu2nRTwSKVvKjd7q"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="TJXHu8Q7OAYgohi5mI1qWW"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="aZqht49iNSu3HtdEVxDok0"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="76fCJ5FY0dsZ0etQdhLJqW"></path></svg></span>
+      <span class="brand-name" data-page-node-id="L9qWCh9Bwqo6tqaB2Kwk4M">Hi<i data-page-node-id="RBctTQZX0g3I7rSD86iiaC">Makers</i></span>
+    </a>
+    <nav class="nav-links" data-page-node-id="z8X0jwrJ1cD6IuZVDOhrqe">
+      <a href="index.html" data-page-node-id="Epqk2A5BvkGK7FiqtSkLVI">首页</a>
+      <a href="shop.html" data-page-node-id="i6MPFxNKo5wYhGoG3yoYHo">商城</a>
+      <a href="ai.html" data-page-node-id="H7susEO6tmPzwdqudNu1LQ">AI 创作</a>
+      <a href="models.html" data-page-node-id="4LscQnkObt4EbzSK8jqTuL">模型库</a>
+      <a href="community.html" data-page-node-id="AwcrH3YRGuZEapEE6Fu8KP">社区</a>
+    </nav>
+    <div class="nav-actions" data-page-node-id="YO9DiBaOcVC0v82jNfAodP">
+      <label class="nav-search" data-page-node-id="jb0suZxMi07HnbhCsPup7r"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="yPpSMB6V00YgEosIPWTF0y"><circle cx="11" cy="11" r="7" data-page-node-id="NxQHKPFDyeUPrcoDwR34pe"></circle><path d="m20 20-3.5-3.5" data-page-node-id="InhT6Sx68Hmv3tWAagqE6p"></path></svg><input type="text" placeholder="搜索机器、模型、灵感…" data-page-node-id="iGwwqwCCahDdVfFNcRqF66"></label>
+
+      <button class="icon-btn" title="购物车" data-page-node-id="S5NQJ5pcBBujsfxSL87Hl3"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="tNoTNHHtIzFVjIFkuY1EHl"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z" data-page-node-id="3uhI3GvVMgcDe8Qt9ECAhA"></path><path d="M9 9V6a3 3 0 0 1 6 0v3" data-page-node-id="K18OsnaxIq5POUarUlqB0R"></path></svg><span class="badge-dot cart-count" data-page-node-id="4f0quarOSbHDDPgJSmDCaq">0</span></button>
+
+      <a href="login.html" class="btn btn-ghost sm hide-sm" data-page-node-id="qkhW43Hj7VnO255CUoSNzH">登录</a>
+      <a href="#" class="btn btn-ink sm hide-sm" data-page-node-id="hUbhsgxl34wSSy6iLcLHQl">注册</a>
+      <button class="icon-btn nav-burger" data-page-node-id="tvyV9JVwjAKOkCmMS2GbPU"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="K4kYBaUZR2URsgoSnfPb2F"><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="1c9RWEqw2jxsP32HmLPTSU"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" data-page-node-id="XloN7B7kRwLdgMGEJRcDFQ">
+  <a href="index.html" data-page-node-id="4DLJ50DGiiBcvHRFlmgwxN">首页</a><a href="shop.html" data-page-node-id="6K61ui4VqBfL0c2ZaMEHRj">商城</a><a href="ai.html" data-page-node-id="uL0RiLqdU6qEEIh16s252F">AI 创作</a><a href="models.html" data-page-node-id="RHhL8C0dwpzezF0d7KEg2y">模型库</a><a href="community.html" data-page-node-id="aLrIoTBbIDwtzj0A8mTZDZ">社区</a>
+  <a href="member.html" data-page-node-id="amsOoN0JlFsogFqVONopm0">个人中心</a>
+</div>
+<div class="mc-root" data-page-node-id="XuJLF18rmyPx9BDVbWu504">
+<main class="shell profile-edit-shell" data-page-node-id="IvDT92sqFSmulg1oOZRkwN">
+<aside class="sidebar" data-page-node-id="VFF8BDHz0TiBES3kmRDtYu">
+<section class="profile-card" data-page-node-id="6PBpjBA6KQHvcA40ESvJYN">
+<div class="profile-avatar-wrap" data-page-node-id="s5O6VXqxH6katIECAvMQuJ">
+<a aria-label="编辑个人资料" class="avatar-link" href="member-profile-edit.html" data-page-node-id="yiWERXadLBLFWPjmA6ErGW"><img alt="创客小宇" class="avatar-lg" src="assets/member/avatar.png" data-page-node-id="awtHLqhNeckItPFN1fs3hs"/></a>
+<a aria-label="编辑个人资料" class="edit-badge" href="member-profile-edit.html" title="编辑个人资料" data-page-node-id="5ERuW6aANnaSimGySKpFcI"><svg viewbox="0 0 24 24" data-page-node-id="cFKTm7fGTKEBeApEME7Z5o"><path d="M12 20h9" data-page-node-id="G2W1VbWTBqLumGcKlOtxRL"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" data-page-node-id="UQjdMUBTGWGGTXVArKtMEF"></path></svg></a>
+</div>
+<a class="user-name" href="member-profile-edit.html" data-page-node-id="TEsGdBXrqvRCuc3TmIGL84">创客小宇 <span class="level" data-page-node-id="ZaLQ1m9lpWTag53saPYFXC">L2</span></a>
+<div class="user-id" data-page-node-id="U9VNE4da6hke5UMxFXTr7E">ID: H9–26242917–0081</div>
+<div class="side-stats" data-page-node-id="pIAIN1omwi8q3hDrpJNd77">
+<a class="side-stat side-stat-link" href="member-points.html" data-page-node-id="Do5MiB0dvOwXXD2RY9nEzC"><strong data-page-node-id="yfh5YLJFctQq9G6Rdt11BE">3,580</strong><span data-page-node-id="rJotFmoUb7FhgAiqBjQJDW">积分</span></a>
+<a class="side-stat side-stat-link" href="member-coupons.html" data-page-node-id="SXBW1U3pCczErO1HjdCyNi"><strong data-page-node-id="buG6PAB76MaaSUJkAIL4gb">5</strong><span data-page-node-id="ctAJTQQG4b9buqt2hfwkiq">优惠券</span></a>
+<a class="side-stat side-stat-link" href="member-devices.html" data-page-node-id="9AG9uywZdetdg6oQRmPSz5"><strong id="side-device-count" data-page-node-id="BFU8c6bLtRZ9eL5lGkGGPg">3</strong><span data-page-node-id="WzwidHuQyUUaBHCvLfBG7M">设备</span></a>
+</div>
+</section>
+<nav class="side-menu" data-page-node-id="4MhIL9Jcmoxx9yNjEUz9Al">
+<a class="side-item" href="member-creation.html" data-page-node-id="pAdMYXMFFlPGGRSjxdTXgo"><svg viewbox="0 0 24 24" data-page-node-id="cmZ0pysMz8Ebz2B8nuOPaY"><path d="M14.7 4.3a3 3 0 0 1 4.2 4.2L9 18.4 4 20l1.6-5 9.1-10.7Z" data-page-node-id="zgkwkFtCHAoAVMD91TtUJ7"></path><path d="m13 6 5 5" data-page-node-id="9HZxj3UjoScMKI6Q4Q4HSF"></path></svg>创作空间</a>
+<a class="side-item" href="member-community.html" data-page-node-id="IEWKdtT6bujo0y8RLkQfaw"><svg viewbox="0 0 24 24" data-page-node-id="vwABzFFrPpzkFHFnMHmRCp"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" data-page-node-id="9PFA5GdFNimtEVLJlJnQDO"></path><circle cx="8.5" cy="7" r="4" data-page-node-id="go45FvNrTpUDCQotPxxy0j"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87" data-page-node-id="n7L6kJ2dlVKQkYz4JwUDJA"></path><path d="M16 3.13a4 4 0 0 1 0 7.75" data-page-node-id="OsKBEtxA5EEc0ltOGHKFdP"></path></svg>社区互动</a>
+<a class="side-item" href="member-orders.html" data-page-node-id="X54yc4qXvBGVbXr7D6GXw5"><svg viewbox="0 0 24 24" data-page-node-id="SkHoSHHKs8GDxvKaK4KoPn"><path d="M6 2v4M18 2v4M4 5h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" data-page-node-id="EIawrlwbiCPMdr8uTq2UoU"></path><path d="M8 11h8M8 15h6" data-page-node-id="1z5aBO2uuxQF40HI7emcjs"></path></svg>我的订单</a>
+</nav>
+</aside>
+<section class="content-panel profile-edit-content-panel" data-page-node-id="HoWQTTGAzW1dbx2PxCzgGh">
+<div class="profile-edit-content settings-page" data-page-node-id="jT2dQPCcAQDTAD4nxQByWw">
+<h1 class="settings-page-title" data-page-node-id="B0qXhcC5dcyzC5kBVgWHbu">设置</h1>
+<nav aria-label="设置分类" class="settings-primary-tabs" data-page-node-id="2AUKbml9fRX2TkRgvpGQ0h"><button class="settings-primary-tab active" data-settings-tab="personal" type="button" data-page-node-id="FWWsNBKKcPsj6Z5xANOdwa">个人资料</button><button class="settings-primary-tab" data-settings-tab="account" type="button" data-page-node-id="Ad09x6oWIF03DAG10jDE5p">账号管理</button></nav><section class="settings-panel settings-primary-panel active" data-settings-panel="personal" data-page-node-id="CpTbFP6KRgEarD6iFjik6Y"><div class="settings-stack" data-page-node-id="OOZBAGI6WOaPBmLs2uss7a">
+<form class="profile-edit-page-form" data-profile-edit-form="" id="profile-settings-form" data-page-node-id="0YTvTdiqjcl7qsreT2BCAc">
+<section class="profile-settings-card profile-avatar-card" data-page-node-id="wCE8z7y3HXoEvIAN3UnEBY">
+<div class="profile-settings-heading compact-heading" data-page-node-id="FHyxcT61jbMTOt6Qvsm1oH">
+<h2 data-page-node-id="lX3eyIfskJlPyRExw5qgJ7">主页信息</h2>
+</div>
+<div class="profile-avatar-edit-row" data-page-node-id="waBkhDHR6KTPEYvMGsszAM">
+<img alt="当前头像" class="profile-edit-avatar-preview" data-profile-edit-avatar="" src="assets/member/avatar.png" data-page-node-id="vKCeZQu6dFPcTKmXw32lMA"/>
+<div class="profile-avatar-edit-actions" data-page-node-id="OX5s2O8eWl50MEpAA1nPu0">
+<button class="profile-avatar-change" data-profile-edit-avatar-button="" type="button" data-page-node-id="kLD89v49CcCP6ijDRFd3Bh">更换头像</button>
+<span data-page-node-id="0O1Hm6BvyCiFD3Vabxc9LM">支持 JPG、PNG，文件不超过 4MB</span>
+<input accept="image/*" class="profile-avatar-input" data-profile-edit-avatar-input="" type="file" data-page-node-id="H7sUMYSVUH7CWal0opVfAU"/>
+</div>
+</div>
+<div class="profile-fields-grid profile-fields-under-avatar" data-page-node-id="LM9Joft4yz6Qh0YgCYGVVU">
+<label class="profile-field" data-page-node-id="ebyaK3iqX2lmRXZ44ATl10">
+<span data-page-node-id="RFw8DPEgJGRQtzSVR88y57">昵称</span>
+<input data-profile-edit-name="" maxlength="16" placeholder="请输入昵称" type="text" data-page-node-id="4yxAA810J9eXGAAPawyO8E"/>
+<small data-page-node-id="d3kDeIrCTkJA3FS7r00GtQ">最多 16 个字符</small>
+</label>
+<label class="profile-field profile-field-readonly" data-page-node-id="mc4lBIRADinsp34B2HCYZQ">
+<span data-page-node-id="g43DwoFOpuZfLxPtqcLoGO">用户 ID</span>
+<input readonly="" type="text" value="H9–26242917–0081" data-page-node-id="uag20R97V5ZmFxUIeRprOl"/>
+<small data-page-node-id="AysfLN8HyBtVEzth4gkFka">用户 ID 暂不支持修改</small>
+</label>
+<label class="profile-field" data-page-node-id="qBJTbJL3MBOzdA1cpi9FpT">
+<span data-page-node-id="Y5ErFl4S2pl8KEJOGJ4kRn">生日</span>
+<input data-profile-edit-birthday="" type="date" data-page-node-id="UuF91QDH9DuXGsE3bS4wB1"/>
+<small data-page-node-id="HGqTuWKstrl0ra7Uki1K0t">用于完善个人资料，不会公开展示</small>
+</label>
+<label class="profile-field" data-page-node-id="ADB1J4V4zS5LZOUjS4sffd">
+<span data-page-node-id="qmEVH9rLvVNZhe6Rd96vC0">性别</span>
+<select data-profile-edit-gender="" data-page-node-id="7nFeYgof6KNUylKzY8t6WF">
+<option value="" data-page-node-id="vV8567w6eBku4qFIMu9Clx">请选择</option>
+<option value="female" data-page-node-id="rp5TOBBM9eyOttYvHu7tyv">女</option>
+<option value="male" data-page-node-id="skAp1RmdJjFMJduqE5NgP3">男</option>
+<option value="other" data-page-node-id="brYDfjgoJd9tPQWtCOJTGC">其他</option>
+<option value="private" data-page-node-id="Alb2B9c6d4fc2INA0QpJ8B">不愿透露</option>
+</select>
+<small data-page-node-id="TQEgBUgYEPWxqwI0cPEqVI">可随时修改</small>
+</label>
+<label class="profile-field profile-field-full profile-interest-field" data-page-node-id="uiKsv147uHmjKBB1Fn41a7">
+<span data-page-node-id="wn3G2M1wtTDLnHC1mYihh3">兴趣标签</span>
+<div class="interest-tags-editor" aria-label="兴趣标签" data-interest-tags data-page-node-id="XyhimTCLodJxJMLEdOWm4D">
+<button class="interest-tag-chip add-chip" type="button" data-interest-add data-page-node-id="RtVE1Dx57l8aGcPiN4saoD">+ 添加</button>
+</div>
+<small data-page-node-id="iUEnLAH3CFYsRBOGT2MRle">展示你的创作兴趣，可新增或删除</small>
+</label>
+<label class="profile-field profile-field-full" data-page-node-id="A9ebkm8sUMNts3LbuFHhNV">
+<span data-page-node-id="LEXtlfViuiNOYBHlNBYWsj">个人简介</span>
+<textarea data-profile-edit-bio="" maxlength="60" placeholder="介绍一下你自己"></textarea>
+<small data-page-node-id="5ojVVHqhO41Gt3KIzQCnT4">最多 60 个字符</small>
+</label>
+</div>
+<div class="profile-edit-actions settings-personal-actions profile-info-actions" data-page-node-id="ei0iCiJyCVYLvCI3hOCge4">
+<button class="profile-cancel-btn" data-profile-reset type="button" data-page-node-id="7yhQWJwpVRJyZey4KkWsTi">取消</button>
+<button class="profile-save-btn" type="submit" data-page-node-id="7lpaPTgxySXpRZLPAWjm6D">保存</button>
+</div>
+</section>
+</form>
+
+<section class="profile-settings-card address-book-card" data-page-node-id="w4FFz61hbH6fUIz2QpEJ7r">
+<div class="profile-settings-heading compact-heading settings-heading-row" data-page-node-id="o8Yo6cKbEX84Ex0kF9jF0K">
+<div data-page-node-id="oJqkxGczQvRHCnFzJyG8aD"><h2 data-page-node-id="rBGp3iD1nkPoLDjKPBEEIP">我的地址</h2></div>
+<button class="settings-secondary-btn" data-add-address="" type="button" data-page-node-id="raYiObG9Jaaq5T8ZgKOksh">+ 新增地址</button>
+</div>
+<div class="address-book-toolbar" data-page-node-id="UhmnwY5MmN5G4O7i6lWerE">
+<div class="address-tabs" role="tablist" aria-label="地址类型" data-page-node-id="Cr2F4dT7Tl1vDHeTxyMmz2">
+<button class="address-tab active" data-address-tab="shipping" type="button" data-page-node-id="LY4mwmBwWnL5GIdwHuo4rE">收货地址 <span data-address-count="shipping" data-page-node-id="fhdoiRXVx4YaVNyzuMph8O">0</span></button>
+<button class="address-tab" data-address-tab="billing" type="button" data-page-node-id="BiJnRjk5YIPMpa8u5U3Ie5">账单地址 <span data-address-count="billing" data-page-node-id="8M5rQ0ZLhQEaDG031yuMkv">0</span></button>
+</div>
+<span class="address-book-hint" data-page-node-id="IHbIjgcUktVrzBHByO8fpH">可保存多个地址，并分别设置默认地址</span>
+</div>
+<div class="address-list" data-address-list data-page-node-id="9b85leAfiQ1QRDnqNjLkoS"></div>
+<div class="address-empty" data-address-empty hidden data-page-node-id="A0IIslIP64BL6CiP8ZpYCE">
+<strong data-page-node-id="HP60Wa8CJBbxDQH5psQPFu">还没有保存地址</strong>
+<span data-page-node-id="0eOTUwvlYGRI02pLGzGDx6">新增后可在下单或开票时快速选择</span>
+</div>
+</section>
+</div></section><section class="settings-panel settings-primary-panel" data-settings-panel="account" hidden="" data-page-node-id="pIXNB5QL1XPsfMo58VGAMo"><div class="settings-stack" data-page-node-id="IuzTjENEmCz3w8TxVQhxZC">
+<section class="profile-settings-card" data-page-node-id="kubPLFBZW6eOvQAlB1fddD">
+<div class="profile-settings-heading compact-heading" data-page-node-id="EXKTckoCoqDTVyy6beal7y"><h2 data-page-node-id="voyNucrEbTZ3PNdMBvAQmD">账号与安全</h2></div>
+<div class="settings-list" data-page-node-id="SXjYvSe7nGwJvU6Zhv9gIO">
+<div class="settings-row" data-page-node-id="0YBeQJufddPwrjWlDdlmQX">
+<div data-page-node-id="Cln4OcPjOdE7BAwaMCuh7v"><strong data-page-node-id="iEXHDTVV8hjXC08jpDjNke">绑定邮箱</strong><span data-account-email="" data-page-node-id="VxGo8HewfSpTp7Cy7TnbCU">maker@himakers.com</span></div>
+<button data-change-email="" type="button" data-page-node-id="rv3Lfy8DveWaUApExg6tON">修改邮箱</button>
+</div>
+<div class="settings-row" data-page-node-id="cA3Org3PTJ0JphQeZJZDvw">
+<div data-page-node-id="mdTkZPCMHaDEhOfqDmFIi3"><strong data-page-node-id="DgIC7CEzlWgUNgKdIdt6wY">绑定手机号</strong><span data-account-phone="" data-page-node-id="ShhnRc3hSTnWzzRVNU4Sh8">+86 138****6218</span></div>
+<button data-change-phone="" type="button" data-page-node-id="Wh1k4brgBR0V9MTwLcXFGv">修改手机号</button>
+</div>
+<div class="settings-row" data-page-node-id="C3U09XGXiTGb21pCe8FvMy">
+<div data-page-node-id="Q2EC4lE2vpbyoY72jQxRss"><strong data-page-node-id="d1gfZbF9x8zHmq3nRVmDQo">登录密码</strong><span data-page-node-id="VzZeDdYJvBvnwXm4aOmWYR">建议定期更新密码，保护账号安全</span></div>
+<button data-change-password="" type="button" data-page-node-id="6iWwBkBJNgPxBELvhAuLCJ">修改密码</button>
+</div>
+<div class="settings-row social-login-row" data-page-node-id="vUoPRZyeD7Xwe1lszHfKX0">
+  <div class="social-login-copy" data-page-node-id="HHuTHjdWJZUa9PPzOhBSSs">
+    <strong data-page-node-id="WAfv2HTSKvycRZi1otPPOR">登录方式管理</strong>
+    <span data-page-node-id="0GEmccduWJ390OXzqs8YsS">管理已绑定的第三方登录方式</span>
+  </div>
+  <div class="social-login-main" data-page-node-id="QWMo1AaBZ7AuTmDyghKitu">
+    <div class="social-bind-list" data-page-node-id="Ydi3ctmX14nfJJClDXAKtb">
+      <div class="social-bind-item" data-page-node-id="RBQcKGsXyWzHcG4ioBliXl"><span class="social-bind-icon wechat" aria-hidden="true" data-page-node-id="Iy5h4EjiyWILX5COzcSLvS"><svg viewBox="0 0 24 24" data-page-node-id="fKsSpXSoE67i0ZECqGDKtp"><path d="M9.5 4C5.36 4 2 6.69 2 10c0 1.9 1.1 3.59 2.82 4.69L4 18l3.12-1.56c.77.15 1.56.23 2.38.23 4.14 0 7.5-2.69 7.5-6S13.64 4 9.5 4Zm-2.6 5.15a.95.95 0 1 1 0 1.9.95.95 0 0 1 0-1.9Zm5.2 0a.95.95 0 1 1 0 1.9.95.95 0 0 1 0-1.9Z" data-page-node-id="qvU2FRmHQiZ2xu7jjpPmJ5"></path><path d="M16.5 8.5c-2.85 0-5.16 1.84-5.16 4.1 0 2.27 2.31 4.1 5.16 4.1.55 0 1.08-.07 1.58-.2L21 18l-.58-2.02c1-.73 1.58-1.74 1.58-2.88 0-2.27-2.31-4.1-5.16-4.1Zm-1.8 3.1a.72.72 0 1 1 0 1.44.72.72 0 0 1 0-1.44Zm3.6 0a.72.72 0 1 1 0 1.44.72.72 0 0 1 0-1.44Z" data-page-node-id="GFzUDDIUpJHNXc8gM3IOKH"></path></svg></span><span class="social-bind-name" data-page-node-id="JLBm256hxDiia51eUgmhxg">微信</span><span class="social-bind-status bound" data-page-node-id="ExuGwkTLog52qHDya9AT0i">已绑定</span></div>
+      <div class="social-bind-item" data-page-node-id="25bvp3KCLBPYQF3IKxpSjv"><span class="social-bind-icon phone" aria-hidden="true" data-page-node-id="qwZN2JGohKjTAl92rsUJ9b"><svg viewBox="0 0 24 24" data-page-node-id="XxgL8hIZHRY587LacPUrsL"><path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm4 17.25a1.25 1.25 0 1 0 0 .01V19.25Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="oGRFnclF7Y87z29owSLk2R"></path><path d="M10 5.5h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" data-page-node-id="Bu6WeAdKm1S9ta88j9L0Z7"></path></svg></span><span class="social-bind-name" data-page-node-id="ijXmFUdeIklbf1qxGPQ37v">手机</span><span class="social-bind-status bound" data-page-node-id="KOjrCbL7N5k6npyu70Ssck">已绑定</span></div>
+      <div class="social-bind-item" data-page-node-id="ILtg4Hsrhh5UeopzUTEFTb"><span class="social-bind-icon google" aria-hidden="true" data-page-node-id="sGmNzn9OHv73iW46sWHU5s"><svg viewBox="0 0 24 24" data-page-node-id="eIcBdmus5zxFuBn2h5gaRg"><path d="M21.6 12.23c0-.68-.06-1.33-.17-1.95H12v3.69h5.39a4.61 4.61 0 0 1-2 3.03v2.52h3.23c1.89-1.74 2.98-4.31 2.98-7.29Z" data-page-node-id="oFkIQRcKxhDDRxOKBg8zl5"></path><path d="M12 22c2.7 0 4.96-.9 6.61-2.43l-3.23-2.52c-.9.61-2.05.97-3.38.97-2.6 0-4.8-1.76-5.59-4.12H3.07v2.59A9.99 9.99 0 0 0 12 22Z" data-page-node-id="ELOByWCqdTTvsm2ZyRgJ0i"></path><path d="M6.41 13.9A5.98 5.98 0 0 1 6.1 12c0-.66.11-1.3.31-1.9V7.51H3.07A10 10 0 0 0 2 12c0 1.62.39 3.15 1.07 4.49l3.34-2.59Z" data-page-node-id="Fq7ELnqRMLkpW3COGhp07R"></path><path d="M12 5.98c1.47 0 2.79.51 3.82 1.51l2.86-2.86C16.95 3 14.7 2 12 2A9.99 9.99 0 0 0 3.07 7.51L6.4 10.1c.8-2.36 3-4.12 5.6-4.12Z" data-page-node-id="pDShT8S9CoPqnNbYA8OdNe"></path></svg></span><span class="social-bind-name" data-page-node-id="WA2r2CpTY0ND96RZYClbcW">Google</span><span class="social-bind-status" data-page-node-id="oJGriBHV5NNBDBD09V2L8d">未绑定</span></div>
+      <div class="social-bind-item" data-page-node-id="OgS4D4rE11kvZrDUbgnmX8"><span class="social-bind-icon apple" aria-hidden="true" data-page-node-id="dFMdTtVBFkSUpPE5QZvoGS"><svg viewBox="0 0 24 24" data-page-node-id="Xav464FPYIlvkcKbREvD7v"><path d="M16.7 12.66c.02 2.42 2.12 3.23 2.14 3.24-.02.06-.33 1.13-1.08 2.24-.65.95-1.33 1.9-2.4 1.92-1.05.02-1.39-.62-2.6-.62-1.21 0-1.6.6-2.58.64-1.03.04-1.81-1.03-2.47-1.98-1.34-1.93-2.36-5.45-.99-7.82.68-1.18 1.9-1.93 3.22-1.95 1.01-.02 1.96.68 2.58.68.62 0 1.79-.84 3.02-.71.51.02 1.95.21 2.87 1.55-.07.05-1.71 1-1.73 2.81ZM14.83 4.66c.55-.67.92-1.6.82-2.53-.79.03-1.74.52-2.31 1.19-.51.6-.95 1.54-.83 2.45.88.07 1.77-.45 2.32-1.11Z" data-page-node-id="ARYFSjFDJ3q8WSqxbV1qnK"></path></svg></span><span class="social-bind-name" data-page-node-id="jQOwevThrCL1b5nCKwmEzB">Apple</span><span class="social-bind-status" data-page-node-id="7aHcsmliVNYc24ZtG5Hhtx">未绑定</span></div>
+      <div class="social-bind-item" data-page-node-id="pQ6ds02ik7qQCNtX2ci4l8"><span class="social-bind-icon facebook" aria-hidden="true" data-page-node-id="INZzsCyWTqg2RMFNv6aW8r"><svg viewBox="0 0 24 24" data-page-node-id="mX1TSEK8zvfyYETLwdNbIF"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.02 10.13 11.93v-8.43H7.08v-3.5h3.05V9.41c0-3.03 1.79-4.7 4.54-4.7 1.32 0 2.7.24 2.7.24v2.98h-1.52c-1.5 0-1.97.94-1.97 1.9v2.28h3.35l-.54 3.5h-2.81V24C19.61 23.09 24 18.1 24 12.07Z" data-page-node-id="AqhhbYXMzPfc23hOyPT52X"></path></svg></span><span class="social-bind-name" data-page-node-id="bHEUnV0Dzj7l6PHDklSaaY">Facebook</span><span class="social-bind-status" data-page-node-id="9gQ8B4ww03G8kO3Hos61bJ">未绑定</span></div>
+    </div>
+  </div>
+  <button data-manage-social="" type="button" data-page-node-id="k2iPFCmd2tZlwbq0CW9mWN">管理</button>
+</div>
+<div class="settings-row danger-row" data-page-node-id="g4rTJ7eQEFb83IPxyB8JaD">
+<div data-page-node-id="fYpDsCFmHXXBnkeXHFgmgt"><strong data-page-node-id="2gQkzMysUMTiKtybv3aywq">注销账号</strong><span data-page-node-id="Aqy0CLEpAYPum5lG5TcWkX">注销后账号、作品与相关数据将无法恢复</span></div>
+<button data-delete-account="" type="button" data-page-node-id="vyTrEv8cSKs5xevYRO7pLz">注销账号</button>
+</div>
+</div>
+</section>
+
+<section class="profile-settings-card" data-page-node-id="57GuV2uSEXoVjDV6wtpCE3">
+<div class="profile-settings-heading compact-heading" data-page-node-id="9YDuPpdMwoLBxew6JJXiHn"><h2 data-page-node-id="OPr8XUuy7PYaZKgDC25LWp">偏好设置</h2></div>
+<div class="settings-list" data-page-node-id="GFP5Ndx9pktEq1vcz4Ndcr">
+<label class="settings-row settings-row-toggle" data-page-node-id="JZtVfaEwLOyW4GP0AHeNSa">
+<div data-page-node-id="wUCTUWBjTl9kVAXQymR8Lv"><strong data-page-node-id="rcgZganN3ShctfNjeIVAB1">社区互动提醒</strong><span data-page-node-id="pqhL4GPAWKhBzA2mY6xY9l">收到点赞、收藏和评论时提醒我</span></div>
+<input checked="" class="toggle-input" data-pref="community" type="checkbox" data-page-node-id="yEMwlYpOpwBnBzF11OGawJ"/>
+<span aria-hidden="true" class="toggle-ui" data-page-node-id="9yOlTeuxCoa7HKnb6mmAjC"></span>
+</label>
+<label class="settings-row settings-row-toggle" data-page-node-id="gfC5QTog2J1D4D2BCsMHd6">
+<div data-page-node-id="5OevpNsJq17g64DWpo0k3x"><strong data-page-node-id="Ys6DQheBDaIGGd1UDoAH5B">订单状态提醒</strong><span data-page-node-id="tBM8d3EVAR4lyt7Ng669h1">订单状态发生变化时提醒我</span></div>
+<input checked="" class="toggle-input" data-pref="orders" type="checkbox" data-page-node-id="bpSZDndnd2af0pwuyeLKw8"/>
+<span aria-hidden="true" class="toggle-ui" data-page-node-id="pBXaMdHLqrWhbSkvccpapL"></span>
+</label>
+<label class="settings-row settings-row-toggle" data-page-node-id="VWaljzaEhgu0z4PIdhGnfm">
+<div data-page-node-id="rAYeHlhQZIi4bxhnphGQFC"><strong data-page-node-id="sG2DRvgNdtE34Ls02lJdAd">个性化推荐</strong><span data-page-node-id="c5xfQpOkg20kLeI7OcYS4w">根据浏览与创作偏好优化内容推荐</span></div>
+<input class="toggle-input" data-pref="recommend" type="checkbox" data-page-node-id="wB1CDqyHjNZr9oVb9cys33"/>
+<span aria-hidden="true" class="toggle-ui" data-page-node-id="gpHWZtfX2t9n2VO9Qd0spn"></span>
+</label>
+<div class="settings-row" data-page-node-id="kceIH6CdQPrJL1DOea9Vzt">
+<div data-page-node-id="9lfoRsGHUQpiflR8upTUGA"><strong data-page-node-id="rFBPF0dNKd9XCfsytSuekX">界面语言</strong><span data-language-current data-page-node-id="OxtRpax1u17U2tNYa7MrUG">当前：简体中文</span></div>
+<button data-language="" type="button" data-page-node-id="6FvR0myKcfxkvCiV6W9eFV">更改</button>
+</div>
+</div>
+</section>
+
+<section class="profile-settings-card" data-page-node-id="h8KCCaVerxYZssEEE4OuPL">
+<div class="profile-settings-heading compact-heading" data-page-node-id="FD0QwHz83ThCuExwjSl86K"><h2 data-page-node-id="bMSs0LqRo1cUwK7uK0m0KK">关于</h2></div>
+<div class="settings-list" data-page-node-id="nrYNWMTTyg74F9l2xUWwvH">
+<div class="settings-row" data-page-node-id="R7kaWTl3l8lspT4sJRgsVS"><div data-page-node-id="6Pk6FpFeEymtWHJ7BbepmO"><strong data-page-node-id="sGci9dxAeyu3G8fDPPf0KB">HiMakers</strong><span data-page-node-id="obLfso1XktPNM4bXLzU9TQ">个人中心原型 · Version 1.0</span></div></div>
+<div class="settings-row" data-page-node-id="OLx4BPd7bK9w3BjQ7tM7UF"><div data-page-node-id="PvSILTcayZEudMjuUeOQgO"><strong data-page-node-id="7QbfuVEPCjT74pxfgFVVED">用户协议</strong><span data-page-node-id="iiAsEfL7eAqxxrflTD1eLU">查看 HiMakers 用户服务协议</span></div><button data-about-link="用户协议" type="button" data-page-node-id="dS8SAJSCBTVP2ePzkQc5a3">查看</button></div>
+<div class="settings-row" data-page-node-id="PuvmqESn9w1UgQSsAtHGD8"><div data-page-node-id="mHcxM8U2qwjLGUVY8xbouM"><strong data-page-node-id="rEu8Fw6nGgWAEq2xu62Vt5">隐私政策</strong><span data-page-node-id="2EplAqktbkkvJOFQEaMV9T">了解个人信息与隐私保护规则</span></div><button data-about-link="隐私政策" type="button" data-page-node-id="NuPEZ7w7wWeirlvRkQTfry">查看</button></div>
+<div class="settings-row" data-page-node-id="iIgFh5HCXDCVvbRLiFvND5"><div data-page-node-id="AG7xNJecImGwsNzfW7TM9W"><strong data-page-node-id="4su22oMWTmjkweeWHkxzdh">帮助与反馈</strong><span data-page-node-id="NqGRrdul3tYCs8oQz8UCFc">提交问题或使用建议</span></div><button data-feedback-open type="button" data-page-node-id="u3E7QI2ZNXCBqQSm1RXkV4">反馈</button></div>
+</div>
+</section>
+</div></section>
+</div>
+</section>
+</main>
+</div>
+<footer class="footer" data-page-node-id="x4cBq3Bvq8urIioj0u2wz0">
+  <div class="footer-inner" data-page-node-id="BiF7vwoG4JZpqcOQhvz5pI">
+    <div class="footer-top" data-page-node-id="qHcIxwv1bH94OrzyCWRPmn">
+      <div class="footer-brand" data-page-node-id="Fhz6Oy4jT9xMv7jx00XZ0A">
+        <a class="brand" href="index.html" data-page-node-id="gcf4MP0wGL9B0RPGxfGjx9">
+          <span class="brand-mark" data-page-node-id="WVDTYaHn9KiceIykX9huUi"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="rTAiz5WPYafeYz4ODYCEbS"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="aFUVocPOnv4uGsLV2HfarN"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="P5xGo1PzPdp6Z8Hh6ZeJKG"></path></svg></span>
+          <span class="brand-name" data-page-node-id="lTS2mrGfJlCr1kNoOUNSlU">Hi<i data-page-node-id="BmQnMHkFpxVaujsyhzJeCJ">Makers</i></span>
+        </a>
+        <p class="footer-slogan" data-page-node-id="yu4mn9BLDUye6AFAC3ilYY">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+        <div class="footer-social" data-page-node-id="qEBwrQHNsDBXpOxZdz3FKr">
+          <a href="#" aria-label="YouTube" data-page-node-id="Zc8Re2AFJDcbw0HuOTNtNP"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" data-page-node-id="Ci8dVPWHvp50iYqpB6JeEs"><rect x="2.5" y="6" width="19" height="12" rx="3.5" data-page-node-id="lHEtDjkPdRkehYiU3GJKFm"></rect><path d="m10.5 9.5 4.5 2.5-4.5 2.5v-5Z" data-page-node-id="BByfmvaXqD2KJRT3ms3ArX"></path></svg></a>
+          <a href="#" aria-label="Instagram" data-page-node-id="Ep4F9lez3gH21yNYa9BbGv"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" data-page-node-id="xoHbwvtnAPUP1Ha89BHs8v"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" data-page-node-id="UWfwIKKfI9lu5LE63ozECr"></rect><circle cx="12" cy="12" r="4" data-page-node-id="FsHI04bE0aTbc5AYWRT0wS"></circle><circle cx="17.2" cy="6.8" r=".6" fill="currentColor" data-page-node-id="2C1Eu7I5qmDJzROw4szIQO"></circle></svg></a>
+          <a href="#" aria-label="X" data-page-node-id="Vt9sciwGjWRDMGGUa59LmK"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="hiOfdjuR9GHzbaEKF7PhZl"><path d="M4 4l16 16M20 4 4 20" data-page-node-id="ieECi4rqwqwRWB1P0oDGUl"></path></svg></a>
+        </div>
+      </div>
+      <div class="footer-col" data-page-node-id="f1FwiLlxMMcHih7hDxCrqr"><h4 data-page-node-id="O7UgMBDA5lGhjl7nmbcbl2">产品</h4><a href="shop.html" data-page-node-id="iFXxTHpowQ2RzJ9bCSHkB2">激光雕刻机</a><a href="shop.html" data-page-node-id="NtswT1pgnlsfwRJgTZfPNN">3D 打印机</a><a href="shop.html" data-page-node-id="iWeY0j8CTGgt5I4WIs3mrB">CNC 雕刻机</a><a href="shop.html" data-page-node-id="R96yQ0HcqgE117THlOlFf5">配件与耗材</a></div>
+      <div class="footer-col" data-page-node-id="z0Ha3WAi3HfHtmDGwDwmBt"><h4 data-page-node-id="SARiS80X6gb0cVFhiHV1F3">创作</h4><a href="ai.html" data-page-node-id="ADBeVU8fYMYGwAVldcJR8W">AI 创作</a><a href="models.html" data-page-node-id="WX6El1Y14k8jEJZCT8pCIC">模型库</a><a href="ai.html" data-page-node-id="u0BvaiG2pvD0NH0djl5GsT">设计工具</a></div>
+      <div class="footer-col" data-page-node-id="u3K2rW9udttwEG8YoWDb2m"><h4 data-page-node-id="rSVOShiXAVG80nhl4S0tDg">账户</h4><a href="member.html" data-page-node-id="NolZPUiYwhPfW1M2nuooB7">个人中心</a><a href="member-orders.html" data-page-node-id="vBCOHglGUvvHDcqjAUC1L1">我的订单</a><a href="member-points.html" data-page-node-id="rWJ64ebfx8NHvqqvQ9zF8L">积分</a><a href="member-coupons.html" data-page-node-id="YfoTnmbBkXzEnR2qWNiH2M">优惠券</a></div>
+      <div class="footer-col" data-page-node-id="fGfObIjH9G5FdAx53DvLaj"><h4 data-page-node-id="d2946Zrzb4KQs6rWWy16lB">支持</h4><a href="#" data-page-node-id="w8cnHx7GNMPPATn69BBFzP">帮助中心</a><a href="#" data-page-node-id="ds8ycUAUvgZoubIepoiymi">固件下载</a><a href="#" data-page-node-id="0CNBUmhPbUNOc3wjrSwjdo">保修政策</a><a href="#" data-page-node-id="R0L61ejg72HmHJu48mPpBH">联系我们</a></div>
+    </div>
+    <div class="footer-bottom" data-page-node-id="h1GVORP7SdEqY1viuYzJ9g">
+      <span data-page-node-id="HJivFIMOUg3JBOWvhoyZab">© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links" data-page-node-id="A3UewGcjPb24BvGacwKA0D"><a href="#" data-page-node-id="QkPJA5YfTPAJVsnidwr2Ox">隐私政策</a><a href="#" data-page-node-id="wG4FI4LwSP3Ma2UFRPlWpn">服务条款</a><a href="#" data-page-node-id="yTA3nAj8Db1UhbZSX2A3Bl">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/member-app.js"></script>
+</body>
+</html>
