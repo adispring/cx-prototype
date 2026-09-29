@@ -174,7 +174,8 @@
     statusMeta: statusMeta,
     newId: newId,
     now: now,
-    /* 从购物车下单 */
+    /* 从购物车/立即购买下单：订单先落库为「待付款」（pay 记「待选择」），
+       支付方式到 payment.html（收银台）再选，选完用 update() 写回 pay + status */
     place: function (opts) {
       var items = (opts.items || []).map(function (it) {
         return { name: it.name, spec: it.spec, price: it.price, qty: it.qty, img: it.img };
@@ -183,10 +184,11 @@
         id: newId(),
         createdAt: now(),
         status: opts.status || "pending",
-        pay: opts.pay || "信用卡 / 借记卡",
+        pay: opts.pay || "待选择",
         ship: opts.ship || 0,
         discount: opts.discount || 0,
         addr: opts.addr,
+        bill: opts.bill || null,
         items: items,
         express: null
       };

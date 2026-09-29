@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全部产品 · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+/* ================= 产品分类页（商城「查看更多」落点） ================= */
+.p-hero { padding: 44px 0 0; }
+.p-crumbs { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--faint); }
+.p-crumbs a:hover { color: var(--ink); }
+.p-crumbs .sep { color: var(--line-2); }
+/* 页面无可见标题（正文顶部只有面包屑）：收在 1px + clip 的 h1，只为屏幕阅读器 / 页面地标存在。
+   ⚠️ 别换成 `display:none` / `visibility:hidden`：那样会把地标一起抹掉。 */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; white-space: nowrap; border: 0;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+}
+.p-main { padding: 26px 0 96px; }
+
+/* ---- 筛选区（**竖排** + **无边框**：靠底下一条灰线区隔筛选与产品区；吸顶于 nav 68px 之下） ----
+   竖排 = .p-bar 走 column，三个块（品类 / 价格 / 计数+排序）自上而下堆叠；
+   组内 chip 仍是横排（chip 再竖排会变成 9 行，太长）。
+   标签当「列头」用固定 flex-basis，三行的 chips 左边自然对齐成一列。
+   ⚠️ 左右 padding 必须是 0：没有面板了，标签/清空要跟产品网格的左右边缘对齐。
+   ⚠️ background 必须是不透明白：吸顶后要让滚过它下面的卡片「消失」，半透明没 blur 会透出内容。
+   ⚠️ 只有 border-bottom、没有 border 时不需要「留 1px 占位」——盒高变化只影响吸顶后下沿，
+      不影响任何水平对齐（对照 checkout 的卡片边框坑，那里是去掉就整块消失）。 */
+.p-bar {
+  position: sticky; top: 68px; z-index: 40;
+  display: flex; flex-direction: column; align-items: stretch; gap: 11px;
+  padding: 17px 0 15px; margin-bottom: 26px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.p-group { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.p-group > .p-h { flex: 0 0 46px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; color: var(--faint); }
+.p-bar .chip { height: 32px; padding: 0 14px; font-size: 13.5px; }
+.p-bar .chip.active { background: var(--green-bg); border-color: var(--green); color: var(--green-t); font-weight: 600; }
+.p-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+/* 第三行：计数靠左，排序 + 清空靠右（同一行、两端对齐） */
+.p-count { margin-right: auto; font-size: 13.5px; color: var(--muted); white-space: nowrap; }
+.p-count b { color: var(--ink); }
+.p-sort { display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; color: var(--muted); }
+.p-sort select {
+  height: 32px; padding: 0 30px 0 13px; border: 1.5px solid var(--line-2); border-radius: 999px;
+  background-color: #fff; font: inherit; font-size: 13.5px; color: var(--ink); cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23808C86' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center;
+}
+.p-sort select:focus { outline: none; border-color: var(--green); }
+.p-reset {
+  border: none; background: none; padding: 0; font: inherit; font-size: 13.5px; color: var(--muted);
+  cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+.p-reset:hover { color: var(--green-t); }
+
+/* ---- 商品网格 ---- */
+[hidden] { display: none !important; }
+.p-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+/* 卡片 = 一个 <a>：图、标题、价格整块可点，卡里没有第二个链接/按钮。
+   因为是 <a>，必须显式继承字色、去掉下划线，否则全站链接色会漏进来。 */
+.p-card {
+  display: flex; flex-direction: column; background: #fff;
+  border: 1px solid var(--line); border-radius: 15px; overflow: hidden;
+  color: inherit; text-decoration: none; cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.p-card:hover { border-color: var(--green); box-shadow: 0 26px 52px -36px rgba(16,22,19,.42); transform: translateY(-3px); }
+.p-card:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+/* 图框固定 4:3，**统一 `cover`**：素材都是为这个比例做过的成品 ——
+   整机 `assets/img/devices/card-*.png` 本身 4:3（零裁零留白）；
+   耗材 `assets/img/shop/card-*.png` 是 16:10（两侧各裁 8.3%，竖向零裁切）。
+   所以卡里既没有灰色底、也没有留白，也看不到 AI 水印。
+   ⚠️ 不要再写 `contain`：那会把留白露出来（正是用户要去掉的「灰色底」）。
+   ⚠️ `min-height: 0` 必须留着：img 是 .p-card（flex column）的子项，自动最小高度会取
+   缩放后的原始高度，方图就会把 4:3 图框顶成正方形。 */
+.p-media { display: block; background: #fff; }
+.p-media img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; min-height: 0; }
+.p-body { display: flex; flex-direction: column; gap: 7px; padding: 15px 17px 17px; flex: 1; min-width: 0; }
+.p-kind { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; color: var(--faint); }
+.p-name { font-size: 16.5px; font-weight: 700; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.p-note { font-size: 12.8px; color: var(--muted); line-height: 1.6; overflow-wrap: anywhere; }
+.p-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.p-tags span { font-size: 10.5px; color: var(--green-t); background: var(--green-bg); padding: 2px 8px; border-radius: 999px; }
+.p-foot { margin-top: auto; padding-top: 11px; }
+.p-foot .price { font-size: 17.5px; white-space: nowrap; }
+
+/* ---- 空状态 ---- */
+.p-empty { display: none; padding: 76px 0 84px; text-align: center; }
+.p-empty.show { display: block; }
+.p-empty p { color: var(--muted); margin-bottom: 16px; }
+
+@media (max-width: 1180px) { .p-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 880px) {
+  .p-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+}
+@media (max-width: 640px) {
+  .p-hero { padding-top: 30px; }
+  .p-main { padding-bottom: 64px; }
+  .p-grid { gap: 12px; }
+  .p-bar { gap: 9px; padding: 13px 0 12px; }
+  .p-bar .chip { height: 30px; padding: 0 12px; font-size: 12.5px; }
+  /* 窄屏列头独占一行：390 宽下 46px 的标签会把 chips 挤到只剩 250px，比独占一行更乱 */
+  .p-group > .p-h { flex-basis: 100%; margin: 0 0 -2px; }
+  .p-body { padding: 12px 13px 14px; gap: 6px; }
+  .p-name { font-size: 14.5px; }
+  .p-note { font-size: 12px; }
+  .p-tags span { font-size: 10px; padding: 2px 7px; }
+  .p-empty { padding: 56px 0 64px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================= 导航 ================= -->
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <div class="nav-item">
+        <a href="shop.html" class="active">商城</a>
+        <div class="nav-menu" aria-label="商城分类">
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…">
+      </label>
+      
+      <div class="notif-wrap"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0"></path></svg><span class="badge-dot notif-count show">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知"><div class="np-head"><h4>通知中心<span class="np-count" id="notifUnreadCount">3 条未读</span></h4><button class="np-mark" id="notifMarkAll">全部已读</button></div><div class="np-tabs"><button class="np-tab on" data-cat="全部">全部</button><button class="np-tab" data-cat="互动">互动</button><button class="np-tab" data-cat="订单">订单</button><button class="np-tab" data-cat="系统">系统</button></div><div class="np-list" id="notifList"><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot"><a href="community.html">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart="" aria-label="购物车">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg>
+        <span class="badge-dot cart-count">0</span>
+      </button>
+
+      <button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html" class="active">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a>
+<a href="member.html">个人中心</a></div>
+
+<!-- ================= 产品分类（全部产品 / 筛选） ================= -->
+<section class="p-hero" id="pWell">
+  <div class="wrap">
+    <nav class="p-crumbs" aria-label="面包屑"><a href="shop.html">商城</a><span class="sep">/</span><span>全部产品</span></nav>
+    <h1 class="sr-only">全部产品</h1>
+  </div>
+</section>
+
+<section class="p-main">
+  <div class="wrap">
+      <div class="p-bar" id="pBar">
+        <div class="p-group"><span class="p-h">品类</span><button type="button" class="chip active" data-group="cat" data-val="all">全部</button><button type="button" class="chip" data-group="cat" data-val="laser">激光雕刻机</button><button type="button" class="chip" data-group="cat" data-val="printer">3D 打印机</button><button type="button" class="chip" data-group="cat" data-val="cnc">CNC 雕刻机</button><button type="button" class="chip" data-group="cat" data-val="mat">耗材与配件</button></div>
+        <div class="p-group"><span class="p-h">价格</span><button type="button" class="chip active" data-group="price" data-val="all">不限</button><button type="button" class="chip" data-group="price" data-val="lt500">¥500 以下</button><button type="button" class="chip" data-group="price" data-val="b500">¥500–6,000</button><button type="button" class="chip" data-group="price" data-val="gt6000">¥6,000 以上</button></div>
+        <div class="p-right">
+          <span class="p-count" id="pCount">共 <b>12</b> 件产品</span>
+          <label class="p-sort">排序
+            <select id="pSort">
+              <option value="rec">推荐</option>
+              <option value="asc">价格从低到高</option>
+              <option value="desc">价格从高到低</option>
+            </select>
+          </label>
+          <button type="button" class="p-reset" id="pReset">清空筛选</button>
+        </div>
+      </div>
+    <div class="p-grid" id="pGrid">
+      <a class="p-card" href="pdp-laser.html" data-i="0" data-cat="laser" data-bucket="b500" data-price="4999">
+        <div class="p-media"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"></div>
+        <div class="p-body">
+          <div class="p-kind">激光雕刻机</div>
+          <h3 class="p-name">XCheng X1</h3>
+          <p class="p-note">20W 定焦激光 · 幅面 400×400mm</p>
+          <div class="p-tags"><span>木刻</span><span>皮革</span><span>亚克力</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>4,999<s>¥5,999</s></div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-laser.html" data-i="1" data-cat="laser" data-bucket="gt6000" data-price="6999">
+        <div class="p-media"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"></div>
+        <div class="p-body">
+          <div class="p-kind">激光雕刻机</div>
+          <h3 class="p-name">XCheng X1 Pro</h3>
+          <p class="p-note">40W 双激光 · 大幅面 600×600mm</p>
+          <div class="p-tags"><span>厚料</span><span>大幅面</span><span>高速</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>6,999<s>¥8,299</s></div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-laser.html" data-i="2" data-cat="laser" data-bucket="b500" data-price="3299">
+        <div class="p-media"><img src="assets/img/devices/card-laser-air.png" alt="XCheng X1 Air"></div>
+        <div class="p-body">
+          <div class="p-kind">激光雕刻机</div>
+          <h3 class="p-name">XCheng X1 Air</h3>
+          <p class="p-note">10W 轻量 · 桌面级 300×300mm</p>
+          <div class="p-tags"><span>入门</span><span>小空间</span><span>轻量</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>3,299<s>¥3,999</s></div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-printer.html" data-i="3" data-cat="printer" data-bucket="b500" data-price="3299">
+        <div class="p-media"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"></div>
+        <div class="p-body">
+          <div class="p-kind">3D 打印机</div>
+          <h3 class="p-name">Doyao Y2</h3>
+          <p class="p-note">单喷头 · 成型 256×256×256mm</p>
+          <div class="p-tags"><span>手办</span><span>零件</span><span>亲子</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>3,299</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-printer.html" data-i="4" data-cat="printer" data-bucket="b500" data-price="4999">
+        <div class="p-media"><img src="assets/img/devices/card-printer-max.png" alt="Doyao Y2 Max"></div>
+        <div class="p-body">
+          <div class="p-kind">3D 打印机</div>
+          <h3 class="p-name">Doyao Y2 Max</h3>
+          <p class="p-note">双喷头 · 成型 350×350×400mm</p>
+          <div class="p-tags"><span>大尺寸</span><span>多色</span><span>工程件</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>4,999</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-cnc.html" data-i="5" data-cat="cnc" data-bucket="b500" data-price="5999">
+        <div class="p-media"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"></div>
+        <div class="p-body">
+          <div class="p-kind">CNC 雕刻机</div>
+          <h3 class="p-name">CNC C1</h3>
+          <p class="p-note">500W 主轴 · 行程 400×400×80mm</p>
+          <div class="p-tags"><span>木雕</span><span>浮雕</span><span>打样</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>5,999</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-cnc.html" data-i="6" data-cat="cnc" data-bucket="gt6000" data-price="8999">
+        <div class="p-media"><img src="assets/img/devices/card-cnc-pro.png" alt="CNC C1 Pro"></div>
+        <div class="p-body">
+          <div class="p-kind">CNC 雕刻机</div>
+          <h3 class="p-name">CNC C1 Pro</h3>
+          <p class="p-note">800W 主轴 · 行程 600×600×120mm</p>
+          <div class="p-tags"><span>工业级</span><span>金属</span><span>长时加工</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>8,999</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-material.html?id=pla" data-i="7" data-cat="mat" data-bucket="lt500" data-price="129">
+        <div class="p-media"><img src="assets/img/shop/card-pla-filament.png" alt="PLA 环保耗材 1kg"></div>
+        <div class="p-body">
+          <div class="p-kind">耗材与配件</div>
+          <h3 class="p-name">PLA 环保耗材 1kg</h3>
+          <p class="p-note">植物基可降解，机器自动识别色号与打印参数。</p>
+          <div class="p-tags"><span>打印耗材</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>129</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-material.html?id=uv" data-i="8" data-cat="mat" data-bucket="lt500" data-price="199">
+        <div class="p-media"><img src="assets/img/shop/card-uv-resin.png" alt="UV 光固化树脂 1kg"></div>
+        <div class="p-body">
+          <div class="p-kind">耗材与配件</div>
+          <h3 class="p-name">UV 光固化树脂 1kg</h3>
+          <p class="p-note">低气味高韧性，0.05mm 细节还原，8 色可选。</p>
+          <div class="p-tags"><span>光固化</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>199</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-material.html?id=flat" data-i="9" data-cat="mat" data-bucket="lt500" data-price="299">
+        <div class="p-media"><img src="assets/img/shop/card-materials-flatlay.png" alt="认证材质探索包"></div>
+        <div class="p-body">
+          <div class="p-kind">耗材与配件</div>
+          <h3 class="p-name">认证材质探索包</h3>
+          <p class="p-note">木板 / 亚克力 / 皮革 / 软木共 24 片，附推荐功率与刀路参数。</p>
+          <div class="p-tags"><span>激光耗材</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>299</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-material.html?id=hex" data-i="10" data-cat="mat" data-bucket="lt500" data-price="199">
+        <div class="p-media"><img src="assets/img/shop/card-hex-box.png" alt="PEI 纹理打印板"></div>
+        <div class="p-body">
+          <div class="p-kind">耗材与配件</div>
+          <h3 class="p-name">PEI 纹理打印板</h3>
+          <p class="p-note">底面自带细纹，取件不用撬，附着力更稳。</p>
+          <div class="p-tags"><span>打印配件</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>199</div></div>
+        </div>
+      </a>
+      <a class="p-card" href="pdp-material.html?id=noz" data-i="11" data-cat="mat" data-bucket="lt500" data-price="249">
+        <div class="p-media"><img src="assets/img/shop/card-robot-arm-joint.png" alt="硬质合金喷头组 ×3"></div>
+        <div class="p-body">
+          <div class="p-kind">耗材与配件</div>
+          <h3 class="p-name">硬质合金喷头组 ×3</h3>
+          <p class="p-note">耐磨耐高温，可打碳纤维与金属填充耗材。</p>
+          <div class="p-tags"><span>打印配件</span></div>
+          <div class="p-foot"><div class="price"><span class="cur">¥</span>249</div></div>
+        </div>
+      </a>
+    </div>
+    <div class="p-empty" id="pEmpty">
+      <p>没有符合条件的产品，换个价格档看看？</p>
+      <button type="button" class="btn btn-soft sm" id="pEmptyReset">清空筛选</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 页脚 ================= -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i style="color:#4ADE97">Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+        <div class="footer-social">
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="3.5"></rect><path d="m10.5 9.5 4.5 2.5-4.5 2.5v-5Z"></path></svg></a>
+          <a href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"></circle></svg></a>
+          <a href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l16 16M20 4 4 20"></path></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="shop.html">激光雕刻机</a><a href="shop.html">3D 打印机</a><a href="shop.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>社区</h4><a href="community.html">作品广场</a><a href="community.html">挑战赛</a><a href="community.html">教程工坊</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+<script>
+/* 产品分类页：筛选 / 排序 / 计数。卡片是静态的，JS 只切 [hidden] 与重排 DOM —— 脚本挂了也不白屏。 */
+(function () {
+  var grid = document.getElementById("pGrid");
+  if (!grid) return;
+  var cards = Array.prototype.slice.call(grid.querySelectorAll(".p-card"));
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".p-bar .chip"));
+  var cntEl = document.getElementById("pCount");
+  var emptyEl = document.getElementById("pEmpty");
+  var sortEl = document.getElementById("pSort");
+  var CATS = ["all", "laser", "printer", "cnc", "mat"];
+  var state = { cat: "all", price: "all", sort: "rec" };
+
+  /* ?cat=mat → 直接落在耗材模块（商城「查看更多」就是带这个参数进来的） */
+  try {
+    var m = /[?&]cat=([a-z]+)/.exec(window.location.search || "");
+    if (m && CATS.indexOf(m[1]) >= 0) state.cat = m[1];
+  } catch (e) {}
+
+  function hit(c) {
+    if (state.cat !== "all" && c.getAttribute("data-cat") !== state.cat) return false;
+    if (state.price !== "all" && c.getAttribute("data-bucket") !== state.price) return false;
+    return true;
+  }
+  function order(list) {
+    if (state.sort === "asc" || state.sort === "desc") {
+      var d = state.sort === "asc" ? 1 : -1;
+      return list.sort(function (a, b) { return ((+a.getAttribute("data-price")) - (+b.getAttribute("data-price"))) * d; });
+    }
+    return list.sort(function (a, b) { return (+a.getAttribute("data-i")) - (+b.getAttribute("data-i")); });
+  }
+  function sync() {
+    var n = 0;
+    cards.forEach(function (c) { var k = hit(c); c.hidden = !k; if (k) n++; });
+    chips.forEach(function (b) {
+      var g = b.getAttribute("data-group"), v = b.getAttribute("data-val");
+      b.classList.toggle("active", g === "cat" ? v === state.cat : v === state.price);
+    });
+    if (cntEl) cntEl.innerHTML = "共 <b>" + n + "</b> 件产品";
+    if (emptyEl) emptyEl.classList.toggle("show", n === 0);
+    order(cards.slice()).forEach(function (c) { grid.appendChild(c); });
+  }
+  function reset() {
+    state.cat = "all"; state.price = "all"; state.sort = "rec";
+    if (sortEl) sortEl.value = "rec";
+    try { window.history.replaceState(null, "", window.location.pathname); } catch (e) {}
+    sync();
+  }
+  chips.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var g = b.getAttribute("data-group"), v = b.getAttribute("data-val");
+      if (g === "cat") state.cat = v; else state.price = v;
+      sync();
+    });
+  });
+  if (sortEl) sortEl.addEventListener("change", function () { state.sort = sortEl.value; sync(); });
+  var rs = document.getElementById("pReset"), re = document.getElementById("pEmptyReset");
+  if (rs) rs.addEventListener("click", reset);
+  if (re) re.addEventListener("click", reset);
+  sync();
+})();
+</script>
+</body>
+</html>

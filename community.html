@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="assets/css/site.css">
 <style>
 /* ============ 社区 ============ */
-.commu-hero { position: relative; border-radius: 32px; overflow: hidden; margin-top: 28px; min-height: 420px; display: flex; align-items: flex-end; }
+.commu-hero { position: relative; border-radius: 24px; overflow: hidden; margin-top: 28px; min-height: 420px; display: flex; align-items: flex-end; }
 .commu-hero img.ch-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .commu-hero .ch-copy {
   position: relative; width: 100%; padding: 52px 52px 44px;
@@ -32,7 +32,7 @@
 
 /* 作品瀑布流 */
 .masonry2 { column-count: 4; column-gap: 16px; }
-.masonry2 .m-item { break-inside: avoid; margin-bottom: 16px; border-radius: 16px; overflow: hidden; position: relative; cursor: pointer; }
+.masonry2 .m-item { break-inside: avoid; margin-bottom: 16px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; }
 .masonry2 .m-item img { width: 100%; transition: transform .5s ease; display: block; }
 .masonry2 .m-item:hover img { transform: scale(1.04); }
 .m-item .m-veil { position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(13,19,16,.72)); opacity: 0; transition: opacity .22s ease; display: flex; align-items: flex-end; padding: 14px; color: #fff; }
@@ -50,7 +50,7 @@
 
 /* 挑战赛 */
 .chal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.chal-card { border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: #fff; transition: transform .25s ease, box-shadow .25s ease; }
+.chal-card { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: #fff; transition: transform .25s ease, box-shadow .25s ease; }
 .chal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
 .chal-card .c-media { position: relative; aspect-ratio: 16/9; overflow: hidden; }
 .chal-card .c-media img { width: 100%; height: 100%; object-fit: cover; }
@@ -61,7 +61,7 @@
 .c-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); padding-top: 12px; border-top: 1px solid var(--line); }
 .c-meta .prize { color: var(--green-t); font-weight: 700; }
 .countdown { display: flex; gap: 6px; font-family: var(--font-num); }
-.countdown b { background: var(--ink); color: #fff; border-radius: 8px; padding: 3px 7px; font-size: 13px; font-weight: 600; }
+.countdown b { background: var(--ink); color: #fff; border-radius: 6px; padding: 3px 7px; font-size: 13px; font-weight: 600; }
 
 /* 教程 */
 .tut-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -75,7 +75,7 @@
 
 /* 创作者榜 */
 .leader-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: start; }
-.leader-list { border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+.leader-list { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
 .leader-item { display: flex; align-items: center; gap: 16px; padding: 16px 22px; border-bottom: 1px solid var(--line); transition: background .15s ease; }
 .leader-item:last-child { border-bottom: none; }
 .leader-item:hover { background: var(--bg-2); }
@@ -94,7 +94,7 @@
 /* 激励计划 */
 .incentive {
   background: linear-gradient(120deg, #0D1310, #123324 60%, #0FA36B 150%);
-  border-radius: 32px; padding: 56px; color: #fff; position: relative; overflow: hidden;
+  border-radius: 24px; padding: 56px; color: #fff; position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
 }
 .incentive::before { content: ""; position: absolute; right: -140px; bottom: -200px; width: 480px; height: 480px; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); }
@@ -277,7 +277,7 @@
       <div class="leader-item"><span class="rank">4</span><img src="assets/img/avatar.jpg" alt=""><div class="l-info"><b>RoboStudio</b><span>深圳 · 机器人 · 官方合作</span></div><div class="l-works"><b>128</b><span>作品</span></div></div>
       <div class="leader-item"><span class="rank">5</span><img src="assets/img/avatar.jpg" alt=""><div class="l-info"><b>WoodToy</b><span>京都 · 木作玩具 · 认证创作者</span></div><div class="l-works"><b>117</b><span>作品</span></div></div>
     </div>
-    <div class="incentive reveal d1" style="border-radius:22px;padding:40px">
+    <div class="incentive reveal d1" style="border-radius:16px;padding:40px">
       <div>
         <h2>创作者激励计划</h2>
         <p>作品被下载、模型被购买、教程被学习，都能获得收益分成。上季度创作者最高分成收入 ¥86,000。</p>

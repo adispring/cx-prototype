@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLA 环保耗材 1kg · HiMakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+.pdp { padding: 16px 0 70px; }
+.pdp-crumb { font-size: 13px; color: var(--faint); margin-bottom: 12px; }
+.pdp-crumb a { color: var(--muted); }
+.pdp-crumb a:hover { color: var(--green-t); }
+/* ---------- 顶部购买区 ---------- */
+.pdp-top {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start;
+  /* 主图放大到「图库列宽」，缩略图收成一条小方图带；两者合计仍受一屏封顶：
+     主图高 = 宽 / --pg-r，--pg-thumb = 缩略图带总高（含上间距）
+     → 允许宽度 = (一屏预算 - --pg-thumb) × --pg-r，再与列宽取小。
+     --pg-top = 导航 + 面包屑 + 吸底栏 + 余量。
+     短屏只是图变小，既不裁图也不出现 letterbox。 */
+  --pg-r: 1.1046;   /* 主图 宽/高（= 1024 / 927，与下方 .pg-main 的 aspect-ratio 成对，改一个要改两个） */
+  --pg-ts: 48px;                          /* 缩略图边长（≤720 收一档） */
+  --pg-thumb: calc(var(--pg-ts) + 14px);  /* 缩略图带总高 = 边长 + 行间距 14（与左列的 row-gap 成对，改一个要改两个） */
+  --pg-nav: 32px;                         /* 左右翻页按钮直径（≤720 收一档） */
+  --pg-top-base: 220px;   /* 顶部占用基准（吸底栏单行为 ~64px 时） */
+  --pg-top: var(--pg-top-base);
+}
+/* 左列 = 三列网格：主图独占首行，第二行是「‹ 缩略图带 ›」—— 左右翻页按钮与缩略图
+   同处一行、紧贴带子两侧。两侧 1fr 等宽 + 带子居中 ⇒ 带子中点与主图中点重合。
+   另：左列图库吸顶 —— 右列（购买信息）比图长，页面下滚时图停在导航下方不动、由右侧继续滚
+   （视觉上「左图位置固定、右侧滑动」）。滚到 .pdp-top 底部自动解除。
+   top = 导航高 68 + 20 余量；单列布局（≤1080）下无位移空间，见媒体查询里的 static 复位。 */
+.pdp-top > div:first-child {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  column-gap: 12px; row-gap: 14px;
+  position: sticky; top: 88px;
+}
+.pg-main {
+  grid-area: 1 / 1 / 2 / -1; justify-self: center;
+  /* 被「一屏封顶」压窄时，主图在左列内居中（左右留白相等）—— 贴左缘会在主图与右侧
+     购买信息之间留出一条很远的空档。图能填满列宽时本条自动失效。 */
+  inline-size: min(100%, calc((100vh - var(--pg-top) - var(--pg-thumb)) * var(--pg-r)));
+  position: relative; border-radius: 16px; overflow: hidden; background: var(--bg-2); aspect-ratio: 1024 / 927;
+}
+.pg-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 左右翻页：与缩略图同一行的圆形小按钮，分列带子两侧（不再压在主图上） */
+.pg-nav {
+  grid-row: 2; align-self: center; padding: 0; display: flex; align-items: center; justify-content: center;
+  inline-size: var(--pg-nav); block-size: var(--pg-nav);
+  border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink);
+  cursor: pointer; transition: border-color .18s ease, background .18s ease, color .18s ease, transform .12s ease;
+}
+.pg-nav.prev { grid-column: 1; justify-self: end; }
+.pg-nav.next { grid-column: 3; justify-self: start; }
+.pg-nav:hover { border-color: var(--green); background: var(--green-bg); color: var(--green-t); }
+.pg-nav:active { transform: scale(.9); }
+.pg-nav svg { inline-size: 14px; block-size: 14px; display: block; }
+/* 视频：主图上的播放遮罩（.pg-main.is-video 才显示）；播放中只切视觉态（原型无视频文件） */
+.pg-vplay { position: absolute; inset: 0; z-index: 1; display: none; align-items: center; justify-content: center; padding: 0; border: 0; background: rgba(12,18,16,.16); cursor: pointer; }
+.pg-main.is-video .pg-vplay { display: flex; }
+.pg-vplay .vp-btn { inline-size: 64px; block-size: 64px; border-radius: 999px; background: rgba(255,255,255,.95); color: var(--green-t); display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 34px -14px rgba(12,18,16,.8); transition: transform .18s ease; }
+.pg-vplay:hover .vp-btn { transform: scale(1.06); }
+.pg-vplay .vp-btn svg { inline-size: 24px; block-size: 24px; display: block; }
+.pg-vplay .vp-dur { position: absolute; right: 16px; bottom: 14px; font-size: 12px; font-weight: 600; color: #fff; background: rgba(12,18,16,.6); padding: 3px 9px; border-radius: 999px; }
+.pg-vplay .vp-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.3); display: none; }
+.pg-vplay .vp-bar i { display: block; height: 100%; width: 0; background: var(--green); }
+.pg-main.is-playing .pg-vplay { background: rgba(12,18,16,.06); }
+.pg-main.is-playing .pg-vplay .vp-btn { opacity: 0; }
+.pg-main.is-playing .pg-vplay .vp-bar { display: block; }
+.pg-main.is-playing .pg-vplay .vp-bar i { animation: pgPlay var(--pg-vdur, 48s) linear forwards; }
+@keyframes pgPlay { from { width: 0; } to { width: 100%; } }
+/* 缩略图：横向居中的小方图带（宽度 = 内容宽，由左列网格居中）；当前项 = 品牌绿描边 + 淡绿外环 */
+.pg-thumbs { grid-area: 2 / 2 / 3 / 3; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pg-thumbs button { inline-size: var(--pg-ts); block-size: var(--pg-ts); flex: 0 0 auto; padding: 0; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--bg-2); cursor: pointer; opacity: .72; transition: opacity .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.pg-thumbs button:hover { opacity: 1; border-color: var(--line-2); }
+.pg-thumbs button.on { opacity: 1; border-color: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
+.pg-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 视频缩略图（追加在缩略图带末尾）：海报 + 中央播放徽标 + 底部时长条 */
+.pg-thumbs .pg-vthumb { position: relative; }
+.pg-thumbs .pg-vbadge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(12,18,16,.3); color: #fff; }
+.pg-thumbs .pg-vbadge svg { inline-size: 15px; block-size: 15px; display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
+.pg-thumbs .pg-vdur { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px 0 3px; font-size: 8px; font-weight: 600; line-height: 1.2; text-align: center; color: #fff; background: linear-gradient(transparent, rgba(12,18,16,.72)); }
+.pdp-cat { display: inline-block; font-size: 12px; font-weight: 600; color: var(--green-t); background: var(--green-bg); padding: 4px 11px; border-radius: 999px; }
+.pdp-top h1 { font-size: 32px; letter-spacing: -.03em; margin: 12px 0 8px; }
+.pdp-lead { font-size: 14.5px; color: var(--muted); line-height: 1.7; }
+.pdp-price { display: flex; align-items: baseline; gap: 10px; margin: 16px 0 4px; }
+.pdp-price .price { font-size: 34px; font-weight: 700; letter-spacing: -.03em; }
+.pdp-price .cur { font-size: 18px; margin-right: 2px; }
+.pdp-price s { font-size: 14px; color: var(--faint); font-weight: 400; }
+.pdp-price .save { font-size: 12.5px; font-weight: 600; color: var(--green-t); background: var(--green-bg); padding: 3px 10px; border-radius: 999px; }
+.pdp-note { font-size: 12.5px; color: var(--faint); }
+.sku-block { margin-top: 18px; }
+.sku-label { font-size: 13px; font-weight: 600; margin-bottom: 9px; }
+.sku-label span { color: var(--faint); font-weight: 400; margin-left: 6px; }
+.sku-opts { display: flex; flex-wrap: wrap; gap: 9px; }
+.sku-opt { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 15px; cursor: pointer; background: #fff; text-align: left; transition: all .18s ease; min-width: 128px; }
+.sku-opt:hover { border-color: var(--green); }
+.sku-opt.on { border-color: var(--green); background: var(--green-bg); }
+.sku-opt b { display: block; font-size: 14px; font-weight: 600; }
+.sku-opt i { display: block; font-style: normal; font-size: 12px; color: var(--muted); margin-top: 3px; }
+.sku-opt em { font-style: normal; font-size: 12.5px; color: var(--green-t); font-weight: 600; }
+.pdp-combo { margin-top: 22px; }
+.combo-head { display: flex; align-items: baseline; gap: 8px; font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.combo-head span { font-size: 12px; font-weight: 400; color: var(--muted); }
+/* 组合搭配：竖排 —— 一行一件（勾选框 / 缩略图 / 名称说明 / 单价），整列自上而下，不再横向滚动 */
+.combo-grid { display: grid; gap: 10px; }
+.combo-item {
+  display: flex; align-items: center; gap: 12px; padding: 9px 14px 9px 12px; background: #fff;
+  border: 1.5px solid var(--line); border-radius: 10px; cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.combo-item:hover { border-color: var(--green); box-shadow: 0 8px 16px -12px rgba(12,18,16,.5); }
+.combo-item.on { border-color: var(--green); background: var(--green-bg); }
+.combo-item img { flex: 0 0 auto; inline-size: 60px; block-size: 60px; object-fit: cover; border-radius: 8px; background: #fff; display: block; }
+.combo-item .ci-mid { flex: 1; min-width: 0; }
+.combo-item .ci-n { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+.combo-item .ci-s { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
+.combo-item .ci-p { margin-left: auto; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.combo-box {
+  flex: 0 0 auto; inline-size: 19px; block-size: 19px; border-radius: 4px;
+  border: 1.5px solid var(--line-2); background: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff;
+  transition: background .15s ease, border-color .15s ease;
+}
+.combo-item.on .combo-box { background: var(--green); border-color: var(--green); }
+.pdp-cta { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 13px; color: var(--muted); }
+.pdp-cta .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+/* ---------- 吸底购买栏 ---------- */
+.buybar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 180;
+  background: rgba(255,255,255,.94);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -10px 34px -14px rgba(12,18,16,.22);
+}
+.buybar-in { display: flex; align-items: center; gap: 18px; padding: 9px 0; }
+.bb-prod { display: flex; align-items: center; gap: 11px; flex: 1; min-width: 0; }
+.bb-prod img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.bb-meta { min-width: 0; }
+.bb-meta b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bb-meta span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bb-price { display: flex; align-items: baseline; gap: 7px; flex-shrink: 0; }
+.bb-price .cur { font-size: 13px; }
+.bb-price b { font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.bb-price s { font-size: 12px; color: var(--faint); font-weight: 400; }
+.bb-act { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+.bb-act .btn { height: 42px; min-width: 126px; padding: 0 22px; font-size: 14px; }
+.bb-act .btn:hover { transform: none; box-shadow: none; }
+/* 加入购物车：幽灵按钮（无实底 + 描边），hover 才染品牌绿 */
+.bb-add { background: transparent; border-color: var(--line-2); color: var(--ink); }
+.bb-add:hover { background: var(--green-bg); border-color: var(--green); color: var(--green-t); transform: none; box-shadow: none; }
+/* 立即购买：主行动 —— 品牌绿实底 */
+.bb-buy { background: var(--green); border-color: var(--green); color: #fff; }
+.bb-buy:hover { background: var(--green-h); border-color: var(--green-h); color: #fff; transform: none; box-shadow: none; }
+.stepper { display: inline-flex; align-items: center; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; height: 42px; flex-shrink: 0; }
+.stepper button { width: 34px; height: 100%; border: none; background: #fff; font-size: 15px; cursor: pointer; color: var(--muted); transition: background .15s ease, color .15s ease; }
+.stepper button:hover { background: var(--bg-2); color: var(--ink); }
+.stepper span { min-width: 28px; text-align: center; font-weight: 600; font-size: 14px; }
+.footer { padding-bottom: 68px; }
+.toast-wrap { bottom: 86px; }
+.pdp-perks { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; font-size: 12.5px; color: var(--muted); }
+.pdp-perks span::before { content: "✓ "; color: var(--green); font-weight: 700; }
+.spec-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.spec-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); }
+.spec-table td:first-child { width: 200px; color: var(--muted); background: var(--bg-2); }
+.pdp-story { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.story-card { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.story-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+.story-card .sc-b { padding: 14px 16px 18px; }
+.story-card h4 { font-size: 15px; margin-bottom: 5px; }
+.story-card p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+/* ---------- 产品介绍：4 段锚点 tab（产品概述 / 规格参数 / 深入了解 / 常见问题） ---------- */
+.pd { margin-top: 54px; }
+.pd-nav {
+  position: sticky; top: 68px; z-index: 40;   /* top = 站点顶栏高；z-index 低于顶栏 200、低于吸底栏 180 */
+  background: rgba(255,255,255,.94);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid var(--line);
+}
+/* 居中：4 个 tab 整体在容器里居中；safe center 让窄屏真溢出时退回左对齐（否则左侧会被裁掉、滚不到） */
+.pd-nav-in { display: flex; justify-content: center; justify-content: safe center; gap: 26px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
+.pd-nav-in::-webkit-scrollbar { display: none; }
+.pd-tab {
+  position: relative; flex: 0 0 auto; padding: 15px 2px 13px; text-decoration: none;
+  font-size: 15px; font-weight: 600; color: var(--muted); white-space: nowrap; transition: color .16s ease;
+}
+.pd-tab::after {
+  content: ""; position: absolute; left: 2px; right: 2px; bottom: -1px; height: 2px; border-radius: 2px;
+  background: var(--green); transform: scaleX(0); transform-origin: 50% 100%; transition: transform .22s ease;
+}
+.pd-tab:hover { color: var(--ink); }
+.pd-tab.on { color: var(--green-t); }
+.pd-tab.on::after { transform: scaleX(1); }
+/* 锚点段：吸顶导航 68 + tab 条 ~49 + 12 余量 = 129；四段共用一个值（点 tab 后标题不会被条压住） */
+.pd-block { padding-top: 34px; scroll-margin-top: 129px; }
+/* ---------- tab 条吸住顶后收起一级导航（页尾脚本加 html.nav-collapsed）：下滑收、上滑 / 点 tab 展 ---------- */
+.nav { transition: transform .26s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, box-shadow .2s ease; }
+html.nav-collapsed .nav { transform: translateY(-100%); }
+.pd-nav { transition: transform .26s cubic-bezier(.4, 0, .2, 1); }
+/* 顶栏让位后 tab 条顶上补位：68 = 一级导航高，两块一起位移、视觉上只少了顶栏 */
+html.nav-collapsed .pd-nav { transform: translateY(-68px); }
+html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落点 = tab 条 ~49 + 12 */
+.pd-block h2 { font-size: 21px; letter-spacing: -.02em; margin-bottom: 16px; }
+.pd-lead { max-inline-size: 860px; font-size: 14.5px; line-height: 1.9; color: var(--body); }
+.pd-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 22px 0 4px; }
+.pd-fact { border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px 16px; }
+.pd-fact b { display: block; font-size: 23px; font-weight: 700; letter-spacing: -.03em; }
+.pd-fact b i { font-size: 12.5px; font-weight: 600; font-style: normal; color: var(--muted); margin-left: 3px; }
+.pd-fact span { display: block; margin-top: 7px; font-size: 12.5px; color: var(--muted); }
+.pd-sub { font-size: 14px; font-weight: 600; margin: 28px 0 14px; }
+/* 深入了解：图文左右交替 */
+.pd-feat { display: grid; grid-template-columns: 1.02fr .98fr; gap: 36px; align-items: center; }
+.pd-feat + .pd-feat { margin-top: 42px; }
+.pd-feat.rev .pd-feat-media { order: 2; }
+.pd-feat-media img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 15px; background: var(--bg-2); }
+.pd-feat-body h3 { font-size: 17px; letter-spacing: -.01em; margin-bottom: 10px; }
+.pd-feat-body p { font-size: 13.5px; line-height: 1.9; color: var(--muted); }
+.pd-feat-body ul { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.pd-feat-body li { position: relative; padding-left: 21px; font-size: 13px; line-height: 1.7; color: var(--body); }
+.pd-feat-body li::before { content: ""; position: absolute; left: 6px; top: 8px; inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--green); }
+/* 常见问题：原生 <details> 手风琴（零 JS） */
+.pd-faq { max-inline-size: 940px; }
+.faq-item { border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.faq-item + .faq-item { margin-top: 10px; }
+.faq-item > summary { display: flex; align-items: center; gap: 12px; padding: 15px 18px; font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; }
+.faq-item > summary::-webkit-details-marker { display: none; }
+.faq-item > summary:hover { color: var(--green-t); }
+.faq-item > summary::after {
+  content: ""; flex: 0 0 auto; margin-left: auto; inline-size: 8px; block-size: 8px;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s ease, border-color .2s ease;
+}
+.faq-item[open] > summary { color: var(--green-t); }
+.faq-item[open] > summary::after { border-color: var(--green); transform: rotate(225deg) translate(-2px, -2px); }
+.faq-a { padding: 0 18px 16px; font-size: 13px; line-height: 1.9; color: var(--muted); }
+@media (max-width: 1024px) {
+  .pd-facts { grid-template-columns: repeat(2, 1fr); }
+  .pd-feat { grid-template-columns: 1fr; gap: 20px; }
+  .pd-feat.rev .pd-feat-media { order: 0; }
+}
+@media (max-width: 720px) {
+  .pd { margin-top: 40px; }
+  .pd-nav-in { gap: 20px; }
+  .pd-tab { padding: 13px 2px 11px; font-size: 14px; }
+  .pd-block { padding-top: 26px; scroll-margin-top: 122px; }
+  html.nav-collapsed .pd-block { scroll-margin-top: 54px; }   /* 窄屏 tab 条收一档：~42 + 12 */
+  .pd-block h2 { font-size: 19px; }
+  .pd-fact { padding: 13px 15px 14px; }
+  .pd-fact b { font-size: 20px; }
+  .faq-item > summary { padding: 13px 15px; font-size: 13.5px; }
+  .faq-a { padding: 0 15px 14px; }
+}
+@media (max-width: 1080px) {
+  /* 单列堆叠：整块购买区收成居中一列 —— 否则 1024 这种宽度下图会被拉到近整屏宽。
+     图库仍受一屏高度封顶，列宽只是上限。 */
+  .pdp-top { grid-template-columns: 1fr; gap: 26px; max-inline-size: 680px; margin-inline: auto; }
+  .pdp-top > div:first-child { position: static; }   /* 单列堆叠：图在购买信息上方，取消吸顶 */
+  .pdp-story { grid-template-columns: 1fr; }
+  .bb-meta span { display: none; }
+}
+@media (max-width: 900px) {
+  .buybar-in { gap: 14px; }
+  .bb-act .btn { min-width: 0; padding: 0 18px; }
+}
+@media (max-width: 720px) {
+  /* 吸底栏在窄屏折成两行（~102px），顶部占用要相应加 38px；缩略图再收一档。只改这一处，三页同构 */
+  .pdp-top { --pg-top: calc(var(--pg-top-base) + 38px); --pg-ts: 40px; --pg-nav: 28px; }
+  .pg-vplay .vp-btn { inline-size: 52px; block-size: 52px; }
+  .pg-vplay .vp-btn svg { inline-size: 20px; block-size: 20px; }
+  .buybar-in { flex-wrap: wrap; gap: 9px 12px; padding: 9px 0; }
+  .bb-prod { flex: 1 1 100%; }
+  .bb-prod img { width: 34px; height: 34px; border-radius: 7px; }
+  .bb-price b { font-size: 19px; }
+  .bb-act { flex: 1; justify-content: flex-end; gap: 8px; }
+  .bb-act .btn { flex: 1; height: 40px; padding: 0 14px; font-size: 13.5px; }
+  .stepper { height: 40px; }
+  .stepper button { width: 32px; }
+  .stepper span { min-width: 24px; }
+  .footer { padding-bottom: 108px; }
+}
+@media (max-width: 640px) {
+  .pdp-top h1 { font-size: 25px; }
+  .pdp-price .price { font-size: 28px; }
+  .spec-table td:first-child { width: 120px; }
+}
+@media (max-width: 480px) {
+  /* 竖排组合卡在小屏收一档（缩略图 60 → 52） */
+  .combo-item { gap: 10px; padding: 8px 12px 8px 10px; }
+  .combo-item img { inline-size: 52px; block-size: 52px; border-radius: 8px; }
+}
+@media (max-width: 420px) {
+  .bb-prod { display: none; }
+  .footer { padding-bottom: 100px; }
+}
+</style>
+<style>
+/* ================= 耗材 / 配件详情页（products.html 耗材卡的落点） ================= */
+/* 主图区：单图，取素材本来的 16:10 + cover —— 铺满、零留白、零裁切、无 AI 水印。
+   ⚠️ `grid-area: 1/1/2/-1` 必须写：`.pdp-top > div:first-child` 被 PDP 改成了
+      `1fr auto 1fr` 的三列网格（给「‹ 缩略图带 ›」用），不跨列的话主图只占最左 1fr
+      —— 图会缩成 230px 宽、右边空一大片（computed 里比例却是对的，很容易看漏）。
+   ⚠️ 不复用 .pg-main：那是给图库用的，尺寸被 --pg-r/--pg-top/--pg-thumb 三个变量绑死。 */
+.pm-main {
+  grid-area: 1 / 1 / 2 / -1; justify-self: center;
+  inline-size: 100%; aspect-ratio: 16 / 10;
+  background: #fff; border-radius: 18px; overflow: hidden;
+}
+.pm-main img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pm-hl { display: flex; flex-direction: column; gap: 9px; margin: 16px 0 2px; }
+.pm-hl span {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 13.5px; color: var(--body, #3A4441);
+}
+.pm-hl span::before {
+  content: ""; flex: 0 0 17px; width: 17px; height: 17px; border-radius: 50%;
+  background: var(--green-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%230FA36B' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 10px no-repeat;
+}
+.pm-sec { padding: 8px 0 40px; }
+.pm-sec .spec-table { margin-top: 4px; }
+@media (max-width: 1080px) {
+  .pm-main { border-radius: 15px; }
+}
+</style>
+</head>
+<body>
+<header class="nav scrolled">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+      <span class="brand-name">Hi<i>Makers</i></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">首页</a>
+      <div class="nav-item">
+        <a href="shop.html">商城</a>
+        <div class="nav-menu" aria-label="商城分类">
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="ai.html">AI 创作</a>
+      <a href="models.html">模型库</a>
+      <a href="community.html">社区</a>
+    </nav>
+    <div class="nav-actions">
+      <label class="nav-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="text" placeholder="搜索机器、模型、灵感…">
+      </label>
+
+
+
+
+      <div class="notif-wrap"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0"></path></svg><span class="badge-dot notif-count show">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知"><div class="np-head"><h4>通知中心<span class="np-count" id="notifUnreadCount">3 条未读</span></h4><button class="np-mark" id="notifMarkAll">全部已读</button></div><div class="np-tabs"><button class="np-tab on" data-cat="全部">全部</button><button class="np-tab" data-cat="互动">互动</button><button class="np-tab" data-cat="订单">订单</button><button class="np-tab" data-cat="系统">系统</button></div><div class="np-list" id="notifList"><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot"><a href="community.html">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart="" aria-label="购物车"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg><span class="badge-dot cart-count show">7</span></button><button class="icon-btn nav-burger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <a href="index.html">首页</a><a href="shop.html">商城</a><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="community.html">社区</a><a href="member.html">个人中心</a><a href="orders.html">我的订单</a>
+</div>
+
+<main class="pdp" id="pmPage">
+  <div class="wrap">
+    <div class="pdp-crumb"><a href="shop.html">商城</a> / <a href="products.html?cat=mat">耗材与配件</a> / <b id="pmCrumb">PLA 环保耗材 1kg</b></div>
+    <div class="pdp-top">
+      <div>
+        <div class="pm-main"><img id="pmImg" src="assets/img/shop/card-pla-filament.png" alt="PLA 环保耗材 1kg"></div>
+      </div>
+      <div class="pdp-info">
+        <span class="pdp-cat" id="pmCat">打印耗材</span>
+        <h1 id="pmName">PLA 环保耗材 1kg</h1>
+        <p class="pdp-lead" id="pmLead">玉米淀粉基可降解耗材，卷盘自带 NFC——装上去机器自动识别色号与打印参数；低气味、不翘边，开箱直接打。</p>
+        <div class="pdp-price">
+          <span class="price"><span class="cur">¥</span><span id="pmPrice">129</span></span>
+        </div>
+        <div class="pdp-note" id="pmNote">1.75mm · 净重 1kg · 12 色可选</div>
+        <div class="pm-hl" id="pmHl"><span>植物基配方，可降解</span><span>NFC 自动识别色号与参数</span><span>低气味 · 不堵头 · 不翘边</span></div>
+        <div class="pdp-perks">
+          <span>30 天无理由退换</span><span>正品保障</span><span>满 ¥99 包邮</span><span>当日发货</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="pd pm-sec" id="pmSpecsSec">
+      <div class="wrap">
+        <div class="pd-block" id="pdSpecs">
+          <h2>规格参数</h2>
+          <table class="spec-table" id="specTable"></table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- 吸底购买栏 -->
+<div class="buybar" id="pmBuyBar">
+  <div class="wrap buybar-in">
+    <div class="bb-prod">
+      <img id="bbImg" src="assets/img/shop/card-pla-filament.png" alt="PLA 环保耗材 1kg">
+      <div class="bb-meta">
+        <b id="bbName">PLA 环保耗材 1kg</b>
+        <span id="bbNote">1.75mm · 净重 1kg · 12 色可选</span>
+      </div>
+    </div>
+    <div class="bb-price">
+      <span class="cur">¥</span><b id="bbPrice">129</b>
+    </div>
+    <div class="bb-act">
+      <div class="stepper">
+        <button id="qtyMinus" title="减少数量">−</button><span id="qtyVal">1</span><button id="qtyPlus" title="增加数量">+</button>
+      </div>
+      <button class="btn bb-add" id="btnAdd">加入购物车</button>
+      <button class="btn btn-primary bb-buy" id="btnBuy">立即购买</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff"></path></svg></span>
+          <span class="brand-name">Hi<i style="color:#4ADE97">Makers</i></span>
+        </a>
+        <p class="footer-slogan">让每个想法都有实物。硬件 · AI · 模型库 · 社区，一个完整的创造生态。</p>
+      </div>
+      <div class="footer-col"><h4>产品</h4><a href="pdp-laser.html">激光雕刻机</a><a href="pdp-printer.html">3D 打印机</a><a href="pdp-cnc.html">CNC 雕刻机</a><a href="shop.html">配件与耗材</a></div>
+      <div class="footer-col"><h4>创作</h4><a href="ai.html">AI 创作</a><a href="models.html">模型库</a><a href="ai.html">设计工具</a></div>
+      <div class="footer-col"><h4>账户</h4><a href="member.html">个人中心</a><a href="orders.html">我的订单</a><a href="cart.html">购物车</a><a href="addresses.html">收货地址</a><a href="aftersale.html">售后与退款</a></div>
+      <div class="footer-col"><h4>支持</h4><a href="#">帮助中心</a><a href="#">固件下载</a><a href="#">保修政策</a><a href="#">联系我们</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HiMakers Inc. 让每个想法都有实物。</span>
+      <div class="footer-bottom-links"><a href="#">隐私政策</a><a href="#">服务条款</a><a href="#">Cookie 设置</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/js/orders.js"></script>
+<script>
+/* 耗材详情页：5 件用 ?id= 切换；内容全部静态写在 DATA 里，脚本挂了也只是停在默认那件（不白屏）。 */
+var PM_DATA = {"pla": {"name": "PLA 环保耗材 1kg", "cat": "打印耗材", "price": 129, "lead": "玉米淀粉基可降解耗材，卷盘自带 NFC——装上去机器自动识别色号与打印参数；低气味、不翘边，开箱直接打。", "img": "assets/img/shop/card-pla-filament.png", "note": "1.75mm · 净重 1kg · 12 色可选", "hl": ["植物基配方，可降解", "NFC 自动识别色号与参数", "低气味 · 不堵头 · 不翘边"], "specs": [["线径", "1.75 mm（公差 ±0.02）"], ["净重", "1 kg（料净重，不含卷盘）"], ["打印温度", "190–220 ℃"], ["热床温度", "0–60 ℃"], ["颜色", "12 色可选 · 色号自动识别"], ["适配机型", "Doyao Y2 / Y2 Max"]]}, "uv": {"name": "UV 光固化树脂 1kg", "cat": "光固化耗材", "price": 199, "lead": "低气味配方，收缩率低、韧性好，0.05mm 层厚也能还原细密纹理；后处理只要酒精 + 紫外固化两步。", "img": "assets/img/shop/card-uv-resin.png", "note": "405nm · 净重 1kg · 8 色可选", "hl": ["低气味配方，室内可用", "0.05mm 细节还原", "韧性好 · 不易脆裂"], "specs": [["波长", "405 nm"], ["净重", "1 kg"], ["层厚", "0.05–0.1 mm"], ["邵氏硬度", "80D"], ["颜色", "8 色可选"], ["适配机型", "Doyao 光固化系列"]]}, "flat": {"name": "认证材质探索包", "cat": "激光耗材", "price": 299, "lead": "木板、亚克力、皮革、软木共 24 片，每片都标好推荐功率与刀路参数——想试激光加工，先拿它找手感。", "img": "assets/img/shop/card-materials-flatlay.png", "note": "24 片 · 4 种材质 · 附参数卡", "hl": ["24 片 · 4 种材质", "每片附推荐功率与刀路", "即取即刻，不用自己切料"], "specs": [["片数", "24 片"], ["材质", "木板 / 亚克力 / 皮革 / 软木"], ["单片刻板", "100 × 100 mm"], ["厚度", "2–3 mm"], ["附赠", "推荐功率与刀路参数卡"], ["适配机型", "XCheng X1 / X1 Pro / X1 Air"]]}, "hex": {"name": "PEI 纹理打印板", "cat": "打印配件", "price": 199, "lead": "双面 PEI 弹簧钢板，底面自带细纹，取件不用撬、不用胶水；磁吸贴合，换板 5 秒。", "img": "assets/img/shop/card-hex-box.png", "note": "256 × 256mm · 双面 PEI · 磁吸", "hl": ["双面 PEI 弹簧钢", "免胶水 · 一掰取件", "磁吸底座 · 5 秒换板"], "specs": [["尺寸", "256 × 256 mm"], ["板面", "双面 PEI 纹理"], ["基材", "弹簧钢 + 磁吸底座"], ["耐温", "≤ 120 ℃"], ["清洁", "酒精擦拭即可"], ["适配机型", "Doyao Y2"]]}, "noz": {"name": "硬质合金喷头组 ×3", "cat": "打印配件", "price": 249, "lead": "硬质合金喷嘴，耐磨耐高温，碳纤维、金属填充这类磨蚀性耗材也能长时间打；0.4mm 口径，3 支装。", "img": "assets/img/shop/card-robot-arm-joint.png", "note": "0.4mm · 硬质合金 · 3 支装", "hl": ["硬质合金 · 耐磨耐高温", "可打碳纤维 / 金属填充", "0.4mm 口径 · 3 支装"], "specs": [["口径", "0.4 mm"], ["材质", "硬质合金"], ["数量", "3 支"], ["最高温度", "300 ℃"], ["接口", "标准 V6 螺纹"], ["适配机型", "Doyao Y2 / Y2 Max"]]}};
+var PM_IDS = ["pla", "uv", "flat", "hex", "noz"];
+var PM_QTY = 1;
+
+var nullSink = { textContent: "", innerHTML: "", src: "", alt: "", style: {} };
+function getEl(id) { return window.document.getElementById(id) || nullSink; }
+
+function pmKey() {
+  try {
+    var m = /[?&]id=([a-z]+)/.exec(window.location.search || "");
+    return m && PM_DATA[m[1]] ? m[1] : PM_IDS[0];
+  } catch (e) { return PM_IDS[0]; }
+}
+function specRows(rows) {
+  return rows.map(function (r) { return "<tr><th>" + r[0] + "</th><td>" + r[1] + "</td></tr>"; }).join("");
+}
+function render(key) {
+  var d = PM_DATA[key];
+  if (!d) return;
+  getEl("pmCrumb").textContent = d.name;
+  getEl("pmCat").textContent = d.cat;
+  getEl("pmName").textContent = d.name;
+  getEl("pmLead").textContent = d.lead;
+  getEl("pmPrice").textContent = d.price.toLocaleString("en-US");
+  getEl("pmNote").textContent = d.note;
+  getEl("pmHl").innerHTML = d.hl.map(function (h) { return "<span>" + h + "</span>"; }).join("");
+  getEl("specTable").innerHTML = specRows(d.specs);
+  var im = getEl("pmImg"); im.src = d.img; im.alt = d.name;
+  getEl("bbImg").src = d.img; getEl("bbImg").alt = d.name;
+  getEl("bbName").textContent = d.name;
+  getEl("bbNote").textContent = d.note;
+  getEl("bbPrice").textContent = d.price.toLocaleString("en-US");
+  document.title = d.name + " · HiMakers";
+  try { window.history.replaceState(null, "", window.location.pathname + "?id=" + key); } catch (e) {}
+}
+function lines() {
+  var key = pmKey(), d = PM_DATA[key];
+  return [{ name: d.name, spec: d.cat + " · " + d.note, price: d.price, qty: PM_QTY, img: d.img }];
+}
+function setQty(v) {
+  PM_QTY = Math.max(1, Math.min(99, v));
+  getEl("qtyVal").textContent = PM_QTY;
+}
+getEl("qtyMinus").onclick = function () { setQty(PM_QTY - 1); };
+getEl("qtyPlus").onclick = function () { setQty(PM_QTY + 1); };
+getEl("btnAdd").onclick = function () {
+  var ls = lines();
+  if (window.Cart && window.Cart.addMany) window.Cart.addMany(ls);
+  else if (window.addToCart) ls.forEach(function (l) { window.addToCart(l); });
+};
+getEl("btnBuy").onclick = function () {
+  var ls = lines();
+  /* 立即购买：不计入购物车，单独存一份给结算页（与 PDP 同口径） */
+  if (window.hmSetBuyNow) window.hmSetBuyNow(ls);
+  try { localStorage.setItem("himakers_buynow", JSON.stringify(ls)); } catch (e) {}
+  if (window.hmHref) location.href = window.hmHref("checkout.html?mode=buynow");
+  else location.href = "checkout.html?mode=buynow";
+};
+
+render(pmKey());
+/* 站内其它入口（如「猜你喜欢」）带 ?id= 回来时会整页刷新，这里不需要监听 */
+</script>
+</body>
+</html>

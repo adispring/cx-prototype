@@ -33,7 +33,7 @@
 .cmp-switch[aria-pressed="true"] .sw::after { transform: translateX(14px); }
 
 /* ---------- 机型选择器 ---------- */
-.cmp-picker { margin-top: 26px; padding: 16px 18px 18px; background: #fff; border: 1px solid var(--line); border-radius: 16px; }
+.cmp-picker { margin-top: 26px; padding: 16px 18px 18px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
 .cmp-picker-t { display: flex; align-items: baseline; gap: 9px; font-size: 13.5px; font-weight: 600; }
 .cmp-picker-t i { font-style: normal; font-size: 12px; font-weight: 400; color: var(--faint); }
 .cmp-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
@@ -62,7 +62,7 @@
      overflow-y: clip / hidden 都救不回来（实测 pinned 仍为 false）。
      只在真的横向溢出时才由 JS 挂 .is-scroll 建容器——此时才需要牺牲 top-sticky。 */
   overflow: visible;
-  border: 1px solid var(--line); border-radius: 18px; background: #fff;
+  border: 1px solid var(--line); border-radius: 14px; background: #fff;
 }
 .cmp-scroll.is-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .cmp-table {
@@ -100,7 +100,7 @@
   display: inline-block; font-size: 11px; font-weight: 600; color: var(--green-t);
   background: var(--green-bg); border-radius: 999px; padding: 3px 9px;
 }
-.cmp-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: var(--bg-2); margin-top: 10px; display: block; }
+.cmp-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 9px; background: var(--bg-2); margin-top: 10px; display: block; }
 .cmp-card .cmp-name { font-size: 16px; font-weight: 700; letter-spacing: -.01em; margin-top: 12px; }
 .cmp-card .cmp-note { font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.6; }
 .cmp-card .cmp-price { display: flex; align-items: baseline; gap: 7px; margin-top: 10px; font-size: 21px; font-weight: 700; letter-spacing: -.03em; }
@@ -146,7 +146,7 @@
 .cmp-pick .cmp-pick-lead { color: var(--muted); font-size: 14px; margin-top: 10px; }
 .cmp-pick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 22px; }
 .cmp-pick-card {
-  display: block; background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  display: block; background: #fff; border: 1px solid var(--line); border-radius: 14px;
   padding: 20px 20px 22px; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 .cmp-pick-card:hover { border-color: var(--green); box-shadow: 0 14px 30px -22px rgba(12,18,16,.5); transform: translateY(-2px); }
@@ -188,21 +188,31 @@
       <div class="nav-item">
         <a href="shop.html" class="active">商城</a>
         <div class="nav-menu" aria-label="商城分类">
-          <div class="wrap nm-in">
-            <div class="nm-col">
-              <div class="nm-h">整机</div>
-              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
-              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
-              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
-              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
-            </div>
-            <div class="nm-prods">
-              <div class="nm-h">热销机型</div>
-              <div class="nm-grid">
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
-                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
-                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

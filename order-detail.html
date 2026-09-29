@@ -17,7 +17,7 @@
 .oc-status.mute { color: var(--faint); background: var(--bg-2); }
 .oc-item { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); }
 .oc-item:last-child { border-bottom: none; }
-.oc-item img { width: 58px; height: 58px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.oc-item img { width: 58px; height: 58px; border-radius: 9px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
 .oc-item .oi-mid { flex: 1; min-width: 0; }
 .oc-item .oi-n { font-size: 14px; font-weight: 600; }
 .oc-item .oi-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
@@ -32,13 +32,13 @@
 .od-head h1 { font-size: 26px; letter-spacing: -.03em; }
 .od-id { font-size: 12.5px; color: var(--faint); margin-top: 5px; }
 .od-layout { display: grid; grid-template-columns: 1fr 330px; gap: 20px; align-items: start; }
-.od-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; margin-bottom: 16px; }
+.od-card { background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 18px 20px; margin-bottom: 16px; }
 .od-card h3 { font-size: 15.5px; margin-bottom: 12px; }
 .od-line { display: flex; justify-content: space-between; font-size: 13.5px; padding: 7px 0; }
 .od-line.total { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 13px; font-weight: 600; font-size: 15px; }
 .od-line.total .price { font-size: 23px; font-weight: 700; }
 .od-line.total .cur { font-size: 14px; }
-.express { background: var(--bg-2); border-radius: 14px; padding: 14px 16px; }
+.express { background: var(--bg-2); border-radius: 10px; padding: 14px 16px; }
 .ex-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
 .ex-top b { font-weight: 600; }
 .ex-step { position: relative; padding-left: 20px; font-size: 13px; padding-bottom: 12px; }
@@ -187,8 +187,7 @@ document.addEventListener("click", function (e) {
   var o = window.Orders.get(id);
   if (!o) return;
   if (act === "pay") {
-    window.Orders.update(id, { status: "paid", pay: o.pay === "待选择" ? "信用卡 / 借记卡" : o.pay });
-    toast("支付成功 · 已进入备货，我们会尽快发货");
+    location.href = "payment.html?order=" + id; return;
   } else if (act === "receive") {
     window.Orders.update(id, { status: "done" });
     toast("已确认收货 · 期待你的开箱作品");

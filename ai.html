@@ -31,18 +31,18 @@
 .wb-head p { color: #8FA096; margin-top: 8px; }
 .credits { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: 10px 20px; font-size: 13.5px; }
 .credits b { color: #4ADE97; }
-.credits .c-bar { width: 120px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
-.credits .c-bar i { display: block; height: 100%; width: 72%; background: linear-gradient(90deg, #0FA36B, #4ADE97); border-radius: 3px; }
+.credits .c-bar { width: 120px; height: 5px; border-radius: 2px; background: rgba(255,255,255,.1); overflow: hidden; }
+.credits .c-bar i { display: block; height: 100%; width: 72%; background: linear-gradient(90deg, #0FA36B, #4ADE97); border-radius: 2px; }
 
 .wb-grid { display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start; }
 
 /* 左侧控制面板 */
-.panel { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 22px; position: sticky; top: 92px; }
+.panel { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 22px; position: sticky; top: 92px; }
 .field label.f-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #DCE6DF; margin-bottom: 10px; letter-spacing: .04em; }
 .field .f-count { color: #6E7B73; font-weight: 400; }
 .prompt-box {
   width: 100%; min-height: 96px; resize: vertical;
-  background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.14); border-radius: 14px;
+  background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.14); border-radius: 10px;
   padding: 14px 16px; color: #fff; font-size: 14.5px; line-height: 1.7; outline: none;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
@@ -53,7 +53,7 @@
 .sample-row .pc:hover { border-color: #4ADE97; color: #4ADE97; }
 .mode-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .mode-btn {
-  border: 1.5px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); border-radius: 12px;
+  border: 1.5px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); border-radius: 9px;
   padding: 12px; text-align: left; color: #DCE6DF; font-size: 13.5px; transition: all .15s ease;
 }
 .mode-btn small { display: block; color: #6E7B73; font-size: 11.5px; margin-top: 2px; }
@@ -77,7 +77,7 @@
 
 /* 右侧画布 */
 .canvas {
-  background: rgba(255,255,255,.03); border: 1px dashed rgba(255,255,255,.16); border-radius: 22px;
+  background: rgba(255,255,255,.03); border: 1px dashed rgba(255,255,255,.16); border-radius: 16px;
   min-height: 620px; padding: 24px; position: relative; display: flex; flex-direction: column;
 }
 .canvas-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -85,7 +85,7 @@
 .canvas-head .c-tip { font-size: 12.5px; color: #6E7B73; }
 .result-grid { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-content: stretch; }
 .result-cell {
-  border-radius: 16px; overflow: hidden; position: relative; cursor: pointer;
+  border-radius: 12px; overflow: hidden; position: relative; cursor: pointer;
   border: 2px solid transparent; background: rgba(255,255,255,.05); min-height: 220px;
   transition: border-color .15s ease, transform .2s ease;
 }
@@ -96,7 +96,7 @@
 .result-cell .r-time { position: absolute; bottom: 10px; right: 12px; color: rgba(255,255,255,.75); font-size: 11.5px; font-family: var(--font-num); }
 /* 空状态 */
 .canvas-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; color: #6E7B73; }
-.canvas-empty .ce-ico { width: 84px; height: 84px; border-radius: 26px; background: rgba(74,222,151,.1); display: flex; align-items: center; justify-content: center; color: #4ADE97; }
+.canvas-empty .ce-ico { width: 84px; height: 84px; border-radius: 20px; background: rgba(74,222,151,.1); display: flex; align-items: center; justify-content: center; color: #4ADE97; }
 .canvas-empty b { color: #DCE6DF; font-size: 17px; }
 /* 生成中 */
 .skeleton { position: relative; overflow: hidden; background: rgba(255,255,255,.05); }
@@ -125,9 +125,9 @@
 
 /* 能力矩阵 */
 .cap-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 24px; }
-.cap-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 18px; padding: 22px 20px; transition: all .2s ease; }
+.cap-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 14px; padding: 22px 20px; transition: all .2s ease; }
 .cap-card:hover { border-color: rgba(74,222,151,.5); transform: translateY(-4px); }
-.cap-card .cap-ico { width: 42px; height: 42px; border-radius: 12px; background: rgba(74,222,151,.12); color: #4ADE97; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.cap-card .cap-ico { width: 42px; height: 42px; border-radius: 9px; background: rgba(74,222,151,.12); color: #4ADE97; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .cap-card h4 { font-size: 15px; margin-bottom: 6px; }
 .cap-card p { font-size: 12.5px; color: #8FA096; line-height: 1.65; }
 

@@ -19,10 +19,10 @@
 
 .cp-layout { display: grid; grid-template-columns: 1fr 372px; gap: 32px; align-items: start; }
 
-.cp-list { background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.cp-list { background: #fff; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; }
 .cp-row { display: grid; grid-template-columns: 104px 1fr auto; gap: 20px; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--line); }
 .cp-row:last-child { border-bottom: 0; }
-.cp-row .cp-img { width: 104px; height: 96px; border-radius: 14px; object-fit: cover; background: var(--bg-2); }
+.cp-row .cp-img { width: 104px; height: 96px; border-radius: 10px; object-fit: cover; background: var(--bg-2); }
 .cp-row .cp-name { font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
 .cp-row .cp-spec { font-size: 13px; color: var(--muted); margin-top: 5px; }
 .cp-row .cp-unit { font-size: 12.5px; color: var(--faint); margin-top: 6px; }
@@ -38,9 +38,9 @@
 .cp-parts-t { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--faint); margin-bottom: 6px; }
 .cp-parts-t .cp-parts-n { font-size: 11px; font-weight: 600; color: var(--green-t); background: var(--green-bg); border-radius: 999px; padding: 2px 8px; }
 .cp-parts-list { display: flex; flex-direction: column; gap: 2px; }
-.cp-part { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 12px; }
+.cp-part { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 9px; }
 .cp-part:hover { background: var(--bg-2); }
-.cp-part img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; background: var(--bg-2); }
+.cp-part img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--bg-2); }
 .cp-part .cp-part-info { min-width: 0; }
 .cp-part .cp-part-n { font-size: 13px; color: var(--body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cp-part .cp-part-s { font-size: 11.5px; color: var(--faint); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -64,13 +64,13 @@
 .cp-empty .ce-cta { display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
 
 .cp-side { position: sticky; top: 92px; display: flex; flex-direction: column; gap: 16px; }
-.cp-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+.cp-card { background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 24px; }
 .cp-card h3 { font-size: 16px; margin-bottom: 16px; }
 .cp-line { display: flex; align-items: center; justify-content: space-between; font-size: 14.5px; color: var(--muted); padding: 7px 0; }
 .cp-line b { color: var(--ink); font-weight: 600; }
 .cp-line.total { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 16px; font-size: 15px; }
 .cp-line.total .price { font-size: 26px; }
-.cp-free { font-size: 12.5px; color: var(--green-t); background: var(--green-bg); border-radius: 10px; padding: 9px 12px; margin-top: 12px; }
+.cp-free { font-size: 12.5px; color: var(--green-t); background: var(--green-bg); border-radius: 8px; padding: 9px 12px; margin-top: 12px; }
 .cp-card .btn { margin-top: 16px; }
 /* 去结算：压低高度、撑满卡片宽度（.block 原本在站点 CSS 里没有定义） */
 .cp-card .btn.block { width: 100%; height: 46px; padding: 0 20px; font-size: 15px; letter-spacing: .01em; }
@@ -83,7 +83,7 @@
 .cp-sug h2 { font-size: 22px; letter-spacing: -.02em; margin-bottom: 6px; }
 .cp-sug .cs-lead { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
 .cs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.cs-card { background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+.cs-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
 .cs-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; background: var(--bg-2); }
 .cs-card .cs-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .cs-card .cs-name { font-size: 15px; font-weight: 600; }
@@ -104,7 +104,7 @@
   .cp-row .cp-img { width: 76px; height: 72px; }
   .cp-row .cp-right { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; }
   .cp-part { grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; padding: 5px 6px 5px 2px; }
-  .cp-part img { width: 34px; height: 34px; border-radius: 9px; }
+  .cp-part img { width: 34px; height: 34px; border-radius: 7px; }
   .cp-part .cp-part-s { display: none; }
   .cs-grid { grid-template-columns: 1fr; }
 }
@@ -124,21 +124,31 @@
       <div class="nav-item">
         <a href="shop.html" data-page-node-id="jETB9ZISQ68UQ8H0wxegFn">商城</a>
         <div class="nav-menu" aria-label="商城分类">
-          <div class="wrap nm-in">
-            <div class="nm-col">
-              <div class="nm-h">整机</div>
-              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
-              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
-              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
-              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
-            </div>
-            <div class="nm-prods">
-              <div class="nm-h">热销机型</div>
-              <div class="nm-grid">
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
-                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
-                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -114,9 +114,9 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
 .ai-inner .mega { color: #fff; }
 .ai-inner .mega em { color: #4ADE97; }
 .ai-inner .mini { color: rgba(255,255,255,.62); margin-top: 18px; font-weight: 300; }
-.panel { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 22px; padding: 22px; backdrop-filter: blur(18px); }
+.panel { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 22px; backdrop-filter: blur(18px); }
 .gen-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.gen-in { flex: 1; min-width: 240px; display: flex; align-items: center; gap: 11px; height: 54px; padding: 0 15px; border-radius: 13px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.14); }
+.gen-in { flex: 1; min-width: 240px; display: flex; align-items: center; gap: 11px; height: 54px; padding: 0 15px; border-radius: 10px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.14); }
 .gen-in:focus-within { border-color: #4ADE97; }
 .gen-in svg { color: #4ADE97; flex-shrink: 0; }
 .gen-in input { flex: 1; border: 0; outline: 0; background: none; color: #EAF2EC; font-size: 14.5px; height: 100%; }
@@ -126,7 +126,7 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
 .gen-chips .gc:hover { border-color: rgba(74,222,151,.6); color: #4ADE97; }
 .gen-chips .gc.on { border-color: #4ADE97; color: #4ADE97; background: rgba(74,222,151,.13); font-weight: 600; }
 .gen-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
-.g-cell { aspect-ratio: 1; border-radius: 12px; overflow: hidden; position: relative; background: rgba(255,255,255,.06); transition: all .2s ease; }
+.g-cell { aspect-ratio: 1; border-radius: 9px; overflow: hidden; position: relative; background: rgba(255,255,255,.06); transition: all .2s ease; }
 .g-cell img { width: 100%; height: 100%; object-fit: cover; }
 .g-cell.pick { cursor: pointer; }
 .g-cell.pick:hover { transform: translateY(-3px); }
@@ -138,10 +138,10 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
 .gen-status .bar { display: inline-block; width: 160px; height: 3px; background: rgba(255,255,255,.12); border-radius: 2px; overflow: hidden; vertical-align: middle; margin: 0 9px; }
 .gen-status .bar i { display: block; height: 100%; width: 0; background: #4ADE97; transition: width .5s ease; }
 .gen-status .st { color: #4ADE97; }
-.gen-make { margin-top: 16px; display: none; align-items: center; gap: 15px; padding: 14px 16px; border-radius: 15px; background: rgba(74,222,151,.09); border: 1px solid rgba(74,222,151,.24); }
+.gen-make { margin-top: 16px; display: none; align-items: center; gap: 15px; }
 .gen-make.show { display: flex; animation: fu .4s ease; }
 @keyframes fu { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.gen-make .gm-i { width: 56px; height: 56px; border-radius: 11px; overflow: hidden; flex-shrink: 0; }
+.gen-make .gm-i { width: 56px; height: 56px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
 .gen-make .gm-i img { width: 100%; height: 100%; object-fit: cover; }
 .gen-make .gm-c { flex: 1; min-width: 0; }
 .gen-make .gm-t { color: #fff; font-size: 15px; font-weight: 600; }
@@ -224,11 +224,11 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
   .outro-stats { gap: 28px; }
 }
 </style>
-<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:3px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
 <body class="has-hero" data-page-node-id="YvmnMLwsDh59yryDDFAqQu" style="">
 
 <!-- ================= 导航 ================= -->
-<header class="nav scrolled" data-page-node-id="29Kjm9ZjJc5jc7UP7cOfEG">
+<header class="nav" data-page-node-id="29Kjm9ZjJc5jc7UP7cOfEG">
   <div class="nav-inner" data-page-node-id="vcaTayRf5FgBDrkveHCEtq">
     <a class="brand" href="index.html" data-page-node-id="3O908tqaUb7zz05Nc6iN3B">
       <span class="brand-mark" data-page-node-id="6sLZkqqGbqGqEQamE0vWlV"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" data-page-node-id="BoTNmml8ZpDPG8Uc0mzhab"><path d="M5.6 4.6v14.8M15.6 4.6v14.8M5.6 12h10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" data-page-node-id="nHPP7A8Enhhs7YPX4pSS6D"></path><path d="M19.6 4c.3 1.7.95 2.35 2.6 2.6-1.65.25-2.3.9-2.6 2.6-.3-1.7-.95-2.35-2.6-2.6 1.65-.25 2.3-.9 2.6-2.6Z" fill="#fff" data-page-node-id="dDgvTT8XH5SQeCwFTbL7SL"></path></svg></span>
@@ -246,12 +246,12 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="hmudD3YgC2XAg2FSE6gyUX"><circle cx="11" cy="11" r="7" data-page-node-id="lsPuJJH8lRcFrFWK5KWUnz"></circle><path d="m20 20-3.5-3.5" data-page-node-id="FcHccB6qblEwdP5S19BkcS"></path></svg>
         <input type="text" placeholder="搜索灵感、模型、机器…" data-page-node-id="dt8pa31bEbn4ya41o3qZvJ">
       </label>
-      <div class="notif-wrap"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0"></path></svg><span class="badge-dot notif-count show">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知"><div class="np-head"><h4>通知中心<span class="np-count" id="notifUnreadCount">3 条未读</span></h4><button class="np-mark" id="notifMarkAll">全部已读</button></div><div class="np-tabs"><button class="np-tab on" data-cat="全部">全部</button><button class="np-tab" data-cat="互动">互动</button><button class="np-tab" data-cat="订单">订单</button><button class="np-tab" data-cat="系统">系统</button></div><div class="np-list" id="notifList"><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot"><a href="community.html">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart data-page-node-id="amjGdqEaO24708E9mV4Gtz">
+      <div class="notif-wrap" data-page-node-id="scIP8JEuhm0W9yIB5QhH8c"><button class="icon-btn" id="notifBtn" title="消息通知" aria-label="消息通知" data-page-node-id="kOPMgXmVwDd43PKDxuJ7Gn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="tzQupGZ44atLHcBlSVGmYH"><path d="M18 8.4a6 6 0 1 0-12 0c0 5.2-2 6.8-2 6.8h16s-2-1.6-2-6.8" data-page-node-id="ZB1RAN8yLW63yE0dPhO3Cp"></path><path d="M13.7 19.2a2 2 0 0 1-3.4 0" data-page-node-id="G9yR26zY6gh9RNJdo1zUag"></path></svg><span class="badge-dot notif-count show" data-page-node-id="sX34tbqVYuCQjkjaT3EcLK">3</span></button><div class="notif-panel" id="notifPanel" role="dialog" aria-label="消息通知" data-page-node-id="l9LoLHOE3LjPDZcbuQkVS4"><div class="np-head" data-page-node-id="71PuAwwIL4gNQDmRwvKBFK"><h4 data-page-node-id="3o6Z2NjCeKomzkZGuD5DDh">通知中心<span class="np-count" id="notifUnreadCount" data-page-node-id="loZpbZZFRddXa5EedTCztE">3 条未读</span></h4><button class="np-mark" id="notifMarkAll" data-page-node-id="8o6142CL87dO1g2mRTcIHM">全部已读</button></div><div class="np-tabs" data-page-node-id="9NgLOGAZsDVQrH89BQrQ1z"><button class="np-tab on" data-cat="全部" data-page-node-id="ihaSAmBEAPmCLLjkRmaOuW">全部</button><button class="np-tab" data-cat="互动" data-page-node-id="QjsPGMrtrGq8D121YAZxi1">互动</button><button class="np-tab" data-cat="订单" data-page-node-id="QMlMrTzhLG112Tpbihh5W3">订单</button><button class="np-tab" data-cat="系统" data-page-node-id="Hw2cTn5BeSxOXsPUa9IGED">系统</button></div><div class="np-list" id="notifList" data-page-node-id="GPV9FQaIiygnBiqobBaYfu"><div class="np-item unread" data-t="你的作品被收藏"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S4.6 15.5 4.6 10.4A4.1 4.1 0 0 1 12 7.7a4.1 4.1 0 0 1 7.4 2.7c0 5.1-7.4 9.8-7.4 9.8Z"></path></svg></span><div class="np-body"><div class="np-t">你的作品被收藏<span class="np-dot"></span></div><div class="np-d">林一 收藏了你发布的《等高线木刻浮雕》</div><div class="np-time">互动 · 2 分钟前</div></div></div><div class="np-item unread" data-t="收到一条新回复"><span class="np-ico g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">收到一条新回复<span class="np-dot"></span></div><div class="np-d">阿哲：这个功率参数我调了 3 次才对，附了曲线图</div><div class="np-time">互动 · 1 小时前</div></div></div><div class="np-item unread" data-t="订单已发货"><span class="np-ico b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.6 12 3.2 3.5 7.6v8.8L12 20.8l8.5-4.4V7.6Z"></path><path d="m3.5 7.6 8.5 4.4 8.5-4.4M12 12v8.8"></path></svg></span><div class="np-body"><div class="np-t">订单已发货<span class="np-dot"></span></div><div class="np-d">HM-20418 · XCheng X1 套装，预计 9/28 送达</div><div class="np-time">订单 · 昨天 18:20</div></div></div><div class="np-item" data-t="Maker Pass 即将到期"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="12.5" rx="2"></rect><path d="M12 8v12.5M3.5 12.2h17M12 8S10.6 3.6 8.2 3.6a2.2 2.2 0 0 0 0 4.4M12 8s1.4-4.4 3.8-4.4a2.2 2.2 0 0 1 0 4.4"></path></svg></span><div class="np-body"><div class="np-t">Maker Pass 即将到期</div><div class="np-d">会员 3 天后到期，续费立享 8 折并保留灵感额度</div><div class="np-time">系统 · 2 天前</div></div></div><div class="np-item" data-t="作品入选精选"><span class="np-ico o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5a2 2 0 0 1-2 2H8.6L4 20.5V5.6a2 2 0 0 1 2-2h12.5a2 2 0 0 1 2 2Z"></path></svg></span><div class="np-body"><div class="np-t">作品入选精选</div><div class="np-d">你投稿的「秋日木作」已进入社区精选合集</div><div class="np-time">系统 · 3 天前</div></div></div></div><div class="np-foot" data-page-node-id="UjrPCxVlpOR8pI63teXG7C"><a href="community.html" data-page-node-id="xPiwXngi3prBhPfDOIGuAp">查看全部消息 →</a></div></div></div><button class="icon-btn" title="购物车" data-cart="" data-page-node-id="amjGdqEaO24708E9mV4Gtz" aria-label="购物车">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ZjpW7IfFTQGbkHNMEpToZj"><path d="M6 7h12l1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H6.6a1.8 1.8 0 0 1-1.8-1.8L6 7Z" data-page-node-id="viL9fQ6uSCMD6tlPKLS1JB"></path><path d="M9 9V6a3 3 0 0 1 6 0v3" data-page-node-id="EJjkeNjYo1fpOtFVM6Saan"></path></svg>
         <span class="badge-dot cart-count" data-page-node-id="sGJuWkldHmXKsFfQPAY2xi">0</span>
       </button>
-      <a href="login.html" class="btn btn-ghost sm hide-sm" data-page-node-id="T5TGVgIfkb8eA6qY2XeGdv">登录</a>
-      <a href="#" class="btn btn-ink sm hide-sm" data-page-node-id="BRbYbYeLoCsKfB5MFc9IpF">注册</a>
+      
+      
       <button class="icon-btn nav-burger" title="菜单" data-page-node-id="3C9bvKCAiffLGO6YscFIbF">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="7reHXvaMyoKtf52uxgvAiX"><path d="M4 7h16M4 12h16M4 17h16" data-page-node-id="sedKFokP0t90oFzRVaLOiI"></path></svg>
       </button>
@@ -260,7 +260,7 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
 </header>
 <div class="mobile-menu" data-page-node-id="K0I7BFr4B7ByizC1gkDnzu">
   <a href="index.html" class="active" data-page-node-id="VGcxvXipM1tKi9BUD6MHv6">首页</a><a href="shop.html" data-page-node-id="lBnKpHcs9vOfGP1m8YwEgC">商城</a><a href="ai.html" data-page-node-id="RmJOuLDpqAiLc59jVJyPXF">AI 创作</a><a href="models.html" data-page-node-id="zZGEDQ72WtjBvlXkwuwVkn">模型库</a><a href="community.html" data-page-node-id="5bTDc6txjYJuiov0vmCHtG">社区</a>
-<a href="member.html">个人中心</a></div>
+<a href="member.html" data-page-node-id="kpK3xsNy7JjtVJ9rcA7evp">个人中心</a></div>
 
 <!-- 右侧路径 -->
 <nav class="path-rail" aria-label="体验路径" data-page-node-id="e6B9sCjXxRpfmMYPNOH8BB">
@@ -371,7 +371,7 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="WOKO4BTsd0x5UL1phwAXTs"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3Z" data-page-node-id="2S49vCHri8hylHHUru06C2"></path></svg>
           <input id="genText" type="text" value="一只在星空下奔跑的机械鹿，等高线风格" placeholder="描述你想做的东西" data-page-node-id="luc1wCrEqmReTJp3DgfDlT">
         </label>
-        <button class="btn btn-primary" id="genBtn" style="height:54px;border-radius:13px" data-page-node-id="5WeC4V54Mir6yjwCDlwzsQ"><span id="genBtnTxt" data-page-node-id="ClDpUG6jU6PcxiBzQa0yEl">生成</span> <span class="arr" data-page-node-id="tCRn8ps2yNL2KdNv36iKWJ">→</span></button>
+        <button class="btn btn-primary" id="genBtn" style="height:54px;border-radius:10px" data-page-node-id="5WeC4V54Mir6yjwCDlwzsQ"><span id="genBtnTxt" data-page-node-id="ClDpUG6jU6PcxiBzQa0yEl">生成</span> <span class="arr" data-page-node-id="tCRn8ps2yNL2KdNv36iKWJ">→</span></button>
       </div>
       <div class="gen-chips" id="genChips" data-page-node-id="t0uWyZwD91lxpduzLlTV4P">
         <button class="gc on" data-dev="laser" data-page-node-id="1G4gCcMfxuXH0hJALgSDIV">线稿雕刻</button>
@@ -473,13 +473,13 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
         <h4 data-page-node-id="3vcmmgzOzzAXHBpEJSw1Iu">社区与支持</h4>
         <a href="community.html" data-page-node-id="NFHwARsHVHEuwjBRXmsTzB">作品广场</a><a href="community.html" data-page-node-id="ItNIbesDuScgJlAaICJOP1">挑战赛</a><a href="#" data-page-node-id="9j5LqfN7ZQwURNCaS065tE">帮助中心</a>
       </div>
-      <div class="footer-col">
-        <h4>服务支持</h4>
-        <a href="#">配送与退换</a><a href="#">保修与维修</a><a href="shop.html">配件与耗材</a><a href="#">联系客服</a>
+      <div class="footer-col" data-page-node-id="4BjqLHBUk9V9RSagYUIvoa">
+        <h4 data-page-node-id="oON02aMXBRwge6J2sxX2fc">服务支持</h4>
+        <a href="#" data-page-node-id="ndABGSF7RfIM3Q1W4RJuuR">配送与退换</a><a href="#" data-page-node-id="8cInCLKmoZIAcIAITZSYom">保修与维修</a><a href="shop.html" data-page-node-id="UMZRjfIFbMfRSEIeF3Lzit">配件与耗材</a><a href="#" data-page-node-id="EoWkLJPUw6gliKmPrkwZK0">联系客服</a>
       </div>
-      <div class="footer-col">
-        <h4>关于我们</h4>
-        <a href="#">品牌故事</a><a href="#">新闻中心</a><a href="#">加入我们</a><a href="#">合作伙伴</a>
+      <div class="footer-col" data-page-node-id="15RXthqhvPCgh5wbYhFJjY">
+        <h4 data-page-node-id="dBuGyyXOevtjAlQSh68URl">关于我们</h4>
+        <a href="#" data-page-node-id="SgSVCed4fW7pCDmtnkMJbM">品牌故事</a><a href="#" data-page-node-id="NcyxmG4QBmgQtE3UdF5B1e">新闻中心</a><a href="#" data-page-node-id="6O2ovVwajmV9aYG4CbVLVj">加入我们</a><a href="#" data-page-node-id="PGNQwQ7OzMfSeVsSgrKUXm">合作伙伴</a>
       </div>
     </div>
     <div class="footer-bottom" data-page-node-id="R76paDJbrkylCbLXM9uSmK">
@@ -661,8 +661,8 @@ body.has-hero .hero { margin-top: calc(-1 * var(--nav-h, 68px)); }
         '<div style="display:flex;justify-content:space-between;font-size:14px;padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">推荐耗材</span><b style="color:var(--ink)">' + w.mat + "</b></div>" +
         '<div style="display:flex;justify-content:space-between;font-size:14px;padding:11px 0;border-bottom:1px solid var(--line)"><span style="color:var(--muted)">预计工时</span><b style="color:var(--ink)">' + w.time + "</b></div>" +
       "</div>" +
-      '<div style="margin-top:22px;background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px">' +
-        '<img src="' + d.img + '" alt="" style="width:60px;height:60px;border-radius:12px;object-fit:cover;background:#fff">' +
+      '<div style="margin-top:22px;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px">' +
+        '<img src="' + d.img + '" alt="" style="width:60px;height:60px;border-radius:9px;object-fit:cover;background:#fff">' +
         '<div style="flex:1;min-width:0"><div style="font-size:12.5px;color:var(--muted)">这件作品由它制作</div>' +
         '<div style="font-size:15.5px;font-weight:600;color:var(--ink)">' + d.name + " · " + d.craft + "</div>" +
         '<div style="font-size:13px;color:var(--green-t);font-weight:600;margin-top:2px">' + d.price + "</div></div>" +

@@ -41,7 +41,7 @@
   /* 被「一屏封顶」压窄时，主图在左列内居中（左右留白相等）—— 贴左缘会在主图与右侧
      购买信息之间留出一条很远的空档。图能填满列宽时本条自动失效。 */
   inline-size: min(100%, calc((100vh - var(--pg-top) - var(--pg-thumb)) * var(--pg-r)));
-  position: relative; border-radius: 22px; overflow: hidden; background: var(--bg-2); aspect-ratio: 1024 / 927;
+  position: relative; border-radius: 16px; overflow: hidden; background: var(--bg-2); aspect-ratio: 1024 / 927;
 }
 .pg-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* 左右翻页：与缩略图同一行的圆形小按钮，分列带子两侧（不再压在主图上） */
@@ -72,7 +72,7 @@
 @keyframes pgPlay { from { width: 0; } to { width: 100%; } }
 /* 缩略图：横向居中的小方图带（宽度 = 内容宽，由左列网格居中）；当前项 = 品牌绿描边 + 淡绿外环 */
 .pg-thumbs { grid-area: 2 / 2 / 3 / 3; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.pg-thumbs button { inline-size: var(--pg-ts); block-size: var(--pg-ts); flex: 0 0 auto; padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-2); cursor: pointer; opacity: .72; transition: opacity .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.pg-thumbs button { inline-size: var(--pg-ts); block-size: var(--pg-ts); flex: 0 0 auto; padding: 0; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--bg-2); cursor: pointer; opacity: .72; transition: opacity .18s ease, border-color .18s ease, box-shadow .18s ease; }
 .pg-thumbs button:hover { opacity: 1; border-color: var(--line-2); }
 .pg-thumbs button.on { opacity: 1; border-color: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
 .pg-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -94,7 +94,7 @@
 .sku-label { font-size: 13px; font-weight: 600; margin-bottom: 9px; }
 .sku-label span { color: var(--faint); font-weight: 400; margin-left: 6px; }
 .sku-opts { display: flex; flex-wrap: wrap; gap: 9px; }
-.sku-opt { border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 15px; cursor: pointer; background: #fff; text-align: left; transition: all .18s ease; min-width: 128px; }
+.sku-opt { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 15px; cursor: pointer; background: #fff; text-align: left; transition: all .18s ease; min-width: 128px; }
 .sku-opt:hover { border-color: var(--green); }
 .sku-opt.on { border-color: var(--green); background: var(--green-bg); }
 .sku-opt b { display: block; font-size: 14px; font-weight: 600; }
@@ -107,18 +107,18 @@
 .combo-grid { display: grid; gap: 10px; }
 .combo-item {
   display: flex; align-items: center; gap: 12px; padding: 9px 14px 9px 12px; background: #fff;
-  border: 1.5px solid var(--line); border-radius: 14px; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: 10px; cursor: pointer;
   transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
 }
 .combo-item:hover { border-color: var(--green); box-shadow: 0 8px 16px -12px rgba(12,18,16,.5); }
 .combo-item.on { border-color: var(--green); background: var(--green-bg); }
-.combo-item img { flex: 0 0 auto; inline-size: 60px; block-size: 60px; object-fit: cover; border-radius: 11px; background: #fff; display: block; }
+.combo-item img { flex: 0 0 auto; inline-size: 60px; block-size: 60px; object-fit: cover; border-radius: 8px; background: #fff; display: block; }
 .combo-item .ci-mid { flex: 1; min-width: 0; }
 .combo-item .ci-n { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.35; }
 .combo-item .ci-s { display: block; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
 .combo-item .ci-p { margin-left: auto; font-size: 14px; font-weight: 600; white-space: nowrap; }
 .combo-box {
-  flex: 0 0 auto; inline-size: 19px; block-size: 19px; border-radius: 6px;
+  flex: 0 0 auto; inline-size: 19px; block-size: 19px; border-radius: 4px;
   border: 1.5px solid var(--line-2); background: #fff;
   display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff;
   transition: background .15s ease, border-color .15s ease;
@@ -137,7 +137,7 @@
 }
 .buybar-in { display: flex; align-items: center; gap: 18px; padding: 9px 0; }
 .bb-prod { display: flex; align-items: center; gap: 11px; flex: 1; min-width: 0; }
-.bb-prod img { width: 40px; height: 40px; border-radius: 11px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.bb-prod img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
 .bb-meta { min-width: 0; }
 .bb-meta b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bb-meta span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -166,7 +166,7 @@
 .spec-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); }
 .spec-table td:first-child { width: 200px; color: var(--muted); background: var(--bg-2); }
 .pdp-story { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.story-card { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.story-card { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
 .story-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
 .story-card .sc-b { padding: 14px 16px 18px; }
 .story-card h4 { font-size: 15px; margin-bottom: 5px; }
@@ -205,7 +205,7 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
 .pd-block h2 { font-size: 21px; letter-spacing: -.02em; margin-bottom: 16px; }
 .pd-lead { max-inline-size: 860px; font-size: 14.5px; line-height: 1.9; color: var(--body); }
 .pd-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 22px 0 4px; }
-.pd-fact { border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px 16px; }
+.pd-fact { border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px 16px; }
 .pd-fact b { display: block; font-size: 23px; font-weight: 700; letter-spacing: -.03em; }
 .pd-fact b i { font-size: 12.5px; font-weight: 600; font-style: normal; color: var(--muted); margin-left: 3px; }
 .pd-fact span { display: block; margin-top: 7px; font-size: 12.5px; color: var(--muted); }
@@ -214,7 +214,7 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
 .pd-feat { display: grid; grid-template-columns: 1.02fr .98fr; gap: 36px; align-items: center; }
 .pd-feat + .pd-feat { margin-top: 42px; }
 .pd-feat.rev .pd-feat-media { order: 2; }
-.pd-feat-media img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 20px; background: var(--bg-2); }
+.pd-feat-media img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 15px; background: var(--bg-2); }
 .pd-feat-body h3 { font-size: 17px; letter-spacing: -.01em; margin-bottom: 10px; }
 .pd-feat-body p { font-size: 13.5px; line-height: 1.9; color: var(--muted); }
 .pd-feat-body ul { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
@@ -222,7 +222,7 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
 .pd-feat-body li::before { content: ""; position: absolute; left: 6px; top: 8px; inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--green); }
 /* 常见问题：原生 <details> 手风琴（零 JS） */
 .pd-faq { max-inline-size: 940px; }
-.faq-item { border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.faq-item { border: 1px solid var(--line); border-radius: 10px; background: #fff; }
 .faq-item + .faq-item { margin-top: 10px; }
 .faq-item > summary { display: flex; align-items: center; gap: 12px; padding: 15px 18px; font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; }
 .faq-item > summary::-webkit-details-marker { display: none; }
@@ -271,7 +271,7 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
   .pg-vplay .vp-btn svg { inline-size: 20px; block-size: 20px; }
   .buybar-in { flex-wrap: wrap; gap: 9px 12px; padding: 9px 0; }
   .bb-prod { flex: 1 1 100%; }
-  .bb-prod img { width: 34px; height: 34px; border-radius: 9px; }
+  .bb-prod img { width: 34px; height: 34px; border-radius: 7px; }
   .bb-price b { font-size: 19px; }
   .bb-act { flex: 1; justify-content: flex-end; gap: 8px; }
   .bb-act .btn { flex: 1; height: 40px; padding: 0 14px; font-size: 13.5px; }
@@ -288,14 +288,14 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
 @media (max-width: 480px) {
   /* 竖排组合卡在小屏收一档（缩略图 60 → 52） */
   .combo-item { gap: 10px; padding: 8px 12px 8px 10px; }
-  .combo-item img { inline-size: 52px; block-size: 52px; border-radius: 10px; }
+  .combo-item img { inline-size: 52px; block-size: 52px; border-radius: 8px; }
 }
 @media (max-width: 420px) {
   .bb-prod { display: none; }
   .footer { padding-bottom: 100px; }
 }
 </style>
-<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:3px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
 <body data-page-node-id="SM6vhiHiwDZJbjLhNvtgZt" style="">
 <header class="nav scrolled" data-page-node-id="4P9p6TyPwmSvAJE9oUO73j">
   <div class="nav-inner" data-page-node-id="05s7zylBCUjxxvAB7AC8NY">
@@ -308,21 +308,31 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
       <div class="nav-item">
         <a href="shop.html" data-page-node-id="DOpq5Gt16aNEuGWgyQtViK">商城</a>
         <div class="nav-menu" aria-label="商城分类">
-          <div class="wrap nm-in">
-            <div class="nm-col">
-              <div class="nm-h">整机</div>
-              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
-              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
-              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
-              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
-            </div>
-            <div class="nm-prods">
-              <div class="nm-h">热销机型</div>
-              <div class="nm-grid">
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
-                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
-                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -25,7 +25,7 @@
   width: 620px; height: 620px; border-radius: 50%; pointer-events: none;
   background: radial-gradient(circle, rgba(15,163,107,.34) 0%, rgba(74,222,151,.14) 42%, rgba(15,163,107,0) 68%);
 }
-.lg-brand .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
+.lg-brand .brand-mark { width: 38px; height: 38px; border-radius: 9px; }
 .lg-brand .brand-name { font-size: 21px; color: #fff; }
 .lg-brand .brand-name i { color: #4ADE97; }
 .lg-slogan { position: relative; margin-top: 64px; max-width: 560px; }
@@ -35,7 +35,7 @@
 .lg-slogan p { margin-top: 16px; color: #93A29A; font-size: 15.5px; line-height: 1.8; }
 .lg-visual {
   position: relative; margin-top: 44px; align-self: flex-start; width: 100%; max-width: 560px;
-  border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,.1);
 }
 /* 源图 1536×1024，按 1536/927 取景把底部约 9.5%（生成水印区）裁掉 */
 .lg-visual img { width: 100%; aspect-ratio: 1536 / 927; object-fit: cover; object-position: top; display: block; }
@@ -59,7 +59,7 @@
 
 .lg-social { display: flex; gap: 12px; margin-top: 32px; }
 .lg-social button {
-  flex: 1; height: 48px; border: 1.5px solid var(--line); border-radius: 12px;
+  flex: 1; height: 48px; border: 1.5px solid var(--line); border-radius: 9px;
   background: #fff; display: flex; align-items: center; justify-content: center;
   transition: border-color .15s ease, background .15s ease;
 }
@@ -71,7 +71,7 @@
 .lg-field { margin-bottom: 14px; }
 .lg-field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--body); margin-bottom: 6px; }
 .lg-field input {
-  width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px;
+  width: 100%; border: 1.5px solid var(--line); border-radius: 9px; padding: 12px 14px;
   font-size: 14px; font-family: inherit; background: #fff; color: var(--ink);
   transition: border-color .15s ease, box-shadow .15s ease;
 }
@@ -87,7 +87,7 @@
 .lg-note a { color: var(--green-t); }
 .lg-switch { margin-top: 14px; font-size: 13.5px; color: var(--muted); text-align: center; }
 .lg-switch a { color: var(--green-t); font-weight: 600; }
-.lg-err { display: none; margin-bottom: 12px; font-size: 13px; color: #B42318; background: #FEECEB; border-radius: 10px; padding: 10px 12px; }
+.lg-err { display: none; margin-bottom: 12px; font-size: 13px; color: #B42318; background: #FEECEB; border-radius: 8px; padding: 10px 12px; }
 .lg-err.show { display: block; }
 
 .lg-foot {

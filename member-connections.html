@@ -12,12 +12,12 @@
 .connections-page{overflow:visible}
 .connections-head{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:24px}
 .connections-titlebar{display:flex;align-items:center;min-width:max-content}
-.connections-back{height:42px;padding:0 15px 0 12px;border:1px solid #E4E8EB;border-radius:10px;background:#fff;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#3A434D;font-size:14px;font-weight:600;cursor:pointer;transition:.18s ease}
+.connections-back{height:42px;padding:0 15px 0 12px;border:1px solid #E4E8EB;border-radius:8px;background:#fff;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#3A434D;font-size:14px;font-weight:600;cursor:pointer;transition:.18s ease}
 .connections-back:hover{border-color:rgba(12,201,146,.32);color:var(--brand);background:#F8FEFC}
 .connections-back svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .connections-search{position:relative;width:100%;max-width:none}
 .connections-search svg{position:absolute;left:22px;top:50%;transform:translateY(-50%);width:20px;height:20px;stroke:#8E97A3;fill:none;stroke-width:1.9;pointer-events:none}
-.connections-search input{width:100%;height:54px;border:1px solid #E1E6E9;border-radius:14px;background:#F8F9FA;padding:0 18px 0 58px;font-size:15px;color:#28313A;outline:none;transition:.18s ease}
+.connections-search input{width:100%;height:54px;border:1px solid #E1E6E9;border-radius:10px;background:#F8F9FA;padding:0 18px 0 58px;font-size:15px;color:#28313A;outline:none;transition:.18s ease}
 .connections-search input:focus{border-color:rgba(12,201,146,.5);box-shadow:0 0 0 3px rgba(12,201,146,.08);background:#fff}
 .connections-tabs{margin-top:28px}
 .connections-list{margin-top:18px;border-top:1px solid #EEF1F3}
@@ -33,7 +33,7 @@
 .connections-empty.show{display:block}
 @media(max-width:767px){
   .connections-head{grid-template-columns:1fr;gap:16px}
-  .connections-back{height:38px;padding:0 13px 0 10px;border-radius:9px;font-size:13px}
+  .connections-back{height:38px;padding:0 13px 0 10px;border-radius:7px;font-size:13px}
   .connections-search{width:100%}
   .connections-tabs{margin-top:20px}
   .connection-item{grid-template-columns:44px minmax(0,1fr) auto;gap:11px;padding:15px 0}

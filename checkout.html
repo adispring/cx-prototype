@@ -14,12 +14,12 @@
 .ck-sub { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
 .ck-layout { display: grid; grid-template-columns: 1fr 340px; gap: 22px; align-items: start; margin-top: 22px; }
 /* 左侧卡片一律无外框：保留 1px 透明描边占位（不写 border:none，避免 2px 布局位移） */
-.ck-card { background: #fff; border: 1px solid transparent; border-radius: 20px; padding: 18px 20px; margin-bottom: 16px; }
+.ck-card { background: #fff; border: 1px solid transparent; border-radius: 15px; padding: 18px 20px; margin-bottom: 16px; }
 .ck-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .ck-card h3 { font-size: 16px; margin-bottom: 12px; }
 .ck-card-head h3 { margin-bottom: 0; }
 .ck-link { font-size: 13px; color: var(--green-t); font-weight: 600; }
-.addr-item { border: 1.5px solid var(--line); border-radius: 14px; padding: 13px 15px; margin-bottom: 10px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; transition: border-color .18s ease, background .18s ease; }
+.addr-item { border: 1.5px solid var(--line); border-radius: 10px; padding: 13px 15px; margin-bottom: 10px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; transition: border-color .18s ease, background .18s ease; }
 .addr-item:hover { border-color: var(--green); }
 .addr-item.on { border-color: var(--green); background: var(--green-bg); }
 .ai-radio { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--line-2); margin-top: 4px; flex-shrink: 0; }
@@ -27,22 +27,50 @@
 .ai-name { font-weight: 600; font-size: 14px; }
 .ai-tag { font-size: 11.5px; color: var(--green-t); background: #fff; border: 1px solid var(--green); border-radius: 999px; padding: 1px 8px; margin-left: 8px; font-weight: 600; }
 .ai-detail { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.6; }
+/* 账单地址：默认勾选「与收货地址相同」，取消勾选后才展开地址选择列表 */
+.ck-check { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted); cursor: pointer; user-select: none; }
+.ck-check input { width: 15px; height: 15px; margin: 0; accent-color: var(--green); cursor: pointer; flex-shrink: 0; }
+.ck-check:hover { color: var(--ink); }
+#billList { margin-top: 12px; }
 .ck-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .ck-item:last-child { border-bottom: none; }
-.ck-item img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.ck-item img { width: 64px; height: 64px; border-radius: 9px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
 .ck-item .ci-mid { flex: 1; min-width: 0; }
 .ck-item .ci-n { font-size: 14px; font-weight: 600; }
 .ck-item .ci-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
 .ck-item .ci-r { text-align: right; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
 .ck-item .ci-r i { display: block; font-style: normal; font-size: 12px; color: var(--faint); font-weight: 400; margin-top: 3px; }
 .opt-row { display: flex; flex-wrap: wrap; gap: 10px; }
-.opt { border: 1.5px solid var(--line); border-radius: 14px; padding: 11px 15px; cursor: pointer; min-width: 160px; transition: all .18s ease; }
+.opt { border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 15px; cursor: pointer; min-width: 160px; transition: all .18s ease; }
 .opt:hover { border-color: var(--green); }
 .opt.on { border-color: var(--green); background: var(--green-bg); }
 .opt b { display: block; font-size: 13.5px; font-weight: 600; }
 .opt i { font-style: normal; font-size: 12px; color: var(--muted); }
 .ck-side { position: sticky; top: 92px; }
-.ck-sum { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; }
+.ck-sum { background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 18px 20px; }
+/* 「金额明细」标题与右侧「商品清单」标题同字号（默认 h3 = 1.17em ≈ 18.7px，偏大） */
+.ck-sum h3 { font-size: 15px; }
+/* 商品清单：在右侧栏、位于「金额明细」之上。单件直接展开；多件可展开 / 收起，默认收起 */
+.ck-items { background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 16px 18px; margin-bottom: 14px; }
+.ck-items-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.ck-items-head h3 { font-size: 15px; }
+.ck-count { font-weight: 400; color: var(--faint); font-size: 12.5px; margin-left: 8px; }
+.ck-toggle { display: inline-flex; align-items: center; gap: 5px; border: 0; background: none; padding: 2px 0; color: var(--green-t); font-size: 12.5px; font-weight: 600; font-family: inherit; cursor: pointer; }
+.ck-toggle:hover { color: var(--green-h); }
+.ck-toggle svg { transition: transform .18s ease; }
+.ck-items.is-open .ck-toggle svg { transform: rotate(180deg); }
+.ck-items:not(.is-multi) .ck-toggle { display: none; }
+.ck-thumbs { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.ck-thumbs img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.ck-thumbs .ci-more { font-size: 12px; color: var(--muted); }
+/* 展开态：完整清单。⚠️ overflow-x 显式写 hidden —— 只写 overflow-y:auto 时另一轴会被算成 auto */
+.ck-items-list { margin-top: 4px; max-height: 44vh; overflow-y: auto; overflow-x: hidden; }
+.ck-items .ck-item { padding: 10px 0; gap: 10px; }
+.ck-items .ck-item img { width: 52px; height: 52px; border-radius: 8px; }
+.ck-items .ck-item .ci-n { font-size: 13.5px; }
+.ck-items .ck-item .ci-s { font-size: 12px; margin-top: 2px; }
+.ck-items .ck-item .ci-r { font-size: 13px; }
+.ck-items .ck-item .ci-r i { font-size: 11.5px; margin-top: 2px; }
 .ck-line { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; padding: 7px 0; }
 .ck-line b { font-weight: 600; }
 .ck-line.total { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 13px; font-size: 15px; font-weight: 600; }
@@ -53,8 +81,8 @@
 .ck-empty h2 { font-size: 19px; margin-bottom: 8px; }
 .ck-empty p { color: var(--muted); font-size: 13.5px; margin-bottom: 18px; }
 .ck-empty .ce-cta { display: flex; gap: 10px; justify-content: center; }
-/* 左侧 6 张卡全部无框（收货地址 / 商品清单 / 配送方式 / 积分抵扣 / 优惠券 / 支付方式）；
-   右侧「金额明细」.ck-sum 仍保留描边 —— 用户未要求改它，它也是页面上唯一的容器边界 */
+/* 左侧 5 张卡全部无框（收货地址 / 配送方式 / 积分抵扣 / 优惠券 / 账单地址）；
+   右侧两张面板保留描边：商品清单 .ck-items + 金额明细 .ck-sum —— 它们就是页面上的容器边界 */
 /* 提交订单：压低高度、撑满卡片宽度（.block 在站点 CSS 里没有定义，原先是 inline-flex 内容宽 = 112px） */
 .ck-sum .btn.block { width: 100%; height: 46px; padding: 0 20px; font-size: 15px; }
 /* 积分抵扣 */
@@ -62,7 +90,7 @@
 .ck-pt-hint b { color: var(--green-t); font-weight: 600; }
 .ck-pt-row { display: flex; gap: 10px; }
 .ck-pt-field { position: relative; flex: 1; min-width: 0; }
-.ck-pt-field input { width: 100%; height: 44px; padding: 0 48px 0 14px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
+.ck-pt-field input { width: 100%; height: 44px; padding: 0 48px 0 14px; border: 1.5px solid var(--line); border-radius: 9px; background: #fff; font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
 .ck-pt-field input::placeholder { color: var(--faint); }
 .ck-pt-field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-bg); }
 .ck-pt-field input:disabled { background: var(--bg-2); color: var(--muted); }
@@ -87,21 +115,31 @@
       <div class="nav-item">
         <a href="shop.html" data-page-node-id="iVtoKTFgbZfpNfr8D1TYss">商城</a>
         <div class="nav-menu" aria-label="商城分类">
-          <div class="wrap nm-in">
-            <div class="nm-col">
-              <div class="nm-h">整机</div>
-              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
-              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
-              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
-              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
-            </div>
-            <div class="nm-prods">
-              <div class="nm-h">热销机型</div>
-              <div class="nm-grid">
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
-                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
-                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -146,10 +184,6 @@
           <div class="ck-card-head" data-page-node-id="DhwfOuUZc8M5cS76tRpcGE"><h3 data-page-node-id="yXaCb3XnFJg2nsB3KLI1xW">收货地址</h3><a class="ck-link" href="addresses.html" data-page-node-id="lNZHlmbCJyjuUayRwLpxjh">管理地址 →</a></div>
           <div id="addrList" data-page-node-id="8hrWS4ZQpDRevbA4kO7Uc3"></div>
         </section>
-        <section class="ck-card" data-page-node-id="wz9nJFTt1nDfd30igl0xJt">
-          <h3 data-page-node-id="zsyVI3EKhGB4p0ZzinI2EU">商品清单<span style="font-weight:400;color:var(--faint);font-size:12.5px;margin-left:8px" id="ckCount" data-page-node-id="a9vrQ5NIDEOe95STaq1HQA"></span></h3>
-          <div id="ckItems" data-page-node-id="nc8D7NNROHzCXDpw9pzhvY"></div>
-        </section>
         <section class="ck-card" data-page-node-id="Rvem1EvxVIWmnxCWGJETPf">
           <h3 data-page-node-id="jCrzenf1as1FAcCEFMnyzZ">配送方式</h3>
           <div class="opt-row" id="shipOpts" data-page-node-id="OkFQnSZFFy8lYunFFXB7kf"></div>
@@ -170,11 +204,20 @@
           <div class="opt-row" id="couponOpts" data-page-node-id="W5mkT2hu9JENRQPoUpG3Xt"></div>
         </section>
         <section class="ck-card" data-page-node-id="4bWJ8Uh8Cr724HNFA5hpKl">
-          <h3 data-page-node-id="D5zVL2ePtDNxhu2hJswaW6">支付方式</h3>
-          <div class="opt-row" id="payOpts" data-page-node-id="v5yR17MLseAQhi00lPwx51"></div>
+          <div class="ck-card-head"><h3>账单地址</h3><a class="ck-link" href="addresses.html">管理地址 →</a></div>
+          <label class="ck-check"><input type="checkbox" id="billSame" checked><span>与收货地址相同</span></label>
+          <div id="billList" style="display:none"></div>
         </section>
       </div>
       <aside class="ck-side" data-page-node-id="XJu5FUYH0lLhOSOlvodVDc">
+        <section class="ck-items is-multi" id="ckItemsCard">
+          <div class="ck-items-head">
+            <h3>商品清单<span class="ck-count" id="ckCount"></span></h3>
+            <button class="ck-toggle" id="ckItemsToggle" type="button" aria-expanded="false" aria-controls="ckItems"><span id="ckItemsToggleT">展开</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+          </div>
+          <div class="ck-thumbs" id="ckItemsThumbs"></div>
+          <div class="ck-items-list" id="ckItems"></div>
+        </section>
         <div class="ck-sum" data-page-node-id="BmlBjYZvA6BcOQG0z9at7D">
           <h3 data-page-node-id="XQEpiQLyWq4K0Tjsz8UnaE">金额明细</h3>
           <div class="ck-line" data-page-node-id="T0yVbvz1sqQFiPF89hzjK0"><span data-page-node-id="KPgm7IjLKVLW6XGWSEvpGP">商品小计</span><b id="sumSub" data-page-node-id="LjONe76oHxwG7eCFVaAcXL">¥0</b></div>
@@ -229,14 +272,7 @@ var SHIPS = [
   { id: "std", name: "标准配送", fee: 0, note: "3-5 个工作日 · 满 ¥999 包邮" },
   { id: "fast", name: "加急配送", fee: 49, note: "次日达 · 顺丰速运" }
 ];
-/* 支付方式：美国主流（信用卡组织 + 钱包 + BNPL） */
-var PAYS = [
-  { id: "card", name: "信用卡 / 借记卡", note: "Visa · Mastercard · American Express · Discover" },
-  { id: "paypal", name: "PayPal", note: "用 PayPal 余额或绑定的卡 / 银行支付" },
-  { id: "apple", name: "Apple Pay", note: "iPhone / Mac 上用 Face ID 一键支付" },
-  { id: "google", name: "Google Pay", note: "Android 设备一键支付" },
-  { id: "klarna", name: "Klarna", note: "分 4 期免息" }
-];
+/* 支付方式不在这页选 —— 提交订单后到 payment.html（收银台）再选并完成支付 */
 var COUPONS = [
   { id: "none", name: "不使用优惠券", v: 0, note: "—" },
   { id: "new", name: "新人券", v: 100, note: "满 ¥1,000 可用" },
@@ -244,7 +280,9 @@ var COUPONS = [
 ];
 /* 积分：100 积分抵 ¥1，单笔最多抵商品小计的 20%，且不超过余额 */
 var PT_BAL = 2860, PT_RATE = 100, PT_CAP_RATIO = 0.2;
-var state = { addrId: null, ship: "std", pay: PAYS[0].id, coupon: "none", points: 0 };
+/* billSame：账单地址是否与收货地址相同（默认相同，取消勾选后从地址簿里另选）
+   itemsOpen：右侧「商品清单」是否展开（多件时默认收起；单件会被强制展开） */
+var state = { addrId: null, ship: "std", coupon: "none", points: 0, billSame: true, billId: null, itemsOpen: false };
 
 function m(n) { return (n || 0).toLocaleString("en-US"); }
 function subtotal() { return items.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0); }
@@ -263,8 +301,19 @@ function ptCap() {
   return Math.min(byMoney, byBal);
 }
 function ptVal() { return Math.floor(state.points / PT_RATE); }
-function payName() { return (PAYS.filter(function (p) { return p.id === state.pay; })[0] || PAYS[0]).name; }
+/* 账单地址：勾了「与收货地址相同」就跟着收货地址走，否则用另选的地址 */
+function billAddr() {
+  if (state.billSame) return window.Addr.get(state.addrId) || window.Addr.def();
+  return window.Addr.get(state.billId) || window.Addr.get(state.addrId) || window.Addr.def();
+}
 function total() { return Math.max(0, subtotal() + shipFee() - couponVal() - ptVal()); }
+
+function addrCard(a, attr, key) {
+  return '<div class="addr-item' + (a.id === state[key] ? " on" : "") + '" ' + attr + '="' + a.id + '">' +
+    '<span class="ai-radio"></span><div><div class="ai-name">' + a.name + ' ' + a.phone +
+    '<span class="ai-tag">' + a.tag + '</span></div>' +
+    '<div class="ai-detail">' + a.region + ' ' + a.detail + '</div></div></div>';
+}
 
 function renderAddr() {
   var list = window.Addr.all();
@@ -272,32 +321,56 @@ function renderAddr() {
     var d = list.filter(function (a) { return a.def; })[0] || list[0];
     if (d) state.addrId = d.id;
   }
-  document.getElementById("addrList").innerHTML = list.map(function (a) {
-    return '<div class="addr-item' + (a.id === state.addrId ? " on" : "") + '" data-addr="' + a.id + '">' +
-      '<span class="ai-radio"></span><div><div class="ai-name">' + a.name + ' ' + a.phone +
-      '<span class="ai-tag">' + a.tag + '</span></div>' +
-      '<div class="ai-detail">' + a.region + ' ' + a.detail + '</div></div></div>';
-  }).join("");
+  document.getElementById("addrList").innerHTML = list.map(function (a) { return addrCard(a, "data-addr", "addrId"); }).join("");
 }
 
+/* 账单地址：默认与收货地址相同；取消勾选后展开地址簿供另选 */
+function renderBill() {
+  document.getElementById("billSame").checked = !!state.billSame;
+  var box = document.getElementById("billList");
+  if (state.billSame) { box.style.display = "none"; box.innerHTML = ""; return; }
+  var list = window.Addr.all();
+  if (!state.billId) state.billId = state.addrId || (list[0] && list[0].id);
+  box.style.display = "";
+  box.innerHTML = list.map(function (a) { return addrCard(a, "data-bill", "billId"); }).join("");
+}
+
+/* 商品清单（右侧栏、位于「金额明细」之上）：
+   单件 → 直接展开（没有可收起的必要，切换按钮隐藏）；多件 → 默认收起，可展开 / 收起。
+   ⚠️ 完整清单的行**始终**渲染进 DOM，折叠只切 display —— 折叠状态不影响元素计数类断言。 */
+var THUMB_MAX = 5;
 function renderItems() {
+  var multi = items.length > 1;
+  if (!multi) state.itemsOpen = true;                 /* 单件时没必要收起来 */
+  var card = document.getElementById("ckItemsCard");
+  var list = document.getElementById("ckItems");
+  var thumbs = document.getElementById("ckItemsThumbs");
+  var tg = document.getElementById("ckItemsToggle");
+
   document.getElementById("ckCount").textContent = "共 " + count() + " 件";
-  document.getElementById("ckItems").innerHTML = items.map(function (it) {
+  list.innerHTML = items.map(function (it) {
     return '<div class="ck-item"><img src="' + it.img + '" alt="">' +
       '<div class="ci-mid"><div class="ci-n">' + it.name + '</div><div class="ci-s">' + it.spec + '</div></div>' +
       '<div class="ci-r">¥' + m(it.price) + '<i>× ' + (it.qty || 1) + '</i></div></div>';
   }).join("");
+
+  /* 收起态：一排缩略图（超过 5 件补「+N 件」） */
+  var strip = items.slice(0, THUMB_MAX).map(function (it) { return '<img src="' + it.img + '" alt="">'; }).join("");
+  if (items.length > THUMB_MAX) strip += '<span class="ci-more">+' + (items.length - THUMB_MAX) + ' 件</span>';
+  thumbs.innerHTML = strip;
+
+  card.className = "ck-items" + (state.itemsOpen ? " is-open" : "") + (multi ? " is-multi" : "");
+  tg.setAttribute("aria-expanded", state.itemsOpen ? "true" : "false");
+  tg.setAttribute("aria-label", state.itemsOpen ? "收起商品清单" : "展开商品清单");
+  document.getElementById("ckItemsToggleT").textContent = state.itemsOpen ? "收起" : "展开";
+  list.style.display = state.itemsOpen ? "" : "none";
+  thumbs.style.display = state.itemsOpen ? "none" : "";
 }
 
 function renderOpts() {
   document.getElementById("shipOpts").innerHTML = SHIPS.map(function (s) {
     return '<div class="opt' + (s.id === state.ship ? " on" : "") + '" data-ship="' + s.id + '"><b>' + s.name +
       (s.fee ? " · ¥" + s.fee : " · 免运费") + '</b><i>' + s.note + '</i></div>';
-  }).join("");
-  document.getElementById("payOpts").innerHTML = PAYS.map(function (p) {
-    return '<div class="opt' + (p.id === state.pay ? " on" : "") + '" data-pay="' + p.id + '"><b>' + p.name + '</b><i>' +
-      (p.id === "klarna" ? p.note + " · 每期约 ¥" + m(Math.round(total() / 4)) :
-        (p.id === "card" ? "推荐 · " + p.note : p.note)) + '</i></div>';
   }).join("");
   document.getElementById("couponOpts").innerHTML = COUPONS.map(function (c) {
     var ok = !c.v || subtotal() >= (c.id === "vip" ? 5000 : 1000);
@@ -349,18 +422,30 @@ function renderAll() {
   document.getElementById("ckSub").textContent = mode === "buynow"
     ? "立即购买 · 共 " + count() + " 件商品"
     : "来自购物车 · 共 " + count() + " 件商品";
-  renderAddr(); renderItems(); renderOpts(); renderPoints(); renderSum();
+  renderAddr(); renderBill(); renderItems(); renderOpts(); renderPoints(); renderSum();
 }
 
 document.addEventListener("click", function (e) {
   var a = e.target.closest("[data-addr]");
   if (a) { state.addrId = a.getAttribute("data-addr"); renderAddr(); return; }
+  var b = e.target.closest("[data-bill]");
+  if (b) { state.billId = b.getAttribute("data-bill"); renderBill(); return; }
   var s = e.target.closest("[data-ship]");
   if (s) { state.ship = s.getAttribute("data-ship"); renderOpts(); renderSum(); return; }
-  var p = e.target.closest("[data-pay]");
-  if (p) { state.pay = p.getAttribute("data-pay"); renderOpts(); return; }
   var c = e.target.closest("[data-coupon]");
   if (c) { state.coupon = c.getAttribute("data-coupon"); renderOpts(); renderSum(); return; }
+});
+
+/* 商品清单：展开 / 收起（仅多件时显示该按钮） */
+document.getElementById("ckItemsToggle").onclick = function () {
+  state.itemsOpen = !state.itemsOpen;
+  renderItems();
+};
+
+/* 账单地址：勾选 / 取消「与收货地址相同」 */
+document.getElementById("billSame").addEventListener("change", function () {
+  state.billSame = this.checked;
+  renderBill();
 });
 
 /* 积分输入：只保留数字，按 100 取整，超出上限则取上限 */
@@ -379,11 +464,12 @@ document.getElementById("ptInput").addEventListener("keydown", function (e) {
   if (e.key === "Enter") { e.preventDefault(); document.getElementById("ptApply").click(); }
 });
 
+/* 提交订单：先把订单落库（待付款），再去收银台选支付方式并完成支付 */
 document.getElementById("ckSubmit").onclick = function () {
   if (!items.length) { toast("还没有可结算的商品"); return; }
   var addr = window.Addr.get(state.addrId) || window.Addr.def();
   var order = window.Orders.place({
-    items: items, addr: addr, pay: payName(),
+    items: items, addr: addr, bill: billAddr(), pay: "待选择",
     ship: shipFee(), discount: couponVal() + ptVal(), status: "pending"
   });
   if (mode === "buynow") {
@@ -392,7 +478,7 @@ document.getElementById("ckSubmit").onclick = function () {
   } else {
     window.Cart.clear();
   }
-  location.href = "order-success.html?order=" + order.id;
+  location.href = "payment.html?order=" + order.id;
 };
 
 renderAll();

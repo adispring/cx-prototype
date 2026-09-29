@@ -32,7 +32,7 @@
 
 /* 专题 */
 .coll-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.coll-card { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 16/8.5; cursor: pointer; }
+.coll-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16/8.5; cursor: pointer; }
 .coll-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .coll-card:hover img { transform: scale(1.05); }
 .coll-card .cc-copy { position: absolute; inset: 0; padding: 24px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(transparent 30%, rgba(13,19,16,.75)); color: #fff; }
@@ -56,13 +56,13 @@
 .lib-card .l-author { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
 .lib-card .l-author img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
 .compat-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.compat-chips .cc { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; background: var(--bg-2); }
+.compat-chips .cc { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 2px 7px; background: var(--bg-2); }
 
 /* 会员横幅 */
 .pass-banner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   background: linear-gradient(120deg, #0D1310, #123324 60%, #0FA36B 150%);
-  border-radius: 28px; padding: 40px 44px; color: #fff; position: relative; overflow: hidden;
+  border-radius: 21px; padding: 40px 44px; color: #fff; position: relative; overflow: hidden;
 }
 .pass-banner::before { content: ""; position: absolute; right: -120px; top: -140px; width: 380px; height: 380px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); }
 .pass-banner h3 { color: #fff; font-size: 26px; letter-spacing: -.02em; }

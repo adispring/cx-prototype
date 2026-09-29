@@ -193,12 +193,12 @@
     persist();
   })();
   function saveCart() { persist(); }
-  /* 页面里指向购物车 / 结算的链接，统一带上数据负载 */
+  /* 页面里指向购物车 / 结算 / 收银台的链接，统一带上数据负载 */
   document.addEventListener("click", function (e) {
     var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
     if (!a) return;
     var h = a.getAttribute("href") || "";
-    if (/^(\.\.?\/)?(cart|checkout)\.html([?#]|$)/.test(h)) {
+    if (/^(\.\.?\/)?(cart|checkout|payment)\.html([?#]|$)/.test(h)) {
       var to = window.hmHref(h);
       if (to !== h) { e.preventDefault(); location.href = to; }
     }

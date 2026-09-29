@@ -16,7 +16,7 @@
 .oc-status.mute { color: var(--faint); background: var(--bg-2); }
 .oc-item { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); }
 .oc-item:last-child { border-bottom: none; }
-.oc-item img { width: 58px; height: 58px; border-radius: 12px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
+.oc-item img { width: 58px; height: 58px; border-radius: 9px; object-fit: cover; background: var(--bg-2); flex-shrink: 0; }
 .oc-item .oi-mid { flex: 1; min-width: 0; }
 .oc-item .oi-n { font-size: 14px; font-weight: 600; }
 .oc-item .oi-s { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
@@ -31,7 +31,7 @@
 .my-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 18px; }
 .my-tab { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
 .my-tab.on { border-color: var(--green); background: var(--green-bg); color: var(--green-t); }
-.ord-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 18px 20px; margin-bottom: 14px; }
+.ord-card { background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 18px 20px; margin-bottom: 14px; }
 .oc-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
 .oc-id { font-size: 13.5px; font-weight: 600; }
 .oc-id span { font-weight: 400; color: var(--faint); margin-left: 6px; }
@@ -42,13 +42,13 @@
 .oc-sum { font-size: 13px; color: var(--muted); }
 .oc-sum b { font-size: 19px; font-weight: 700; color: var(--ink); margin-left: 4px; }
 .oc-sum i { font-style: normal; margin-left: 8px; }
-.my-empty { text-align: center; padding: 70px 20px; background: #fff; border: 1px solid var(--line); border-radius: 20px; }
+.my-empty { text-align: center; padding: 70px 20px; background: #fff; border: 1px solid var(--line); border-radius: 15px; }
 .my-empty .ce-ico { font-size: 44px; margin-bottom: 12px; }
 .my-empty p { color: var(--muted); font-size: 13.5px; margin-bottom: 16px; }
 @media (max-width: 640px) { .my-head h1 { font-size: 23px; } .oc-foot { flex-direction: column; align-items: flex-start; } }
 
 </style>
-<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:3px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
 <body data-page-node-id="j6dByJK3H7nEnRNtGVIqyh" style="">
 <header class="nav" data-page-node-id="A5sRIqveCeKIE251cOlucU">
   <div class="nav-inner" data-page-node-id="YqRgu3oLwdZJ2jc6XhshoS">
@@ -148,8 +148,7 @@ document.addEventListener("click", function (e) {
   var o = window.Orders.get(id);
   if (!o) return;
   if (act === "pay") {
-    window.Orders.update(id, { status: "paid", pay: o.pay === "待选择" ? "信用卡 / 借记卡" : o.pay });
-    toast("支付成功 · 已进入备货，我们会尽快发货");
+    location.href = "payment.html?order=" + id; return;
   } else if (act === "receive") {
     window.Orders.update(id, { status: "done" });
     toast("已确认收货 · 期待你的开箱作品");

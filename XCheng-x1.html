@@ -109,7 +109,7 @@ body { background: var(--bg); }
 .px-sec.ink .px-col h4 { color: #fff; }
 
 /* 通栏大图 */
-.px-full-img { margin-top: 48px; border-radius: 24px; overflow: hidden; background: var(--bg-2); }
+.px-full-img { margin-top: 48px; border-radius: 18px; overflow: hidden; background: var(--bg-2); }
 .px-full-img img { width: 100%; display: block; object-fit: cover; }
 .px-bleed { position: relative; overflow: hidden; }
 .px-bleed img { width: 100%; height: 62vh; min-height: 380px; object-fit: cover; display: block; }
@@ -123,7 +123,7 @@ body { background: var(--bg); }
 /* 图文左右交替 */
 .px-split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 64px; }
 .px-split.flip .px-split-media { order: 2; }
-.px-split-media { border-radius: 22px; overflow: hidden; background: var(--bg-2); }
+.px-split-media { border-radius: 16px; overflow: hidden; background: var(--bg-2); }
 .px-split-media img { width: 100%; display: block; object-fit: cover; aspect-ratio: 4/3; }
 .px-split-copy h3 { font-size: clamp(21px, 2.4vw, 30px); letter-spacing: -.025em; line-height: 1.3; font-weight: 700; }
 .px-split-copy > p { margin-top: 16px; font-size: 15.5px; line-height: 1.9; color: var(--muted); }
@@ -132,7 +132,7 @@ body { background: var(--bg); }
 
 /* 三列要点 */
 .px-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 44px; }
-.px-col { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 26px 24px; }
+.px-col { background: #fff; border: 1px solid var(--line); border-radius: 15px; padding: 26px 24px; }
 .px-sec.ink .px-col { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); }
 .px-col h4 { font-size: 17px; font-weight: 600; letter-spacing: -.015em; }
 .px-col p { margin-top: 10px; font-size: 13.5px; line-height: 1.8; color: var(--muted); }
@@ -145,12 +145,12 @@ body { background: var(--bg); }
 /* 四宫格能力卡 */
 .px-grid4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 44px; }
 .px-card {
-  background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 30px 28px;
+  background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 30px 28px;
   transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .px-card:hover { border-color: var(--green); transform: translateY(-3px); box-shadow: 0 20px 40px -26px rgba(16,22,19,.3); }
 .px-card .px-ico {
-  width: 44px; height: 44px; border-radius: 14px; background: var(--green-bg); color: var(--green-t);
+  width: 44px; height: 44px; border-radius: 10px; background: var(--green-bg); color: var(--green-t);
   display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
 }
 .px-card h3 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
@@ -168,7 +168,7 @@ body { background: var(--bg); }
 .px-rail.dragging * { user-select: none; }
 .px-rail img { -webkit-user-drag: none; }
 .px-work {
-  position: relative; flex: 0 0 340px; border-radius: 22px; overflow: hidden;
+  position: relative; flex: 0 0 340px; border-radius: 16px; overflow: hidden;
   background: var(--bg-2); cursor: pointer; border: 1px solid var(--line);
 }
 .px-work img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
@@ -190,14 +190,14 @@ body { background: var(--bg); }
 .px-railbar-thumb::after { content: ""; position: absolute; inset: -12px 0; }
 
 /* 规格参数 */
-.px-spec { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.px-spec { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; }
 .px-spec div { background: #fff; padding: 24px 22px; }
 .px-spec dt { font-size: 12.5px; color: var(--faint); }
 .px-spec dd { margin-top: 8px; font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
 
 /* 配件卡 */
 .px-kit { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 44px; }
-.px-kit-card { background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+.px-kit-card { background: #fff; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; }
 .px-kit-top { height: 132px; display: flex; align-items: center; justify-content: center; background: var(--bg-2); color: var(--green-t); }
 .px-kit-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
 .px-kit-body h4 { font-size: 15.5px; font-weight: 600; }
@@ -207,7 +207,7 @@ body { background: var(--bg); }
 
 /* 末尾 CTA */
 .px-cta {
-  position: relative; overflow: hidden; border-radius: 28px; margin: 0 auto;
+  position: relative; overflow: hidden; border-radius: 21px; margin: 0 auto;
   max-width: 1328px; padding: 72px 56px; background: var(--bg-ink); color: #fff;
 }
 .px-cta img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .3; }
@@ -258,7 +258,7 @@ body { background: var(--bg); }
   .px-kit { grid-template-columns: 1fr; }
   .px-bleed img { height: 52vh; }
   .px-bleed-copy { padding: 44px 0 36px; }
-  .px-cta { margin: 0 16px; padding: 44px 24px; border-radius: 22px; }
+  .px-cta { margin: 0 16px; padding: 44px 24px; border-radius: 16px; }
   .px-cta-inner { flex-direction: column; align-items: flex-start; }
   .px-work { flex: 0 0 76vw; }
 }
@@ -346,7 +346,7 @@ body { background: var(--dk-bg); }
 .subnav { transition: top .3s cubic-bezier(.22,.7,.22,1); }
 body.nav-up .subnav { top: 0; }
 </style>
-<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:3px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
 <body data-page-node-id="q2i1foBOYXQ7PLuBfJvb4u" style="">
 <header class="nav" data-page-node-id="bD4XpHaab7ZEZXogHGlyTP">
   <div class="nav-inner" data-page-node-id="DB0buhxmAxA5t22EDJDECV">
@@ -359,21 +359,31 @@ body.nav-up .subnav { top: 0; }
       <div class="nav-item">
         <a href="shop.html" data-page-node-id="Lq27KvHePyXMG3Cl1RN1Bu">商城</a>
         <div class="nav-menu" aria-label="商城分类">
-          <div class="wrap nm-in">
-            <div class="nm-col">
-              <div class="nm-h">整机</div>
-              <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 / X1 Pro / X1 Air</em></a>
-              <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 / Y2 Max</em></a>
-              <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 / C1 Pro</em></a>
-              <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板 · 树脂</em></a>
-            </div>
-            <div class="nm-prods">
-              <div class="nm-h">热销机型</div>
-              <div class="nm-grid">
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
-                <a class="nm-p" href="pdp-laser.html"><img src="assets/img/device-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
-                <a class="nm-p" href="pdp-printer.html"><img src="assets/img/device-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
-                <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/device-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+          <div class="wrap">
+            <div class="nm-in">
+              <div class="nm-col">
+                <div class="nm-h">整机</div>
+                <a class="nm-a" href="shop.html">激光雕刻机<em>XCheng X1 · X1 Pro · X1 Air</em></a>
+                <a class="nm-a" href="shop.html">3D 打印机<em>Doyao Y2 · Y2 Max</em></a>
+                <a class="nm-a" href="shop.html">数控雕刻机<em>CNC C1 · C1 Pro</em></a>
+                <a class="nm-a" href="shop.html">耗材与配件<em>激光模组 · 喷头 · 打印板</em></a>
+              </div>
+              <div class="nm-prods">
+                <a class="nm-h nm-more" href="products.html">查看更多<span class="arr">→</span></a>
+                <div class="nm-grid">
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser.png" alt="XCheng X1"><span class="nm-t"><span class="nm-n">XCheng X1</span><span class="nm-pr">¥4,999</span></span></a>
+                  <a class="nm-p" href="pdp-laser.html"><img src="assets/img/devices/card-laser-pro.png" alt="XCheng X1 Pro"><span class="nm-t"><span class="nm-n">XCheng X1 Pro</span><span class="nm-pr">¥6,999</span></span></a>
+                  <a class="nm-p" href="pdp-printer.html"><img src="assets/img/devices/card-printer.png" alt="Doyao Y2"><span class="nm-t"><span class="nm-n">Doyao Y2</span><span class="nm-pr">¥3,299</span></span></a>
+                  <a class="nm-p" href="pdp-cnc.html"><img src="assets/img/devices/card-cnc.png" alt="CNC C1"><span class="nm-t"><span class="nm-n">CNC C1</span><span class="nm-pr">¥5,999</span></span></a>
+                  <a class="nm-diy" href="diy.html">
+                    <img class="nm-diy-img" src="assets/img/diy-combo.png" alt="产品 DIY 组合：激光 / 3D 打印 / CNC 整机搭配耗材" width="800" height="600">
+                    <span class="nm-diy-b">
+                      <span class="nm-diy-t">产品 DIY 组合</span>
+                      <span class="nm-diy-d">任选整机 + 配件耗材，一套下单</span>
+                      <span class="nm-diy-go">开始自由组合<span class="arr">→</span></span>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

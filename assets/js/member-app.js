@@ -1446,7 +1446,7 @@
       desc:'设备连接正常，可随时开始新的加工任务。', last:'刚刚', image:'assets/member/device-laser-x1.png'
     },
     'printer-p2': {
-      name:'HiMakers Doyao Y2', model:'Doyao Y2', sn:'PP2-2026-013407', fw:'v2.3.1',
+      name:'HiMakers Printer P2', model:'Printer P2', sn:'PP2-2026-013407', fw:'v2.3.1',
       ip:'192.168.1.108', wifi:'HiMakers_Studio', laserPower:null, status:'working', statusText:'工作中',
       desc:'设备正在执行加工任务，可在详情中查看剩余时长与控制任务。', last:'正在工作', image:'assets/member/device-printer-p2.png'
     },

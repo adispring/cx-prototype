@@ -18,7 +18,7 @@ window.HM_ORDER_DATA = {
     {no:'HM-20260916-009',time:'2026-09-16 08:53',status:'cancel',name:'光固化树脂 500ml（肤色）',spec:'高韧性 · 405nm',qty:2,price:'158.00',img:'assets/member/order-uv-resin.png',shipIcon:'x',shipText:'超时未付款，已自动关闭'},
     {no:'HM-20260915-007',time:'2026-09-15 16:20',status:'done',name:'HiMakers CNC C1 配件包',spec:'含润滑脂 20g',qty:1,price:'199.00',img:'assets/member/device-cnc-c1.png',carrier:'顺丰速运',tracking:'SF1032757007',shipIcon:'check',shipText:'已于 09-17 14:40 签收 · 签收人：前台代收'},
     {no:'HM-20260914-004',time:'2026-09-14 10:11',status:'done',name:'Laser X1 保护镜片 × 2',spec:'原厂配件',qty:1,price:'89.00',img:'assets/member/device-laser-x1.png',carrier:'顺丰速运',tracking:'SF1032744004',shipIcon:'check',shipText:'已于 09-16 09:15 签收 · 签收人：本人'},
-    {no:'HM-20260913-016',time:'2026-09-13 21:36',status:'receive',name:'HiMakers Y2 耗材套件',spec:'PLA 试用装 × 6',qty:3,price:'267.00',img:'assets/member/device-printer-p2.png',carrier:'顺丰速运',tracking:'SF1032911223',shipIcon:'truck',shipText:'顺丰速运 · SF1032911223 · 运输中，预计明日送达'},
+    {no:'HM-20260913-016',time:'2026-09-13 21:36',status:'receive',name:'HiMakers P2 耗材套件',spec:'PLA 试用装 × 6',qty:3,price:'267.00',img:'assets/member/device-printer-p2.png',carrier:'顺丰速运',tracking:'SF1032911223',shipIcon:'truck',shipText:'顺丰速运 · SF1032911223 · 运输中，预计明日送达'},
     {no:'HM-20260912-008',time:'2026-09-12 11:05',status:'cancel',name:'光固化树脂 500ml（灰色）',spec:'标准刚性 · 405nm',qty:3,price:'267.00',img:'assets/member/order-uv-resin.png',shipIcon:'x',shipText:'超时未付款，已自动关闭'}
   ],
   logistics:{
