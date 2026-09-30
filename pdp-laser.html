@@ -294,6 +294,52 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
   .bb-prod { display: none; }
   .footer { padding-bottom: 100px; }
 }
+/* ---------- 本单可得积分（价格块下方一行，随机型/套装/配件实时变） ---------- */
+.pdp-pt { display: flex; align-items: center; gap: 6px; margin: 8px 0 0; font-size: 12.5px; color: var(--green-t); }
+.pdp-pt .pt-ico { inline-size: 15px; block-size: 15px; flex: 0 0 auto; }
+.pdp-pt b { font-size: 13.5px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.pdp-pt .pt-tip { color: var(--faint); font-weight: 400; }
+.pdp-pt .pt-tip::before { content: "·"; margin-right: 6px; color: var(--line-2); }
+/* ---------- 「帮你选机」视频卡片（挂在机型块下方，视觉语言对齐 .combo-item） ---------- */
+.sku-video {
+  display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 9px; padding: 8px 14px 8px 9px;
+  background: #fff; border: 1.5px solid var(--line); border-radius: 10px; cursor: pointer; text-align: left;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.sku-video:hover { border-color: var(--green); box-shadow: 0 8px 16px -12px rgba(12,18,16,.5); }
+.sku-video .sv-thumb { position: relative; flex: 0 0 auto; inline-size: 96px; block-size: 54px; border-radius: 8px; overflow: hidden; background: var(--bg-2); }
+.sku-video .sv-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sku-video .sv-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(12,18,16,.28); color: #fff; }
+.sku-video .sv-play svg { inline-size: 15px; block-size: 15px; display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
+.sku-video .sv-dur { position: absolute; right: 4px; bottom: 4px; font-size: 9.5px; font-weight: 600; color: #fff; background: rgba(12,18,16,.62); padding: 1px 5px; border-radius: 999px; }
+.sku-video .sv-txt { min-width: 0; flex: 1; }
+.sku-video .sv-txt b { display: block; font-size: 13px; font-weight: 600; line-height: 1.35; }
+.sku-video .sv-txt i { display: block; font-style: normal; font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
+/* ---------- 选机视频弹窗：站内「假播放器」（海报 + 播放徽标 + 时长 + 进度条动画，同图库口径） ---------- */
+.vm-box { position: relative; display: block; max-width: 828px; padding: 0; }
+.vm-stage { position: relative; background: var(--bg-2); aspect-ratio: 16 / 9; }
+.vm-stage > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vm-play { position: absolute; inset: 0; z-index: 0; display: flex; align-items: center; justify-content: center; padding: 0; border: 0; background: rgba(12,18,16,.16); cursor: pointer; }
+.vm-play span { inline-size: 68px; block-size: 68px; border-radius: 999px; background: rgba(255,255,255,.95); color: var(--green-t); display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 34px -14px rgba(12,18,16,.8); transition: transform .18s ease; }
+.vm-play:hover span { transform: scale(1.06); }
+.vm-play svg { inline-size: 26px; block-size: 26px; display: block; }
+.vm-dur { position: absolute; right: 16px; bottom: 14px; z-index: 1; pointer-events: none; font-size: 12px; font-weight: 600; color: #fff; background: rgba(12,18,16,.6); padding: 3px 9px; border-radius: 999px; }
+.vm-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; height: 3px; background: rgba(255,255,255,.3); pointer-events: none; }
+.vm-bar i { display: block; height: 100%; width: 0; background: var(--green); }
+.vm-stage.is-playing .vm-play { background: rgba(12,18,16,.06); }
+.vm-stage.is-playing .vm-play span { opacity: 0; }
+.vm-stage.is-playing .vm-bar i { animation: pgPlay var(--vm-dur, 155s) linear forwards; }   /* pgPlay 复用本页图库的进度条关键帧 */
+.vm-body { padding: 22px 26px 26px; }
+.vm-body h3 { font-size: 17px; margin-bottom: 13px; }
+.vm-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.vm-list li { display: flex; gap: 10px; font-size: 13px; color: var(--body); line-height: 1.55; }
+.vm-list b { flex: 0 0 auto; inline-size: 104px; color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) {
+  .vm-box { max-height: 92vh; overflow-y: auto; }
+  .vm-body { padding: 18px 18px 22px; }
+  .vm-list li { display: block; }
+  .vm-list b { display: block; inline-size: auto; margin-bottom: 2px; }
+}
 </style>
 <style id="__dm_no_drag_style__">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:3px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
 <body data-page-node-id="SM6vhiHiwDZJbjLhNvtgZt" style="">
@@ -377,10 +423,19 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
           <span class="save" id="pdpSave" style="" data-page-node-id="y4LSZWbdPCclJ0BdD4ndi6">省 ¥1,000</span>
         </div>
         <div class="pdp-note" id="pdpNote" data-page-node-id="dnQkx5pKOrYNSz55bICMXA">20W 光斑 · 幅面 400×400mm · 主机 + 入门材质 6 件</div>
+        <div class="pdp-pt" id="pdpPt">
+          <svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M9.4 8.3 12 11.6l2.6-3.3"/><path d="M12 11.6v4.1"/><path d="M9.6 12.6h4.8"/><path d="M9.6 14.3h4.8"/></svg>
+          本单可得 <b id="ptEarn">4,999</b> 积分
+          <span class="pt-tip">100 积分抵 ¥1</span>
+        </div>
 
         <div class="sku-block" data-page-node-id="2zH3n2WALmlL3CAL95lwNW">
           <div class="sku-label" data-page-node-id="z9LfC0yXHZJ2pgP9mSMj8k">机型<span data-page-node-id="LBhlr9T7ePy53OqHKdrxpQ">选择适合你的规格</span></div>
           <div class="sku-opts" id="skuModels" data-page-node-id="EJ2KGhysuv556u7CkfGXBN"><button class="sku-opt on" data-model="x1"><b>XCheng X1</b><i>20W 光斑 · 幅面 400×400mm</i><em>¥4,999</em></button><button class="sku-opt" data-model="x1pro"><b>XCheng X1 Pro</b><i>40W 双激光 · 幅面 600×600mm</i><em>¥6,999</em></button><button class="sku-opt" data-model="x1air"><b>XCheng X1 Air</b><i>10W 轻量 · 桌面级 300×300mm</i><em>¥3,299</em></button></div>
+          <button class="sku-video" type="button" id="skuVideo" aria-label="打开「帮你选机」视频">
+            <span class="sv-thumb"><img src="assets/img/pick-video.png" alt=""><span class="sv-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10.4-6.8a1 1 0 0 0 0-1.7L9.6 4.3A1 1 0 0 0 8 5.2z"/></svg></span><span class="sv-dur">02:35</span></span>
+            <span class="sv-txt"><b>三款怎么选？看 2 分钟选机视频</b><i>X1 / X1 Pro / X1 Air 实测对比 —— 功率、幅面、适合谁</i></span>
+          </button>
         </div>
         <div class="sku-block" data-page-node-id="upZbZgfRzGEjCOPxz1WJUL">
           <div class="sku-label" data-page-node-id="2DtFxUXPm9X8c9tQsAADqR">套装<span data-page-node-id="ZtyWPOlYzFecxVNM4Hb9W8">开箱即用的配置组合</span></div>
@@ -535,6 +590,27 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
     </div>
   </div>
 </div>
+<!-- ================= 选机视频弹窗（站内假播放器：海报 + 播放徽标 + 时长 + 进度条动画） ================= -->
+<div class="modal" id="pickModal">
+  <div class="modal-box vm-box">
+    <button class="x-btn modal-close" data-close aria-label="关闭">✕</button>
+    <div class="vm-stage" id="vmStage" style="--vm-dur:155s">
+      <img src="assets/img/pick-video.png" alt="三款机型选机对比封面">
+      <button class="vm-play" type="button" aria-label="播放选机视频"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10.4-6.8a1 1 0 0 0 0-1.7L9.6 4.3A1 1 0 0 0 8 5.2z"/></svg></span></button>
+      <span class="vm-dur">02:35</span>
+      <span class="vm-bar"><i></i></span>
+    </div>
+    <div class="vm-body">
+      <h3>三款怎么选？</h3>
+      <ul class="vm-list">
+        <li><b>XCheng X1</b><span>20W 光斑 · 400×400mm —— 家用木作、皮具礼物，性价比最高。</span></li>
+        <li><b>XCheng X1 Pro</b><span>40W 双激光 · 600×600mm —— 小批量接单、厚亚克力，效率翻倍。</span></li>
+        <li><b>XCheng X1 Air</b><span>10W · 300×300mm —— 桌面空间有限、想先试水的入门款。</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 <script src="assets/js/site.js"></script>
 <script src="assets/js/orders.js"></script>
 
@@ -542,6 +618,7 @@ html.nav-collapsed .pd-block { scroll-margin-top: 61px; }   /* 让位后的落�
 var CFG = {"file": "pdp-laser.html", "title": "XCheng X1 激光雕刻机", "cat": "激光雕刻机", "mainimg": "assets/img/device-laser.png", "lead": "20W 光斑一键成型，木、皮革、亚克力通吃。封闭式结构 + 自动对焦，开机 3 分钟就能刻出第一件成品。", "models": [{"id": "x1", "name": "XCheng X1", "price": 4999, "orig": 5999, "note": "20W 光斑 · 幅面 400×400mm", "img": "assets/img/device-laser.png"}, {"id": "x1pro", "name": "XCheng X1 Pro", "price": 6999, "orig": 8299, "note": "40W 双激光 · 幅面 600×600mm", "img": "assets/img/device-laser-pro.png"}, {"id": "x1air", "name": "XCheng X1 Air", "price": 3299, "orig": 3999, "note": "10W 轻量 · 桌面级 300×300mm", "img": "assets/img/device-laser-air.png"}], "bundles": [{"id": "std", "name": "标准版", "delta": 0, "note": "主机 + 入门材质 6 件"}, {"id": "plus", "name": "进阶套装", "delta": 800, "note": "加材质包 24 件 + 旋转轴 R1"}, {"id": "max", "name": "旗舰套装", "delta": 1600, "note": "加旋转轴 + 蜂巢底板 + 除尘系统"}], "combos": [{"name": "认证材质探索包", "spec": "木 / 皮革 / 亚克力 共 24 件", "price": 299, "img": "assets/img/materials-flatlay.png"}, {"name": "旋转雕刻轴 R1", "spec": "圆柱体 · 杯体 / 笔筒雕刻", "price": 899, "img": "assets/img/device-laser.png"}, {"name": "蜂巢切割底板", "spec": "蜂窝结构 · 防反射更透切", "price": 399, "img": "assets/img/scene-home.png"}, {"name": "除尘净化模块", "spec": "滤芯 ×2 · 烟雾净化", "price": 599, "img": "assets/img/scene-order.png"}], "gallery": ["assets/img/xc-x1-front.png", "assets/img/xc-x1-top.png", "assets/img/xc-x1-side.png", "assets/img/xc-x1-rear.png"], "stories": [{"t": "定制礼物", "d": "名字、日期、一句祝福刻成实物，木牌、皮具、钥匙扣都能做。", "img": "assets/img/scene-gift.png"}, {"t": "家居木作", "d": "杯垫、托盘、门牌，一张图导入即可批量雕刻。", "img": "assets/img/scene-home.png"}, {"t": "小批量接单", "d": "社团、店铺的定制订单，一晚上能出几十件。", "img": "assets/img/scene-order.png"}], "specs": [["激光功率", "20W（X1） / 40W 双激光（X1 Pro） / 10W（X1 Air）"], ["雕刻幅面", "400 × 400 mm（Pro 600 × 600 mm）"], ["适用材料", "木材 / 皮革 / 亚克力 / 纸板 / 竹 / 深色石材"], ["对焦方式", "自动对焦 + 一键测厚"], ["连接方式", "Wi-Fi / USB-C / U 盘离线"], ["软件支持", "HiMakers Studio / LightBurn / 移动端 App"], ["安全结构", "封闭式防护罩 · 火焰探测 · 开盖停机"], ["整机尺寸", "620 × 590 × 320 mm · 净重 12.5kg"]]};
 var state = { model: CFG.models[0].id, bundle: CFG.bundles[0].id, qty: 1, combo: {}, shot: 0 };
 var lastModel = CFG.models[0].id;                  /* 用于判断是否切换了机型 */
+var PT_EARN = 1;                                   /* 本单可得积分：实付 ¥1 = 1 积分（结算页 100 积分抵 ¥1） */
 
 function m(n) { return (n || 0).toLocaleString("en-US"); }
 /* 元素容错：节点缺失时写入空对象，避免单个节点缺失打断整段渲染 */
@@ -577,6 +654,8 @@ function render() {
   getEl("comboOrig").textContent = c.dis ? ("¥" + m(orig * state.qty)) : "";
   getEl("comboOrig").style.display = c.dis ? "" : "none";
   getEl("pdpNote").textContent = curModel().note + " · " + curBundle().note;
+  /* 本单可得积分：按实付（机型 + 套装 + 配件 95 折后）× 数量，切机型/套装/配件/数量都会跟着变 */
+  getEl("ptEarn").textContent = m(Math.round(c.unit * state.qty * PT_EARN));
 
   /* 吸底栏同步 */
   getEl("qtyVal").textContent = state.qty;
@@ -689,8 +768,24 @@ getEl("btnBuy").onclick = function () {
 };
 
 render();
-</script>
 
+/* ---------- 「帮你选机」视频卡片 → 弹窗假播放器 ----------
+   站内没有视频文件，同图库口径：海报 + 播放徽标 + 时长 + 进度条动画（关键帧 pgPlay 复用）。 */
+(function () {
+  var card = document.getElementById("skuVideo");
+  var stage = document.getElementById("vmStage");
+  if (!card || !stage) return;
+  var play = stage.querySelector(".vm-play");
+  card.addEventListener("click", function () {
+    stage.classList.remove("is-playing");   /* 每次打开都从 0 起步（Esc 关闭不走 [data-close]） */
+    if (window.openLayer) window.openLayer("pickModal");
+  });
+  if (play) play.addEventListener("click", function (e) {
+    e.stopPropagation();
+    stage.classList.add("is-playing");
+  });
+})();
+</script>
 
 
 
